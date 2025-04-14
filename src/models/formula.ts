@@ -11,8 +11,9 @@ export const FormulaModel = sequelize.define("formula", {
   name: {
     type: DataTypes.STRING,
   },
-  state: {
+  active: {
     type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
   id_product: {
     type: DataTypes.INTEGER,

@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize  from "../database/sequelize";
-import { ClassModel } from "./class";
+import { SectorModel } from "./sector";
+import { ProcessModel } from "./process";
 
 export const CategoryModel = sequelize.define("category", {
   id: {
@@ -11,11 +12,20 @@ export const CategoryModel = sequelize.define("category", {
   name: {
     type: DataTypes.STRING,
   },
-  id_class: {
+  id_process: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  id_sector: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
-ClassModel.hasMany(CategoryModel, { foreignKey: "id_class" });
-CategoryModel.belongsTo(ClassModel, { foreignKey: "id_class" });
+
+SectorModel.hasMany(CategoryModel, { foreignKey: "id_sector" });
+CategoryModel.belongsTo(SectorModel, { foreignKey: "id_sector" });
+
+ProcessModel.hasMany(CategoryModel, { foreignKey: "id_process" });
+CategoryModel.belongsTo(ProcessModel, { foreignKey: "id_process" });
+
 

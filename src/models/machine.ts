@@ -16,6 +16,10 @@ export const MachineModel = sequelize.define("machine", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
 });
 
 ProcessModel.hasMany(MachineModel, { foreignKey: "id_process" });

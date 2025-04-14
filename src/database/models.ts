@@ -1,7 +1,7 @@
 import sequelize from "./sequelize";
 
 import {CategoryModel} from "../models/category"; 
-import {ClassModel} from "../models/class"; 
+import {SectorModel} from "../models/sector"; 
 import {FormulaModel} from "../models/formula"; 
 import {FormulaDetailModel} from "../models/formula_detail"; 
 import {InventoryModel} from "../models/inventory"; 
@@ -18,10 +18,11 @@ import {ProductionDetailModel} from "../models/production_detail";
 import {TurnModel} from "../models/turn"; 
 import {UserModel} from "../models/user"; 
 import {WarehouseModel} from "../models/warehouse"; 
+import {UnityModel} from "../models/unity"; 
 
 const models = {
     Category: CategoryModel,
-    Class: ClassModel,
+    Sector: SectorModel,
     Formula: FormulaModel,
     FormulaDetail: FormulaDetailModel,
     Inventory: InventoryModel,
@@ -38,6 +39,8 @@ const models = {
     Turn: TurnModel,
     User: UserModel,
     Warehouse: WarehouseModel,
+    Unity: UnityModel,
+
   };
   
   export default models;

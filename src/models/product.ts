@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize  from "../database/sequelize"; 
 import { CategoryModel } from "./category";
+import { UnityModel } from "./unity";
 
 export const ProductModel = sequelize.define("product", {
   id: {
@@ -11,8 +12,7 @@ export const ProductModel = sequelize.define("product", {
   name: {
     type: DataTypes.STRING,
   },
-  
-  measure: {
+  description: {
     type: DataTypes.STRING,
   },
   cost: {
@@ -20,6 +20,10 @@ export const ProductModel = sequelize.define("product", {
   },
   price: {
     type: DataTypes.DATE,
+  },
+  id_unity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   id_category: {
     type: DataTypes.INTEGER,
@@ -30,7 +34,5 @@ export const ProductModel = sequelize.define("product", {
 CategoryModel.hasMany(ProductModel, { foreignKey: "id_category" });
 ProductModel.belongsTo(CategoryModel, { foreignKey: "id_category" });
 
-/*
-//Relacion con evento
-
-*/
+UnityModel.hasMany(ProductModel, { foreignKey: "id_unity" });
+ProductModel.belongsTo(UnityModel, { foreignKey: "id_unity" });
