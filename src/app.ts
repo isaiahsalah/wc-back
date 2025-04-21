@@ -2,7 +2,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-//import extrusionRoute from "./routes/extrusion.route";
+import colorRoute from "./routes/color.route";
 //import corteRoute from "./routes/corte.route";
 //import impresionRoute from "./routes/impresion.route";
 
@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Rutas de ejemplo
 
-//app.use("/extrusion", extrusionRoute);
+app.use("/pr/color", colorRoute);
 //app.use("/corte", corteRoute);
 //app.use("/impresion", impresionRoute);
 app.get("/example", async (req, res) => {

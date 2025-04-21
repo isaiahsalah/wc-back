@@ -16,7 +16,7 @@ async function main() {
     //console.log("📦 Modelos registrados:", sequelize.models);
 
     //force: false, alter: false
-    await sequelize.sync({ /*force: true*/ });
+    await sequelize.sync({ /*force: true */});
     await seedDatabase()
     console.log("✅ Conectado a PostgreSQL");
   

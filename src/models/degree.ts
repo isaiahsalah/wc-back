@@ -1,7 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize";
 
-export const CategoryModel = sequelize.define("category", {
+import { DataTypes } from "sequelize";
+import  sequelize  from "../database/sequelize";
+
+export const DegreeModel = sequelize.define("degree", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -14,6 +15,3 @@ export const CategoryModel = sequelize.define("category", {
     type: DataTypes.STRING,
   },
 });
-
-
-

@@ -2,7 +2,8 @@ import { DataTypes } from "sequelize";
 import sequelize  from "../database/sequelize"; 
 import { UserModel } from "./user";
 import { OrderDetailModel } from "./order_detail";
-import { MachineModel } from "./machine";
+import { MachineModel } from "./machine"; 
+import { StateModel } from "./state";
 
 export const ProductionModel = sequelize.define("production", {
   id: {
@@ -12,6 +13,9 @@ export const ProductionModel = sequelize.define("production", {
   },
   date: {
     type: DataTypes.DATE,
+  },
+  duration: {
+    type: DataTypes.INTEGER,  // in minutes
   },
   amount: {
     type: DataTypes.FLOAT,
@@ -28,6 +32,10 @@ export const ProductionModel = sequelize.define("production", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  id_state: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 MachineModel.hasMany(ProductionModel, { foreignKey: "id_machine" });
@@ -38,4 +46,7 @@ ProductionModel.belongsTo(OrderDetailModel, { foreignKey: "id_order_detail" });
 
 UserModel.hasMany(ProductionModel, { foreignKey: "id_user" });
 ProductionModel.belongsTo(UserModel, { foreignKey: "id_user" });
+
+StateModel.hasMany(ProductionModel, { foreignKey: "id_state" });
+ProductionModel.belongsTo(StateModel, { foreignKey: "id_state" });
 
