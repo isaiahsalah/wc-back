@@ -50,14 +50,16 @@ export const updateColor = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { name, hexCode } = req.body;
-    const color = await models.Color.findByPk(id);
-    if (!color) {
+
+    const TempColor = await models.Color.findByPk(id);
+    if (!TempColor) {
       res.status(404).json({ error: "Color no encontrado" });
       return;
     }
-    await color.update({ name, hexCode });
-    res.json(color);
+
+    await TempColor.update(req.body);
+    console.log(req.body)
+    res.json(TempColor);
   } catch (error) {
     console.error("❌ Error al actualizar el color:", error);
     res.status(500).json({ error: "Error al actualizar el color" });
