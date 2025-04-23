@@ -2,6 +2,17 @@ import { Request, Response } from "express";
 import models from "../database/models";
 
 // Controlador para Colores
+export const getAllColors = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const colors = await models.Color.findAll({paranoid: false});
+    res.json(colors);
+  } catch (error) {
+    console.error("❌ Error al obtener los colores:", error);
+    res.status(500).json({ error: "Error al obtener los colores" });
+  }
+};
+
+// Controlador para Colores
 export const getColors = async (req: Request, res: Response): Promise<void> => {
   try {
     const colors = await models.Color.findAll();
@@ -35,8 +46,7 @@ export const createColor = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { name, hexCode } = req.body;
-    const newColor = await models.Color.create({ name, hexCode });
+    const newColor = await models.Color.create(req.body);
     res.status(201).json(newColor);
   } catch (error) {
     console.error("❌ Error al crear el color:", error);
@@ -82,5 +92,29 @@ export const deleteColor = async (
   } catch (error) {
     console.error("❌ Error al eliminar el color:", error);
     res.status(500).json({ error: "Error al eliminar el color" });
+  }
+};
+
+
+
+export const recoverColor = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const TempColor = await models.Color.findByPk(id);
+    if (!TempColor) {
+      res.status(404).json({ error: "Color no encontrado" });
+      return;
+    }
+
+    await TempColor.update({ deletedAt: null });
+    console.log(req.body)
+    res.json(TempColor);
+  } catch (error) {
+    console.error("❌ Error al recuperar el color:", error);
+    res.status(500).json({ error: "Error al recuperar el color" });
   }
 };
