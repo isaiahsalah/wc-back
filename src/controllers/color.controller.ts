@@ -66,9 +66,8 @@ export const updateColor = async (
       res.status(404).json({ error: "Color no encontrado" });
       return;
     }
-
-    await TempColor.update(req.body);
     console.log(req.body)
+    await TempColor.update(req.body); 
     res.json(TempColor);
   } catch (error) {
     console.error("❌ Error al actualizar el color:", error);
@@ -96,23 +95,26 @@ export const deleteColor = async (
 };
 
 
-
-export const recoverColor = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const recoverColor = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
-    const TempColor = await models.Color.findByPk(id);
+    // Busca el registro incluso si está marcado como eliminado
+    const TempColor = await models.Color.findByPk(id, { paranoid: false });
     if (!TempColor) {
       res.status(404).json({ error: "Color no encontrado" });
       return;
     }
+  
 
-    await TempColor.update({ deletedAt: null });
-    console.log(req.body)
-    res.json(TempColor);
+    // Recupera el registro marcándolo como activo
+    await TempColor.restore();
+    
+    // Busca nuevamente el registro para confirmar
+    const updatedColor = await models.Color.findByPk(id);
+    // Devuelve el registro actualizado
+    res.json(updatedColor);
+
   } catch (error) {
     console.error("❌ Error al recuperar el color:", error);
     res.status(500).json({ error: "Error al recuperar el color" });

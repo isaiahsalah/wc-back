@@ -13,7 +13,7 @@ const router = Router();
 
 // Routes
 router.post("/", createColor);
-router.put("/", updateColor);
+router.put("/:id", updateColor);
 router.get("/", getColors);
 router.get("/all", getAllColors);
 router.get("/:id", getColorById);
