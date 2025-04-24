@@ -65,14 +65,18 @@ export async function seedDatabase() {
     console.log("✅ Datos de Almacén insertados");
   }
 
+
+  function generateData() {
+    const data = [];
+    for (let i = 0; i < 1000; i++) {
+      data.push({ name: "Rojo", description: `Color rojo utilizado en productos: ${i} ` });
+    }
+    return data;
+  }
   // Inserta datos de color
   const colorCount = await models.Color.count();
   if (colorCount === 0) {
-    await models.Color.bulkCreate([
-      { name: "Rojo", description: "Color rojo utilizado en productos" },
-      { name: "Verde", description: "Color verde utilizado en productos" },
-      { name: "Azul", description: "Color azul utilizado en productos" },
-    ]);
+    await models.Color.bulkCreate(generateData());
     console.log("✅ Datos de Color insertados");
   }
 

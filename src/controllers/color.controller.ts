@@ -105,7 +105,6 @@ export const recoverColor = async (req: Request, res: Response): Promise<void> =
       res.status(404).json({ error: "Color no encontrado" });
       return;
     }
-  
 
     // Recupera el registro marcándolo como activo
     await TempColor.restore();
