@@ -1,9 +1,9 @@
 import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize"; 
+import sequelize from "../database/sequelize";
 import { UserModel } from "./user";
 import { OrderDetailModel } from "./order_detail";
-import { MachineModel } from "./machine"; 
-import { StateModel } from "./state";
+import { MachineModel } from "./machine";
+import { LoteModel } from "./lote";
 
 export const ProductionModel = sequelize.define("production", {
   id: {
@@ -11,16 +11,23 @@ export const ProductionModel = sequelize.define("production", {
     primaryKey: true,
     autoIncrement: true,
   },
+  description: {
+    type: DataTypes.STRING,
+  },
   date: {
     type: DataTypes.DATE,
   },
   duration: {
-    type: DataTypes.INTEGER,  // in minutes
+    type: DataTypes.INTEGER, // in minutes
   },
   amount: {
     type: DataTypes.FLOAT,
   },
   id_machine: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  id_lote: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -32,9 +39,8 @@ export const ProductionModel = sequelize.define("production", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_state: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  state: {
+    type: DataTypes.SMALLINT,
   },
 });
 
@@ -47,6 +53,5 @@ ProductionModel.belongsTo(OrderDetailModel, { foreignKey: "id_order_detail" });
 UserModel.hasMany(ProductionModel, { foreignKey: "id_user" });
 ProductionModel.belongsTo(UserModel, { foreignKey: "id_user" });
 
-StateModel.hasMany(ProductionModel, { foreignKey: "id_state" });
-ProductionModel.belongsTo(StateModel, { foreignKey: "id_state" });
-
+LoteModel.hasMany(ProductionModel, { foreignKey: "id_lote" });
+ProductionModel.belongsTo(LoteModel, { foreignKey: "id_lote" });

@@ -2,17 +2,6 @@ import models from "./models";
 
 export const seedDatabase = async () => {
   try {
-    // Inserta datos de turno
-    const turnCount = await models.Turn.count();
-    if (turnCount === 0) {
-      await models.Turn.bulkCreate([
-        { name: "Día", description: "Turno diurno de 7:00 AM a 7:00 PM" },
-        { name: "Noche", description: "Turno nocturno de 7:00 PM a 7:00 AM" },
-        { name: "Mixto", description: "Turno mixto de 7:00 AM a 3:00 PM y 3:00 PM a 11:00 PM" },
-      ]);
-      console.log("✅ Datos de Turno insertados");
-    }
-
     // Inserta datos de sector
     const sectorCount = await models.Sector.count();
     if (sectorCount === 0) {
@@ -22,50 +11,6 @@ export const seedDatabase = async () => {
         { name: "Almacenamiento", description: "Sector de almacenamiento de productos" },
       ]);
       console.log("✅ Datos de Sector insertados");
-    }
-
-    // Inserta datos de grado
-    const degreeCount = await models.Degree.count();
-    if (degreeCount === 0) {
-      await models.Degree.bulkCreate([
-        { name: "Supervisor", description: "Encargado de supervisar las operaciones" },
-        { name: "Operario", description: "Trabajador encargado de operar maquinaria" },
-        { name: "Técnico", description: "Especialista en mantenimiento y reparación" },
-      ]);
-      console.log("✅ Datos de Grado insertados");
-    }
-
-    // Inserta datos de módulo
-    const moduleCount = await models.Module.count();
-    if (moduleCount === 0) {
-      await models.Module.bulkCreate([
-        { name: "Producción", description: "Módulo principal de producción" },
-        { name: "Calidad", description: "Módulo encargado del control de calidad" },
-        { name: "Logística", description: "Módulo encargado de la logística y distribución" },
-      ]);
-      console.log("✅ Datos de Módulo insertados");
-    }
-
-    // Inserta datos de estado
-    const stateCount = await models.State.count();
-    if (stateCount === 0) {
-      await models.State.bulkCreate([
-        { name: "Bueno", description: "Estado óptimo del producto o proceso" },
-        { name: "Malo", description: "Estado defectuoso del producto o proceso" },
-        { name: "Regular", description: "Estado aceptable pero mejorable" },
-      ]);
-      console.log("✅ Datos de Estado insertados");
-    }
-
-    // Inserta datos de almacén
-    const warehouseCount = await models.Warehouse.count();
-    if (warehouseCount === 0) {
-      await models.Warehouse.bulkCreate([
-        { name: "Central", description: "Almacén principal de la empresa" },
-        { name: "Secundario", description: "Almacén de soporte para materiales" },
-        { name: "Productos Terminados", description: "Almacén para productos listos para distribución" },
-      ]);
-      console.log("✅ Datos de Almacén insertados");
     }
 
     // Inserta datos de color
@@ -78,10 +23,6 @@ export const seedDatabase = async () => {
         { name: "Amarillo", description: "Color amarillo utilizado en productos" },
         { name: "Negro", description: "Color negro utilizado en productos" },
         { name: "Blanco", description: "Color blanco utilizado en productos" },
-        { name: "Gris", description: "Color gris utilizado en productos" },
-        { name: "Naranja", description: "Color naranja utilizado en productos" },
-        { name: "Morado", description: "Color morado utilizado en productos" },
-        { name: "Rosa", description: "Color rosa utilizado en productos" },
       ]);
       console.log("✅ Datos de Color insertados");
     }
@@ -93,66 +34,138 @@ export const seedDatabase = async () => {
         { name: "Kilogramos", shortname: "kg", description: "Unidad de medida en kilogramos" },
         { name: "Litros", shortname: "l", description: "Unidad de medida en litros" },
         { name: "Unidades", shortname: "u", description: "Unidad de medida por cantidad de piezas" },
-        { name: "Metros", shortname: "m", description: "Unidad de medida en metros" },
-        { name: "Centímetros", shortname: "cm", description: "Unidad de medida en centímetros" },
-        { name: "Milímetros", shortname: "mm", description: "Unidad de medida en milímetros" },
-        { name: "Gramos", shortname: "g", description: "Unidad de medida en gramos" },
-        { name: "Toneladas", shortname: "t", description: "Unidad de medida en toneladas" },
-        { name: "Cajas", shortname: "c", description: "Unidad de medida en cajas" },
-        { name: "Palets", shortname: "p", description: "Unidad de medida en palets" },
       ]);
       console.log("✅ Datos de Unidad insertados");
     }
 
-    // Inserta datos de categoría
-    const categoryCount = await models.Category.count();
-    if (categoryCount === 0) {
-      await models.Category.bulkCreate([
-        { name: "En procesos", description: "Materiales base para producción" },
-        { name: "Terminado", description: "Productos en proceso" },
-        { name: "En Procesos de corte", description: "Productos en proceso" },
-
+    // Inserta datos de proceso
+    const processCount = await models.Process.count();
+    if (processCount === 0) {
+      await models.Process.bulkCreate([
+        { name: "Extrusión", description: "Proceso de extrusión de materiales" },
+        { name: "Impresión", description: "Proceso de impresión en productos" },
       ]);
-      console.log("✅ Datos de Categoría insertados");
+      console.log("✅ Datos de Proceso insertados");
     }
-  // Inserta datos de proceso
-  const processCount = await models.Process.count();
-  if (processCount === 0) {
-    await models.Process.bulkCreate([
-      { name: "Extrusión", description: "Proceso de extrusión de materiales" },
-      { name: "Impresión", description: "Proceso de impresión en productos" },
-      { name: "Empaque", description: "Proceso de empaque de productos terminados" },
-      { name: "Corte", description: "Proceso de corte de materiales" },
-      { name: "Laminado", description: "Proceso de laminado de materiales" },
-      { name: "Soldadura", description: "Proceso de soldadura de materiales" },
-      { name: "Moldeo", description: "Proceso de moldeo de productos" },
-      { name: "Pulido", description: "Proceso de pulido de superficies" },
-      { name: "Reciclaje", description: "Proceso de reciclaje de materiales" },
-      { name: "Inspección", description: "Proceso de inspección de calidad" },
-    ]);
-    console.log("✅ Datos de Proceso insertados");
-  }
 
     // Inserta datos de modelo
     const modelCount = await models.Model.count();
     if (modelCount === 0) {
       await models.Model.bulkCreate([
-        { name: "Modelo A", id_process: 1, id_sector: 1, id_category: 1 },
-        { name: "Modelo B", id_process: 2, id_sector: 2, id_category: 2 },
-        { name: "Modelo C", id_process: 3, id_sector: 3, id_category: 3 },
+        { name: "Modelo A", id_process: 1, id_sector: 1 },
+        { name: "Modelo B", id_process: 2, id_sector: 2 },
       ]);
       console.log("✅ Datos de Modelo insertados");
     }
 
-    
     // Inserta datos de usuario
     const userCount = await models.User.count();
     if (userCount === 0) {
       await models.User.bulkCreate([
-        { name: "Juan", lastname: "Pérez", birthday: "1990-01-01", image: "juan.jpg", phone: "123456789", user: "juanp", pass: "1234", id_turn: 1 },
-        { name: "Ana", lastname: "Gómez", birthday: "1992-05-10", image: "ana.jpg", phone: "987654321", user: "anag", pass: "5678", id_turn: 2 },
+        { name: "Juan", lastname: "Pérez", birthday: "1990-01-01", image: "juan.jpg", phone: "123456789", user: "juanp", pass: "1234" },
+        { name: "Ana", lastname: "Gómez", birthday: "1992-05-10", image: "ana.jpg", phone: "987654321", user: "anag", pass: "5678" },
       ]);
       console.log("✅ Datos de Usuario insertados");
+    }
+
+    // Inserta datos de inventario
+    const inventoryCount = await models.Inventory.count();
+    if (inventoryCount === 0) {
+      await models.Inventory.bulkCreate([
+        { name: "Inventario A", description: "Inventario principal" },
+        { name: "Inventario B", description: "Inventario secundario" },
+      ]);
+      console.log("✅ Datos de Inventario insertados");
+    }
+
+    // Inserta datos de lotes
+    const loteCount = await models.Lote.count();
+    if (loteCount === 0) {
+      await models.Lote.bulkCreate([
+        { amount: 100, id_inventory: 1 },
+        { amount: 200, id_inventory: 2 },
+      ]);
+      console.log("✅ Datos de Lotes insertados");
+    }
+
+    // Inserta datos de máquinas
+    const machineCount = await models.Machine.count();
+    if (machineCount === 0) {
+      await models.Machine.bulkCreate([
+        { name: "Máquina A", id_process: 1 },
+        { name: "Máquina B", id_process: 2 },
+      ]);
+      console.log("✅ Datos de Máquinas insertados");
+    }
+
+    // Inserta datos de productos
+    const productCount = await models.Product.count();
+    if (productCount === 0) {
+      await models.Product.bulkCreate([
+        { name: "Producto A", description: "Producto de prueba A", cost: 10, price: 20, id_unity: 1, id_color: 1, id_model: 1 },
+        { name: "Producto B", description: "Producto de prueba B", cost: 15, price: 30, id_unity: 2, id_color: 2, id_model: 2 },
+      ]);
+      console.log("✅ Datos de Productos insertados");
+    }
+
+    // Inserta datos de fórmulas
+    const formulaCount = await models.Formula.count();
+    if (formulaCount === 0) {
+      await models.Formula.bulkCreate([
+        { name: "Fórmula A", id_product: 1 },
+        { name: "Fórmula B", id_product: 2 },
+      ]);
+      console.log("✅ Datos de Fórmulas insertados");
+    }
+
+    // Inserta datos de detalles de fórmula
+    const formulaDetailCount = await models.FormulaDetail.count();
+    if (formulaDetailCount === 0) {
+      await models.FormulaDetail.bulkCreate([
+        { name: "Detalle A", amount: 5, id_product_material: 1 },
+        { name: "Detalle B", amount: 10, id_product_material: 2 },
+      ]);
+      console.log("✅ Datos de Detalles de Fórmula insertados");
+    }
+
+    // Inserta datos de órdenes
+    const orderCount = await models.Order.count();
+    if (orderCount === 0) {
+      await models.Order.bulkCreate([
+        { order_date: new Date(), id_user: 1 },
+        { order_date: new Date(), id_user: 2 },
+      ]);
+      console.log("✅ Datos de Órdenes insertados");
+    }
+
+    // Inserta datos de detalles de órdenes
+    const orderDetailCount = await models.OrderDetail.count();
+    if (orderDetailCount === 0) {
+      await models.OrderDetail.bulkCreate([
+        { amount: 10, id_product: 1, id_order: 1 },
+        { amount: 20, id_product: 2, id_order: 2 },
+      ]);
+      console.log("✅ Datos de Detalles de Órdenes insertados");
+    }
+
+    // Inserta datos de producción
+    const productionCount = await models.Production.count();
+    if (productionCount === 0) {
+      await models.Production.bulkCreate([
+        { description: "Producción A", date: new Date(), duration: 60, amount: 100, id_machine: 1, id_lote: 1, id_order_detail: 1, id_user: 1 },
+        { description: "Producción B", date: new Date(), duration: 120, amount: 200, id_machine: 2, id_lote: 2, id_order_detail: 2, id_user: 2 },
+      ]);
+      console.log("✅ Datos de Producción insertados");
+    }
+
+    // Inserta datos de detalles de producción
+    const productionDetailCount = await models.ProductionDetail.count();
+    if (productionDetailCount === 0) {
+      await models.ProductionDetail.bulkCreate([
+        { amount: 50, id_production: 1, id_product_materia: 1 },
+        { amount: 100, id_production: 2, id_product_materia: 2 },
+      ]);
+      console.log("✅ Datos de Detalles de Producción insertados");
     }
 
     console.log("✅ Base de datos inicializada con datos de ejemplo.");
@@ -160,4 +173,3 @@ export const seedDatabase = async () => {
     console.error("❌ Error al inicializar los datos base:", error);
   }
 };
- 

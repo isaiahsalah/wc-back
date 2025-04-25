@@ -15,7 +15,7 @@ async function main() {
 
   //force: false, alter: false
   await sequelize.sync({
-    force: true, alter: false 
+   /* force: true, alter: false */
   });
   await seedDatabase();
   console.log("✅ Conectado a PostgreSQL");

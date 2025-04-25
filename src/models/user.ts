@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize";
-import { TurnModel } from "./turn";
- 
+import sequelize from "../database/sequelize";
+
 export const UserModel = sequelize.define("user", {
   id: {
     type: DataTypes.INTEGER,
@@ -29,14 +28,10 @@ export const UserModel = sequelize.define("user", {
   pass: {
     type: DataTypes.STRING,
   },
-  id_turn: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  turn: {
+    type: DataTypes.SMALLINT,
   },
 });
-
-TurnModel.hasMany(UserModel, { foreignKey: "id_turn" });
-UserModel.belongsTo(TurnModel, { foreignKey: "id_turn" });
 
 /*
 //Relacion con evento

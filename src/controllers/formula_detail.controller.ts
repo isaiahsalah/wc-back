@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
 import models from "../database/models";
 
-export const getAllFormulaDetails = async (req: Request, res: Response): Promise<void> => {
+export const getAllFormulaDetails = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const formulaDetails = await models.FormulaDetail.findAll({ paranoid: false });
+    const formulaDetails = await models.FormulaDetail.findAll({
+      paranoid: false,
+      include: [models.Product],
+    });
     res.json(formulaDetails);
   } catch (error) {
     console.error("❌ Error al obtener los detalles de fórmula:", error);
@@ -11,7 +17,10 @@ export const getAllFormulaDetails = async (req: Request, res: Response): Promise
   }
 };
 
-export const getFormulaDetailById = async (req: Request, res: Response): Promise<void> => {
+export const getFormulaDetailById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
     const formulaDetail = await models.FormulaDetail.findByPk(id);
@@ -26,7 +35,10 @@ export const getFormulaDetailById = async (req: Request, res: Response): Promise
   }
 };
 
-export const createFormulaDetail = async (req: Request, res: Response): Promise<void> => {
+export const createFormulaDetail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const newFormulaDetail = await models.FormulaDetail.create(req.body);
     res.status(201).json(newFormulaDetail);
@@ -36,7 +48,10 @@ export const createFormulaDetail = async (req: Request, res: Response): Promise<
   }
 };
 
-export const updateFormulaDetail = async (req: Request, res: Response): Promise<void> => {
+export const updateFormulaDetail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
     const formulaDetail = await models.FormulaDetail.findByPk(id);
@@ -48,11 +63,16 @@ export const updateFormulaDetail = async (req: Request, res: Response): Promise<
     res.json(formulaDetail);
   } catch (error) {
     console.error("❌ Error al actualizar el detalle de fórmula:", error);
-    res.status(500).json({ error: "Error al actualizar el detalle de fórmula" });
+    res
+      .status(500)
+      .json({ error: "Error al actualizar el detalle de fórmula" });
   }
 };
 
-export const deleteFormulaDetail = async (req: Request, res: Response): Promise<void> => {
+export const deleteFormulaDetail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
     const formulaDetail = await models.FormulaDetail.findByPk(id);

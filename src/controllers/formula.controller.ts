@@ -3,7 +3,7 @@ import models from "../database/models";
 
 export const getAllFormulas = async (req: Request, res: Response): Promise<void> => {
   try {
-    const formulas = await models.Formula.findAll({ paranoid: false });
+    const formulas = await models.Formula.findAll({ paranoid: false,include:[models.Product]  });
     res.json(formulas);
   } catch (error) {
     console.error("❌ Error al obtener las fórmulas:", error);

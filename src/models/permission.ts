@@ -1,8 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize  from "../database/sequelize";
-import { UserModel } from "./user";
-import { DegreeModel } from "./degree";
-import { ModuleModel } from "./module";
+import { UserModel } from "./user"; 
 
 export const PermissionModel = sequelize.define("permission", {
   id: {
@@ -17,18 +15,13 @@ export const PermissionModel = sequelize.define("permission", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_degree: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  degree: {
+    type: DataTypes.SMALLINT, 
   },
-  id_module: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  screen: {
+    type: DataTypes.SMALLINT, 
   },
 });
-
-ModuleModel.hasMany(PermissionModel, { foreignKey: "id_module" });
-PermissionModel.belongsTo(ModuleModel, { foreignKey: "id_module" });
 
 UserModel.hasMany(PermissionModel, { foreignKey: "id_user" });
 PermissionModel.belongsTo(UserModel, { foreignKey: "id_user" });
