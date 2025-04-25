@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createModel);
 router.put("/:id", updateModel);
 router.get("/", getAllModels);
+router.get("/all", getAllModels);
 router.get("/:id", getModelById);
 router.delete("/:id", deleteModel);
 

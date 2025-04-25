@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createTurn);
 router.put("/:id", updateTurn);
 router.get("/", getAllTurns);
+router.get("/all", getAllTurns);
 router.get("/:id", getTurnById);
 router.delete("/:id", deleteTurn);
 

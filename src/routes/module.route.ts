@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createModule);
 router.put("/:id", updateModule);
 router.get("/", getAllModules);
+router.get("/all", getAllModules);
 router.get("/:id", getModuleById);
 router.delete("/:id", deleteModule);
 

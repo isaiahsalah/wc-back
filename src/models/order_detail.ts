@@ -3,7 +3,7 @@ import sequelize  from "../database/sequelize";
 import { OrderModel } from "./order";
 import { ProductModel } from "./product";
 
-export const OrderDetailModel = sequelize.define("order", {
+export const OrderDetailModel = sequelize.define("order_detail", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

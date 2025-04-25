@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createFormulaDetail);
 router.put("/:id", updateFormulaDetail);
 router.get("/", getAllFormulaDetails);
+router.get("/all", getAllFormulaDetails);
 router.get("/:id", getFormulaDetailById);
 router.delete("/:id", deleteFormulaDetail);
 

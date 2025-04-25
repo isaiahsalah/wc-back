@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createState);
 router.put("/:id", updateState);
 router.get("/", getAllStates);
+router.get("/all", getAllStates);
 router.get("/:id", getStateById);
 router.delete("/:id", deleteState);
 

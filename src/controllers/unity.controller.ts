@@ -47,6 +47,7 @@ export const createUnity = async (
 ): Promise<void> => {
   try {
     const newUnity = await models.Unity.create(req.body);
+   
     res.status(201).json(newUnity);
   } catch (error) {
     console.error("❌ Error al crear la unidad:", error);

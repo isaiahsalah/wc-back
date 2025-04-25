@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createPermission);
 router.put("/:id", updatePermission);
 router.get("/", getAllPermissions);
+router.get("/all", getAllPermissions);
 router.get("/:id", getPermissionById);
 router.delete("/:id", deletePermission);
 

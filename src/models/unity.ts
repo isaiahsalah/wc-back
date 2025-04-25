@@ -14,8 +14,4 @@ export const UnityModel = sequelize.define("unity", {
   shortname: {
     type: DataTypes.STRING,
   },
-  active: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  },
 });

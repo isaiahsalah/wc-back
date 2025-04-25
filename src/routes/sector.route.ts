@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createSector);
 router.put("/:id", updateSector);
 router.get("/", getAllSectors);
+router.get("/all", getAllSectors);
 router.get("/:id", getSectorById);
 router.delete("/:id", deleteSector);
 

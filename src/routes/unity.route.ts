@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createUnity);
 router.put("/:id", updateUnity);
 router.get("/", getAllUnities);
+router.get("/all", getAllUnities);
 router.get("/:id", getUnityById);
 router.delete("/:id", deleteUnity);
 

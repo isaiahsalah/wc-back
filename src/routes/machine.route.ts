@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createMachine);
 router.put("/:id", updateMachine);
 router.get("/", getAllMachines);
+router.get("/all", getAllMachines);
 router.get("/:id", getMachineById);
 router.delete("/:id", deleteMachine);
 

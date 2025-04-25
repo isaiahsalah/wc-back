@@ -13,6 +13,7 @@ const router = Router();
 router.post("/", createProcess);
 router.put("/:id", updateProcess);
 router.get("/", getAllProcesses);
+router.get("/all", getAllProcesses);
 router.get("/:id", getProcessById);
 router.delete("/:id", deleteProcess);
 
