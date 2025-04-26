@@ -102,8 +102,8 @@ export const seedDatabase = async () => {
     const productCount = await models.Product.count();
     if (productCount === 0) {
       await models.Product.bulkCreate([
-        { name: "Producto A", description: "Producto de prueba A", cost: 10, price: 20, id_unity: 1, id_color: 1, id_model: 1 },
-        { name: "Producto B", description: "Producto de prueba B", cost: 15, price: 30, id_unity: 2, id_color: 2, id_model: 2 },
+        { name: "Producto A",amount:20, description: "Producto de prueba A", cost: 10, price: 20, id_unity: 1, id_color: 1, id_model: 1 },
+        { name: "Producto B", amount:24,description: "Producto de prueba B", cost: 15, price: 30, id_unity: 2, id_color: 2, id_model: 2 },
       ]);
       console.log("✅ Datos de Productos insertados");
     }

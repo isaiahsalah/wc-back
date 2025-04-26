@@ -22,6 +22,9 @@ export const ProductModel = sequelize.define("product", {
   price: {
     type: DataTypes.INTEGER,
   },
+  amount:{
+    type: DataTypes.INTEGER,
+  },
   id_unity: {
     type: DataTypes.INTEGER,
     allowNull: false,
