@@ -4,6 +4,7 @@ import {
   deleteOrderDetail,
   getAllOrderDetails,
   getOrderDetailById,
+  recoverOrderDetail,
   updateOrderDetail,
 } from "../controllers/order_detail.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllOrderDetails);
 router.get("/all", getAllOrderDetails);
 router.get("/:id", getOrderDetailById);
 router.delete("/:id", deleteOrderDetail);
-
+router.patch("/:id", recoverOrderDetail );
 export default router;

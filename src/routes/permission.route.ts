@@ -4,6 +4,7 @@ import {
   deletePermission,
   getAllPermissions,
   getPermissionById,
+  recoverPermission,
   updatePermission,
 } from "../controllers/permission.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllPermissions);
 router.get("/all", getAllPermissions);
 router.get("/:id", getPermissionById);
 router.delete("/:id", deletePermission);
-
+router.patch("/:id", recoverPermission );
 export default router;

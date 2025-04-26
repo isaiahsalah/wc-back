@@ -4,6 +4,7 @@ import {
   deleteProductionDetail,
   getAllProductionDetails,
   getProductionDetailById,
+  recoverProductionDetail,
   updateProductionDetail,
 } from "../controllers/production_detail.controller";
 
@@ -17,5 +18,5 @@ router.get("/all", getAllProductionDetails);
 
 router.get("/:id", getProductionDetailById);
 router.delete("/:id", deleteProductionDetail);
-
+router.patch("/:id", recoverProductionDetail );
 export default router;

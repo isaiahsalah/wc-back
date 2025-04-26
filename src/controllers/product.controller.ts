@@ -67,3 +67,29 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ error: "Error al eliminar el producto" });
   }
 };
+
+
+export const recoverProduct = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    // Busca el registro incluso si está marcado como eliminado
+    const TempProduct = await models.Product.findByPk(id, { paranoid: false });
+    if (!TempProduct) {
+      res.status(404).json({ error: "Product no encontrado" });
+      return;
+    }
+
+    // Recupera el registro marcándolo como activo
+    await TempProduct.restore();
+    
+    // Busca nuevamente el registro para confirmar
+    const updatedProduct = await models.Product.findByPk(id);
+    // Devuelve el registro actualizado
+    res.json(updatedProduct);
+
+  } catch (error) {
+    console.error("❌ Error al recuperar el Product:", error);
+    res.status(500).json({ error: "Error al recuperar el Product" });
+  }
+};

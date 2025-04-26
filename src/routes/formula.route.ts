@@ -4,6 +4,7 @@ import {
   deleteFormula,
   getAllFormulas,
   getFormulaById,
+  recoverFormula,
   updateFormula,
 } from "../controllers/formula.controller";
 
@@ -16,5 +17,6 @@ router.get("/", getAllFormulas);
 router.get("/all", getAllFormulas);
 router.get("/:id", getFormulaById);
 router.delete("/:id", deleteFormula);
+router.patch("/:id", recoverFormula );
 
 export default router;

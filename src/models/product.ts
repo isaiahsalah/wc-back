@@ -17,10 +17,10 @@ export const ProductModel = sequelize.define("product", {
     type: DataTypes.STRING,
   },
   cost: {
-    type: DataTypes.DATE,
+    type: DataTypes.INTEGER,
   },
   price: {
-    type: DataTypes.DATE,
+    type: DataTypes.INTEGER,
   },
   id_unity: {
     type: DataTypes.INTEGER,

@@ -4,6 +4,7 @@ import {
   deleteProcess,
   getAllProcesses,
   getProcessById,
+  recoverProcess,
   updateProcess,
 } from "../controllers/process.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllProcesses);
 router.get("/all", getAllProcesses);
 router.get("/:id", getProcessById);
 router.delete("/:id", deleteProcess);
-
+router.patch("/:id", recoverProcess );
 export default router;

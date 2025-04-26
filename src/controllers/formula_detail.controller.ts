@@ -87,3 +87,28 @@ export const deleteFormulaDetail = async (
     res.status(500).json({ error: "Error al eliminar el detalle de fórmula" });
   }
 };
+
+export const recoverFormulaDetail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    // Busca el registro incluso si está marcado como eliminado
+    const TempFormulaDetail = await models.FormulaDetail.findByPk(id, { paranoid: false });
+    if (!TempFormulaDetail) {
+      res.status(404).json({ error: "FormulaDetail no encontrado" });
+      return;
+    }
+
+    // Recupera el registro marcándolo como activo
+    await TempFormulaDetail.restore();
+    
+    // Busca nuevamente el registro para confirmar
+    const updatedFormulaDetail = await models.FormulaDetail.findByPk(id);
+    // Devuelve el registro actualizado
+    res.json(updatedFormulaDetail);
+
+  } catch (error) {
+    console.error("❌ Error al recuperar el FormulaDetail:", error);
+    res.status(500).json({ error: "Error al recuperar el FormulaDetail" });
+  }
+};

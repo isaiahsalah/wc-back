@@ -4,6 +4,7 @@ import {
   deleteMachine,
   getAllMachines,
   getMachineById,
+  recoverMachine,
   updateMachine,
 } from "../controllers/machine.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllMachines);
 router.get("/all", getAllMachines);
 router.get("/:id", getMachineById);
 router.delete("/:id", deleteMachine);
-
+router.patch("/:id", recoverMachine );
 export default router;

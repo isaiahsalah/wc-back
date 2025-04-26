@@ -4,6 +4,7 @@ import {
   deleteUnity,
   getAllUnities,
   getUnityById,
+  recoverUnity,
   updateUnity,
 } from "../controllers/unity.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllUnities);
 router.get("/all", getAllUnities);
 router.get("/:id", getUnityById);
 router.delete("/:id", deleteUnity);
-
+router.patch("/:id", recoverUnity );
 export default router;

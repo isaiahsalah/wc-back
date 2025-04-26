@@ -67,3 +67,29 @@ export const deleteProduction = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ error: "Error al eliminar la producción" });
   }
 };
+
+
+export const recoverProduction = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    // Busca el registro incluso si está marcado como eliminado
+    const TempProduction = await models.Production.findByPk(id, { paranoid: false });
+    if (!TempProduction) {
+      res.status(404).json({ error: "Production no encontrado" });
+      return;
+    }
+
+    // Recupera el registro marcándolo como activo
+    await TempProduction.restore();
+    
+    // Busca nuevamente el registro para confirmar
+    const updatedProduction = await models.Production.findByPk(id);
+    // Devuelve el registro actualizado
+    res.json(updatedProduction);
+
+  } catch (error) {
+    console.error("❌ Error al recuperar el Production:", error);
+    res.status(500).json({ error: "Error al recuperar el Production" });
+  }
+};

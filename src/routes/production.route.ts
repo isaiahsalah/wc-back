@@ -4,6 +4,7 @@ import {
   deleteProduction,
   getAllProductions,
   getProductionById,
+  recoverProduction,
   updateProduction,
 } from "../controllers/production.controller";
 
@@ -17,5 +18,5 @@ router.get("/all", getAllProductions);
 
 router.get("/:id", getProductionById);
 router.delete("/:id", deleteProduction);
-
+router.patch("/:id", recoverProduction );
 export default router;

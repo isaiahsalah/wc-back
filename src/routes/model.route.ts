@@ -4,6 +4,7 @@ import {
   deleteModel,
   getAllModels,
   getModelById,
+  recoverModel,
   updateModel,
 } from "../controllers/model.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllModels);
 router.get("/all", getAllModels);
 router.get("/:id", getModelById);
 router.delete("/:id", deleteModel);
-
+router.patch("/:id", recoverModel );
 export default router;

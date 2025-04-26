@@ -3,7 +3,9 @@ import models from "../database/models";
 
 export const getAllFormulas = async (req: Request, res: Response): Promise<void> => {
   try {
-    const formulas = await models.Formula.findAll({ paranoid: false,include:[models.Product]  });
+    const formulas = await models.Formula.findAll({ paranoid: false,
+     // include:[models.Product]  
+    });
     res.json(formulas);
   } catch (error) {
     console.error("❌ Error al obtener las fórmulas:", error);
@@ -65,5 +67,31 @@ export const deleteFormula = async (req: Request, res: Response): Promise<void> 
   } catch (error) {
     console.error("❌ Error al eliminar la fórmula:", error);
     res.status(500).json({ error: "Error al eliminar la fórmula" });
+  }
+};
+
+
+export const recoverFormula = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    // Busca el registro incluso si está marcado como eliminado
+    const TempFormula = await models.Formula.findByPk(id, { paranoid: false });
+    if (!TempFormula) {
+      res.status(404).json({ error: "Formula no encontrado" });
+      return;
+    }
+
+    // Recupera el registro marcándolo como activo
+    await TempFormula.restore();
+    
+    // Busca nuevamente el registro para confirmar
+    const updatedFormula = await models.Formula.findByPk(id);
+    // Devuelve el registro actualizado
+    res.json(updatedFormula);
+
+  } catch (error) {
+    console.error("❌ Error al recuperar el Formula:", error);
+    res.status(500).json({ error: "Error al recuperar el Formula" });
   }
 };

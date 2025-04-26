@@ -4,6 +4,7 @@ import {
   deleteInventory,
   getAllInventories,
   getInventoryById,
+  recoverInventory,
   updateInventory,
 } from "../controllers/inventory.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllInventories);
 router.get("/all", getAllInventories);
 router.get("/:id", getInventoryById);
 router.delete("/:id", deleteInventory);
-
+router.patch("/:id", recoverInventory );
 export default router;

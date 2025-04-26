@@ -4,6 +4,7 @@ import {
   deleteLote,
   getAllLotes,
   getLoteById,
+  recoverLote,
   updateLote,
 } from "../controllers/lote.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllLotes);
 router.get("/all", getAllLotes);
 router.get("/:id", getLoteById);
 router.delete("/:id", deleteLote);
-
+router.patch("/:id", recoverLote );
 export default router;

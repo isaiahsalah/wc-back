@@ -67,3 +67,29 @@ export const deleteProductionDetail = async (req: Request, res: Response): Promi
     res.status(500).json({ error: "Error al eliminar el detalle de producción" });
   }
 };
+
+
+export const recoverProductionDetail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    // Busca el registro incluso si está marcado como eliminado
+    const TempProductionDetail = await models.ProductionDetail.findByPk(id, { paranoid: false });
+    if (!TempProductionDetail) {
+      res.status(404).json({ error: "ProductionDetail no encontrado" });
+      return;
+    }
+
+    // Recupera el registro marcándolo como activo
+    await TempProductionDetail.restore();
+    
+    // Busca nuevamente el registro para confirmar
+    const updatedProductionDetail = await models.ProductionDetail.findByPk(id);
+    // Devuelve el registro actualizado
+    res.json(updatedProductionDetail);
+
+  } catch (error) {
+    console.error("❌ Error al recuperar el ProductionDetail:", error);
+    res.status(500).json({ error: "Error al recuperar el ProductionDetail" });
+  }
+};

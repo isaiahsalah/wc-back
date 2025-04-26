@@ -82,3 +82,29 @@ export const deleteLote = async (
     res.status(500).json({ error: "Error al eliminar el lote" });
   }
 };
+
+
+export const recoverLote = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    // Busca el registro incluso si está marcado como eliminado
+    const TempLote = await models.Lote.findByPk(id, { paranoid: false });
+    if (!TempLote) {
+      res.status(404).json({ error: "Lote no encontrado" });
+      return;
+    }
+
+    // Recupera el registro marcándolo como activo
+    await TempLote.restore();
+    
+    // Busca nuevamente el registro para confirmar
+    const updatedLote = await models.Lote.findByPk(id);
+    // Devuelve el registro actualizado
+    res.json(updatedLote);
+
+  } catch (error) {
+    console.error("❌ Error al recuperar el Lote:", error);
+    res.status(500).json({ error: "Error al recuperar el Lote" });
+  }
+};

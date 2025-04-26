@@ -4,6 +4,7 @@ import {
   deleteUser,
   getAllUsers,
   getUserById,
+  recoverUser,
   updateUser,
 } from "../controllers/user.controller";
 
@@ -16,5 +17,5 @@ router.get("/", getAllUsers);
 router.get("/all", getAllUsers);
 router.get("/:id", getUserById);
 router.delete("/:id", deleteUser);
-
+router.patch("/:id", recoverUser );
 export default router;
