@@ -109,6 +109,7 @@ export const seedDatabase = async () => {
           phone: "123456789",
           user: "admin",
           pass: "admin",
+          id_group: 4,
         },
         {
           name: "Ana",
@@ -118,6 +119,7 @@ export const seedDatabase = async () => {
           phone: "987654321",
           user: "anag",
           pass: "5678",
+          id_group: 1,
         },
       ]);
       console.log("✅ Datos de Usuario insertados");
@@ -149,6 +151,18 @@ export const seedDatabase = async () => {
       await models.Machine.bulkCreate([
         { name: "Máquina A", description: "", id_process: 1 },
         { name: "Máquina B", description: "", id_process: 2 },
+      ]);
+      console.log("✅ Datos de Máquinas insertados");
+    }
+    // Inserta datos de Grupos
+    const groupCount = await models.Machine.count();
+    if (groupCount === 0) {
+      await models.Group.bulkCreate([
+        { name: "Grupo A", description: "", turn: 1 },
+        { name: "Grupo B", description: "", turn: 1 },
+
+        { name: "Grupo A", description: "", turn: 2 },
+        { name: "Grupo B", description: "", turn: 2 },
       ]);
       console.log("✅ Datos de Máquinas insertados");
     }
@@ -205,8 +219,16 @@ export const seedDatabase = async () => {
     const orderCount = await models.Order.count();
     if (orderCount === 0) {
       await models.Order.bulkCreate([
-        { init_date: new Date(),end_date: new Date().setDate( new Date().getDate() + 1), id_user: 1 },
-        { init_date: new Date(), end_date: new Date().setDate( new Date().getDate() + 1),id_user: 2 },
+        {
+          init_date: new Date(),
+          end_date: new Date().setDate(new Date().getDate() + 1),
+          id_user: 1,
+        },
+        {
+          init_date: new Date(),
+          end_date: new Date().setDate(new Date().getDate() + 1),
+          id_user: 2,
+        },
       ]);
       console.log("✅ Datos de Órdenes insertados");
     }
@@ -228,42 +250,42 @@ export const seedDatabase = async () => {
         {
           description: "Producción A",
           date: new Date(),
-          duration: 60, 
+          duration: 60,
           id_machine: 1,
           id_lote: 1,
           id_order_detail: 1,
           id_user: 1,
-          quality:1
+          quality: 1,
         },
         {
           description: "Producción B",
           date: new Date(),
-          duration: 120, 
+          duration: 120,
           id_machine: 2,
           id_lote: 2,
           id_order_detail: 2,
           id_user: 2,
-          quality:1
+          quality: 1,
         },
         {
           description: "Producción C",
           date: new Date(),
-          duration: 60, 
+          duration: 60,
           id_machine: 1,
           id_lote: 1,
           id_order_detail: 1,
           id_user: 1,
-          quality:1
+          quality: 1,
         },
         {
           description: "Producción D",
           date: new Date(),
-          duration: 120, 
+          duration: 120,
           id_machine: 2,
           id_lote: 2,
           id_order_detail: 2,
           id_user: 2,
-          quality:1
+          quality: 1,
         },
       ]);
       console.log("✅ Datos de Producción insertados");

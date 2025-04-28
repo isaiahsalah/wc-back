@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../database/sequelize";
+import { GroupModel } from "./group";
 
 export const UserModel = sequelize.define("user", {
   id: {
@@ -33,7 +34,5 @@ export const UserModel = sequelize.define("user", {
   },
 });
 
-/*
-//Relacion con evento
-
-*/
+GroupModel.hasMany(UserModel, { foreignKey: "id_turn" });
+UserModel.belongsTo(GroupModel, { foreignKey: "id_turn" });

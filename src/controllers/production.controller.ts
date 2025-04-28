@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import models, { sequelize } from "../database/models";
+import { Op } from "sequelize";
 
 export const getProductions = async (
   req: Request,
@@ -178,7 +179,9 @@ export const createProductions = async (
         );
       })
     );
-    const ids:Number[] = Array.from(createdProductions.map((p) => p.get("id")));
+    const ids: Number[] = Array.from(
+      createdProductions.map((p) => p.get("id"))
+    );
 
     const detailedProductions = await models.Production.findAll({
       where: {
@@ -188,12 +191,15 @@ export const createProductions = async (
         {
           model: models.OrderDetail,
           include: [
-            { model: models.Product, include: [{ model: models.Unity }] },
+            {
+              model: models.Product,
+              include: [{ model: models.Unity }, { model: models.Model }],
+            },
           ],
         },
         {
-          model:models.Lote
-        }
+          model: models.Lote,
+        },
       ],
       transaction: t,
     });
@@ -211,5 +217,36 @@ export const createProductions = async (
 
     console.error("❌ Error al crear las producciones:", error);
     res.status(500).json({ error: "Error al crear las producciones" });
+  }
+};
+
+export const getAllProductionsDate = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    // Obtiene el parámetro 'date' de la consulta
+    const { date } = req.query;
+
+    // Crea una condición de filtro dependiendo de si se proporciona el parámetro 'date'
+    const filter: any = {};
+    if (date) {
+      filter.date = date; // Ajusta 'date' al nombre real del campo en tu tabla
+    }
+
+    // Consulta las producciones, con o sin filtro de fecha
+    const productions = await models.Production.findAll({
+      where: {
+        "$productions.date$": {
+          [Op.lte]: date, // Menor o igual que date
+        },
+      },
+      paranoid: false, // Ignora los registros eliminados si es necesario
+    });
+
+    res.json(productions);
+  } catch (error) {
+    console.error("❌ Error al obtener las producciones:", error);
+    res.status(500).json({ error: "Error al obtener las producciones" });
   }
 };
