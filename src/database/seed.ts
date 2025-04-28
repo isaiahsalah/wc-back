@@ -6,9 +6,18 @@ export const seedDatabase = async () => {
     const sectorCount = await models.Sector.count();
     if (sectorCount === 0) {
       await models.Sector.bulkCreate([
-        { name: "Producción", description: "Sector de producción de productos" },
-        { name: "Reciclaje", description: "Sector encargado del reciclaje de materiales" },
-        { name: "Almacenamiento", description: "Sector de almacenamiento de productos" },
+        {
+          name: "Producción",
+          description: "Sector de producción de productos",
+        },
+        {
+          name: "Reciclaje",
+          description: "Sector encargado del reciclaje de materiales",
+        },
+        {
+          name: "Almacenamiento",
+          description: "Sector de almacenamiento de productos",
+        },
       ]);
       console.log("✅ Datos de Sector insertados");
     }
@@ -20,7 +29,10 @@ export const seedDatabase = async () => {
         { name: "Rojo", description: "Color rojo utilizado en productos" },
         { name: "Azul", description: "Color azul utilizado en productos" },
         { name: "Verde", description: "Color verde utilizado en productos" },
-        { name: "Amarillo", description: "Color amarillo utilizado en productos" },
+        {
+          name: "Amarillo",
+          description: "Color amarillo utilizado en productos",
+        },
         { name: "Negro", description: "Color negro utilizado en productos" },
         { name: "Blanco", description: "Color blanco utilizado en productos" },
       ]);
@@ -31,9 +43,21 @@ export const seedDatabase = async () => {
     const unityCount = await models.Unity.count();
     if (unityCount === 0) {
       await models.Unity.bulkCreate([
-        { name: "Kilogramos", shortname: "kg", description: "Unidad de medida en kilogramos" },
-        { name: "Litros", shortname: "l", description: "Unidad de medida en litros" },
-        { name: "Unidades", shortname: "u", description: "Unidad de medida por cantidad de piezas" },
+        {
+          name: "Kilogramos",
+          shortname: "kg",
+          description: "Unidad de medida en kilogramos",
+        },
+        {
+          name: "Litros",
+          shortname: "l",
+          description: "Unidad de medida en litros",
+        },
+        {
+          name: "Unidades",
+          shortname: "u",
+          description: "Unidad de medida por cantidad de piezas",
+        },
       ]);
       console.log("✅ Datos de Unidad insertados");
     }
@@ -42,7 +66,10 @@ export const seedDatabase = async () => {
     const processCount = await models.Process.count();
     if (processCount === 0) {
       await models.Process.bulkCreate([
-        { name: "Extrusión", description: "Proceso de extrusión de materiales" },
+        {
+          name: "Extrusión",
+          description: "Proceso de extrusión de materiales",
+        },
         { name: "Impresión", description: "Proceso de impresión en productos" },
       ]);
       console.log("✅ Datos de Proceso insertados");
@@ -52,8 +79,20 @@ export const seedDatabase = async () => {
     const modelCount = await models.Model.count();
     if (modelCount === 0) {
       await models.Model.bulkCreate([
-        { name: "Modelo A", id_process: 1, id_sector: 1 },
-        { name: "Modelo B", id_process: 2, id_sector: 2 },
+        {
+          name: "Modelo A",
+          description: "",
+          id_process: 1,
+          id_sector: 1,
+          type: 1,
+        },
+        {
+          name: "Modelo B",
+          description: "",
+          id_process: 2,
+          id_sector: 2,
+          type: 1,
+        },
       ]);
       console.log("✅ Datos de Modelo insertados");
     }
@@ -62,8 +101,24 @@ export const seedDatabase = async () => {
     const userCount = await models.User.count();
     if (userCount === 0) {
       await models.User.bulkCreate([
-        { name: "Juan", lastname: "Pérez", birthday: "1990-01-01", image: "juan.jpg", phone: "123456789", user: "juanp", pass: "1234" },
-        { name: "Ana", lastname: "Gómez", birthday: "1992-05-10", image: "ana.jpg", phone: "987654321", user: "anag", pass: "5678" },
+        {
+          name: "Juan",
+          lastname: "Pérez",
+          birthday: "1990-01-01",
+          image: "juan.jpg",
+          phone: "123456789",
+          user: "admin",
+          pass: "admin",
+        },
+        {
+          name: "Ana",
+          lastname: "Gómez",
+          birthday: "1992-05-10",
+          image: "ana.jpg",
+          phone: "987654321",
+          user: "anag",
+          pass: "5678",
+        },
       ]);
       console.log("✅ Datos de Usuario insertados");
     }
@@ -82,8 +137,8 @@ export const seedDatabase = async () => {
     const loteCount = await models.Lote.count();
     if (loteCount === 0) {
       await models.Lote.bulkCreate([
-        { amount: 100, id_inventory: 1 },
-        { amount: 200, id_inventory: 2 },
+        { name: "26042025-1", id_inventory: 1 },
+        { name: "25042025-1", id_inventory: 2 },
       ]);
       console.log("✅ Datos de Lotes insertados");
     }
@@ -92,8 +147,8 @@ export const seedDatabase = async () => {
     const machineCount = await models.Machine.count();
     if (machineCount === 0) {
       await models.Machine.bulkCreate([
-        { name: "Máquina A", id_process: 1 },
-        { name: "Máquina B", id_process: 2 },
+        { name: "Máquina A", description: "", id_process: 1 },
+        { name: "Máquina B", description: "", id_process: 2 },
       ]);
       console.log("✅ Datos de Máquinas insertados");
     }
@@ -102,8 +157,26 @@ export const seedDatabase = async () => {
     const productCount = await models.Product.count();
     if (productCount === 0) {
       await models.Product.bulkCreate([
-        { name: "Producto A",amount:20, description: "Producto de prueba A", cost: 10, price: 20, id_unity: 1, id_color: 1, id_model: 1 },
-        { name: "Producto B", amount:24,description: "Producto de prueba B", cost: 15, price: 30, id_unity: 2, id_color: 2, id_model: 2 },
+        {
+          name: "Producto A",
+          amount: 20,
+          description: "Producto de prueba A",
+          cost: 10,
+          price: 20,
+          id_unity: 1,
+          id_color: 1,
+          id_model: 1,
+        },
+        {
+          name: "Producto B",
+          amount: 24,
+          description: "Producto de prueba B",
+          cost: 15,
+          price: 30,
+          id_unity: 2,
+          id_color: 2,
+          id_model: 2,
+        },
       ]);
       console.log("✅ Datos de Productos insertados");
     }
@@ -132,8 +205,8 @@ export const seedDatabase = async () => {
     const orderCount = await models.Order.count();
     if (orderCount === 0) {
       await models.Order.bulkCreate([
-        { order_date: new Date(), id_user: 1 },
-        { order_date: new Date(), id_user: 2 },
+        { init_date: new Date(),end_date: new Date().setDate( new Date().getDate() + 1), id_user: 1 },
+        { init_date: new Date(), end_date: new Date().setDate( new Date().getDate() + 1),id_user: 2 },
       ]);
       console.log("✅ Datos de Órdenes insertados");
     }
@@ -152,8 +225,46 @@ export const seedDatabase = async () => {
     const productionCount = await models.Production.count();
     if (productionCount === 0) {
       await models.Production.bulkCreate([
-        { description: "Producción A", date: new Date(), duration: 60, amount: 100, id_machine: 1, id_lote: 1, id_order_detail: 1, id_user: 1 },
-        { description: "Producción B", date: new Date(), duration: 120, amount: 200, id_machine: 2, id_lote: 2, id_order_detail: 2, id_user: 2 },
+        {
+          description: "Producción A",
+          date: new Date(),
+          duration: 60, 
+          id_machine: 1,
+          id_lote: 1,
+          id_order_detail: 1,
+          id_user: 1,
+          quality:1
+        },
+        {
+          description: "Producción B",
+          date: new Date(),
+          duration: 120, 
+          id_machine: 2,
+          id_lote: 2,
+          id_order_detail: 2,
+          id_user: 2,
+          quality:1
+        },
+        {
+          description: "Producción C",
+          date: new Date(),
+          duration: 60, 
+          id_machine: 1,
+          id_lote: 1,
+          id_order_detail: 1,
+          id_user: 1,
+          quality:1
+        },
+        {
+          description: "Producción D",
+          date: new Date(),
+          duration: 120, 
+          id_machine: 2,
+          id_lote: 2,
+          id_order_detail: 2,
+          id_user: 2,
+          quality:1
+        },
       ]);
       console.log("✅ Datos de Producción insertados");
     }

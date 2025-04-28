@@ -3,6 +3,7 @@ import {
   createUnity,
   deleteUnity,
   getAllUnities,
+  getUnities,
   getUnityById,
   recoverUnity,
   updateUnity,
@@ -13,7 +14,7 @@ const router = Router();
 // Routes
 router.post("/", createUnity);
 router.put("/:id", updateUnity);
-router.get("/", getAllUnities);
+router.get("/", getUnities);
 router.get("/all", getAllUnities);
 router.get("/:id", getUnityById);
 router.delete("/:id", deleteUnity);

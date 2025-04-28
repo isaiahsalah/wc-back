@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
-import models from "../database/models";
+import models, { sequelize } from "../database/models";
 
 // Controlador para Orders
-export const getAllOrders = async (req: Request, res: Response): Promise<void> => {
+export const getAllOrders = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const orders = await models.Order.findAll({ paranoid: false });
     res.json(orders);
@@ -93,7 +96,10 @@ export const deleteOrder = async (
   }
 };
 
-export const recoverOrder = async (req: Request, res: Response): Promise<void> => {
+export const recoverOrder = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
 
@@ -114,5 +120,49 @@ export const recoverOrder = async (req: Request, res: Response): Promise<void> =
   } catch (error) {
     console.error("❌ Error al recuperar la orden:", error);
     res.status(500).json({ error: "Error al recuperar la orden" });
+  }
+};
+
+/////////////////////////////////////////////////////////////////////
+
+export const createOrderWithDetails = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const transaction = await sequelize.transaction(); // Iniciar transacción
+
+  try {
+    const { order, orderDetails } = req.body; // Extraer la orden y los detalles de la solicitud
+
+    // Verificar si la orden y los detalles existen
+    if (!order || !orderDetails || !Array.isArray(orderDetails)) {
+      res
+        .status(400)
+        .json({ error: "Datos inválidos: se esperaba una orden y detalles" });
+      return;
+    }
+
+    // Crear la orden dentro de la transacción
+    const newOrder = await models.Order.create(order, { transaction });
+
+    // 2. Crear los detalles de la orden (OrderDetails)
+    // Asegurarse de asociar el ID de la orden a los detalles
+    const orderDetailsWithOrderId = orderDetails.map((detail) => ({
+      ...detail,
+      id_order: newOrder.get("id"), // Asignar el id de la nueva orden a los detalles
+    }));
+
+    // Crear múltiples detalles de la orden
+    await models.OrderDetail.bulkCreate(orderDetailsWithOrderId, {
+      transaction,
+    });
+
+    // 3. Confirmar la transacción
+    await transaction.commit();
+    res.status(201).json(newOrder); // Devolver la orden creada
+  } catch (error) {
+    await transaction.rollback();
+    console.error("❌ Error al crear la orden:", error);
+    res.status(500).json({ error: "Error al crear la orden" });
   }
 };

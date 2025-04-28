@@ -1,6 +1,16 @@
 import { Request, Response } from "express";
 import models from "../database/models";
 
+export const getFormulas = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const formulas = await models.Formula.findAll();
+    res.json(formulas);
+  } catch (error) {
+    console.error("❌ Error al obtener las fórmulas:", error);
+    res.status(500).json({ error: "Error al obtener las fórmulas" });
+  }
+};
+
 export const getAllFormulas = async (req: Request, res: Response): Promise<void> => {
   try {
     const formulas = await models.Formula.findAll({ paranoid: false,

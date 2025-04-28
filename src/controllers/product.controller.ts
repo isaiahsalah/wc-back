@@ -1,6 +1,16 @@
 import { Request, Response } from "express";
 import models from "../database/models";
 
+export const getProducts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const products = await models.Product.findAll();
+    res.json(products);
+  } catch (error) {
+    console.error("❌ Error al obtener los productos:", error);
+    res.status(500).json({ error: "Error al obtener los productos" });
+  }
+};
+
 export const getAllProducts = async (req: Request, res: Response): Promise<void> => {
   try {
     const products = await models.Product.findAll({ paranoid: false });

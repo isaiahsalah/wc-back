@@ -8,10 +8,10 @@ export const OrderModel = sequelize.define("order", {
     primaryKey: true,
     autoIncrement: true,
   },
-  order_date: {
+  init_date: {
     type: DataTypes.DATE,
   },
-  completion_date: {
+  end_date: {
     type: DataTypes.DATE,
   },
   id_user: {

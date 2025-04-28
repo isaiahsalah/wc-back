@@ -1,6 +1,16 @@
 import { Request, Response } from "express";
 import models from "../database/models";
 
+export const getInventories = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const inventories = await models.Inventory.findAll();
+    res.json(inventories);
+  } catch (error) {
+    console.error("❌ Error al obtener los inventarios:", error);
+    res.status(500).json({ error: "Error al obtener los inventarios" });
+  }
+};
+
 export const getAllInventories = async (req: Request, res: Response): Promise<void> => {
   try {
     const inventories = await models.Inventory.findAll({ paranoid: false });

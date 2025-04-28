@@ -10,9 +10,10 @@ export const LoteModel = sequelize.define("lote", {
     primaryKey: true,
     autoIncrement: true,
   },
-  amount: {
-    type: DataTypes.FLOAT,
-  }, 
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   id_inventory: {
     type: DataTypes.INTEGER,
     allowNull: false,

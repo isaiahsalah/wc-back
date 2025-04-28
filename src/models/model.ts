@@ -11,6 +11,11 @@ export const ModelModel = sequelize.define("model", {
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   id_process: {
     type: DataTypes.INTEGER,
@@ -21,8 +26,9 @@ export const ModelModel = sequelize.define("model", {
     allowNull: false,
   },
 
-  state: {
-    type: DataTypes.INTEGER,
+  type: {
+    type: DataTypes.SMALLINT,
+    allowNull: false,
   },
 });
 

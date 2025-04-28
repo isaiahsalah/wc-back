@@ -20,9 +20,6 @@ export const ProductionModel = sequelize.define("production", {
   duration: {
     type: DataTypes.INTEGER, // in minutes
   },
-  amount: {
-    type: DataTypes.FLOAT,
-  },
   id_machine: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -39,8 +36,10 @@ export const ProductionModel = sequelize.define("production", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  state: {
+  quality: {
     type: DataTypes.SMALLINT,
+    allowNull: false,
+
   },
 });
 

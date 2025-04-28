@@ -4,6 +4,7 @@ import {
   deleteLote,
   getAllLotes,
   getLoteById,
+  getLotes,
   recoverLote,
   updateLote,
 } from "../controllers/lote.controller";
@@ -13,7 +14,7 @@ const router = Router();
 // Routes
 router.post("/", createLote);
 router.put("/:id", updateLote);
-router.get("/", getAllLotes);
+router.get("/", getLotes);
 router.get("/all", getAllLotes);
 router.get("/:id", getLoteById);
 router.delete("/:id", deleteLote);
