@@ -1,4 +1,5 @@
 import models from "./models";
+import bcryptjs from "bcryptjs";
 
 export const seedDatabase = async () => {
   try {
@@ -100,6 +101,7 @@ export const seedDatabase = async () => {
     // Inserta datos de usuario
     const userCount = await models.User.count();
     if (userCount === 0) {
+      const pass=await bcryptjs.hash("admin", 8) 
       await models.User.bulkCreate([
         {
           name: "Juan",
@@ -108,7 +110,7 @@ export const seedDatabase = async () => {
           image: "juan.jpg",
           phone: "123456789",
           user: "admin",
-          pass: "admin",
+          pass:  pass,
           id_group: 4,
         },
         {
@@ -118,7 +120,7 @@ export const seedDatabase = async () => {
           image: "ana.jpg",
           phone: "987654321",
           user: "anag",
-          pass: "5678",
+          pass: pass,
           id_group: 1,
         },
       ]);

@@ -2,6 +2,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import authRoute from "./routes/auth.route";
 import colorRoute from "./routes/color.route";
 import userRoute from "./routes/user.route";
 import unityRoute from "./routes/unity.route";
@@ -30,7 +31,7 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas de ejemplo
-
+app.use("/auth", authRoute);
 app.use("/pr/color", colorRoute);
 app.use("/pr/user", userRoute);
 app.use("/pr/unity", unityRoute);
