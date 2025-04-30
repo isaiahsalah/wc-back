@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize";
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
 
 export const GroupModel = sequelize.define("group", {
   id: {
@@ -17,6 +17,3 @@ export const GroupModel = sequelize.define("group", {
     type: DataTypes.SMALLINT,
   },
 });
-
-
-

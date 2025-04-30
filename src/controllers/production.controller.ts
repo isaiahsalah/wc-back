@@ -1,115 +1,94 @@
-import { Request, Response } from "express";
-import models, { sequelize } from "../database/models";
-import { Op } from "sequelize";
+import {Request, Response} from "express";
+import models, {sequelize} from "../database/models";
+import {Op} from "sequelize";
 
-export const getProductions = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
     const productions = await models.Production.findAll();
     res.json(productions);
   } catch (error) {
     console.error("❌ Error al obtener las producciones:", error);
-    res.status(500).json({ error: "Error al obtener las producciones" });
+    res.status(500).json({error: "Error al obtener las producciones"});
   }
 };
 
-export const getAllProductions = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getAllProductions = async (req: Request, res: Response): Promise<void> => {
   try {
-    const productions = await models.Production.findAll({ paranoid: false });
+    const productions = await models.Production.findAll({paranoid: false});
     res.json(productions);
   } catch (error) {
     console.error("❌ Error al obtener las producciones:", error);
-    res.status(500).json({ error: "Error al obtener las producciones" });
+    res.status(500).json({error: "Error al obtener las producciones"});
   }
 };
 
-export const getProductionById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getProductionById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const production = await models.Production.findByPk(id);
     if (!production) {
-      res.status(404).json({ error: "Producción no encontrada" });
+      res.status(404).json({error: "Producción no encontrada"});
       return;
     }
     res.json(production);
   } catch (error) {
     console.error("❌ Error al obtener la producción:", error);
-    res.status(500).json({ error: "Error al obtener la producción" });
+    res.status(500).json({error: "Error al obtener la producción"});
   }
 };
 
-export const createProduction = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createProduction = async (req: Request, res: Response): Promise<void> => {
   try {
     const newProduction = await models.Production.create(req.body);
     res.status(201).json(newProduction);
   } catch (error) {
     console.error("❌ Error al crear la producción:", error);
-    res.status(500).json({ error: "Error al crear la producción" });
+    res.status(500).json({error: "Error al crear la producción"});
   }
 };
 
-export const updateProduction = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const updateProduction = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const production = await models.Production.findByPk(id);
     if (!production) {
-      res.status(404).json({ error: "Producción no encontrada" });
+      res.status(404).json({error: "Producción no encontrada"});
       return;
     }
     await production.update(req.body);
     res.json(production);
   } catch (error) {
     console.error("❌ Error al actualizar la producción:", error);
-    res.status(500).json({ error: "Error al actualizar la producción" });
+    res.status(500).json({error: "Error al actualizar la producción"});
   }
 };
 
-export const deleteProduction = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const deleteProduction = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const production = await models.Production.findByPk(id);
     if (!production) {
-      res.status(404).json({ error: "Producción no encontrada" });
+      res.status(404).json({error: "Producción no encontrada"});
       return;
     }
     await production.destroy();
-    res.json({ message: "Producción eliminada correctamente" });
+    res.json({message: "Producción eliminada correctamente"});
   } catch (error) {
     console.error("❌ Error al eliminar la producción:", error);
-    res.status(500).json({ error: "Error al eliminar la producción" });
+    res.status(500).json({error: "Error al eliminar la producción"});
   }
 };
 
-export const recoverProduction = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const recoverProduction = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
     const TempProduction = await models.Production.findByPk(id, {
       paranoid: false,
     });
     if (!TempProduction) {
-      res.status(404).json({ error: "Production no encontrado" });
+      res.status(404).json({error: "Production no encontrado"});
       return;
     }
 
@@ -122,16 +101,13 @@ export const recoverProduction = async (
     res.json(updatedProduction);
   } catch (error) {
     console.error("❌ Error al recuperar el Production:", error);
-    res.status(500).json({ error: "Error al recuperar el Production" });
+    res.status(500).json({error: "Error al recuperar el Production"});
   }
 };
 
 /////////////////////////////////////////////////////////////////////////
 
-export const createProductions = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createProductions = async (req: Request, res: Response): Promise<void> => {
   const t = await sequelize.transaction(); // Inicia la transacción
 
   try {
@@ -143,7 +119,7 @@ export const createProductions = async (
 
     // Obtener el id_product desde la tabla OrderDetail usando el id_order_detail
     const orderDetail = await models.OrderDetail.findOne({
-      where: { id: orderDetailId },
+      where: {id: orderDetailId},
       attributes: ["id_product"], // Solo obtener el id_product
       transaction: t, // Incluir la transacción para mantener la integridad
     });
@@ -152,10 +128,7 @@ export const createProductions = async (
       throw new Error("OrderDetail no encontrado");
     }
     const productCode = orderDetail.get("id_product"); // Recuperamos el id_product
-    const loteName = `${new Date()
-      .toISOString()
-      .slice(0, 10)
-      .replace(/-/g, "")}-${productCode}`; // Formato del código de lote
+    const loteName = `${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${productCode}`; // Formato del código de lote
 
     // Crear el lote con el código generado
     const lote = await models.Lote.create(
@@ -163,7 +136,7 @@ export const createProductions = async (
         name: loteName,
         id_inventory: 1,
       },
-      { transaction: t }
+      {transaction: t}
     );
 
     // Crear las producciones e incluir el id_lote
@@ -175,13 +148,11 @@ export const createProductions = async (
             id_lote: lote.get("id"), // Asociamos el lote creado
             duration: Math.round(production.duration),
           },
-          { transaction: t }
+          {transaction: t}
         );
       })
     );
-    const ids: Number[] = Array.from(
-      createdProductions.map((p) => p.get("id"))
-    );
+    const ids: Number[] = Array.from(createdProductions.map((p) => p.get("id")));
 
     const detailedProductions = await models.Production.findAll({
       where: {
@@ -193,7 +164,7 @@ export const createProductions = async (
           include: [
             {
               model: models.Product,
-              include: [{ model: models.Unity }, { model: models.Model }],
+              include: [{model: models.Unity}, {model: models.Model}],
             },
           ],
         },
@@ -216,17 +187,14 @@ export const createProductions = async (
     await t.rollback();
 
     console.error("❌ Error al crear las producciones:", error);
-    res.status(500).json({ error: "Error al crear las producciones" });
+    res.status(500).json({error: "Error al crear las producciones"});
   }
 };
 
-export const getAllProductionsDate = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getAllProductionsDate = async (req: Request, res: Response): Promise<void> => {
   try {
     // Obtiene el parámetro 'date' de la consulta
-    const { date } = req.query;
+    const {date} = req.query;
 
     // Crea una condición de filtro dependiendo de si se proporciona el parámetro 'date'
     const filter: any = {};
@@ -247,6 +215,6 @@ export const getAllProductionsDate = async (
     res.json(productions);
   } catch (error) {
     console.error("❌ Error al obtener las producciones:", error);
-    res.status(500).json({ error: "Error al obtener las producciones" });
+    res.status(500).json({error: "Error al obtener las producciones"});
   }
 };

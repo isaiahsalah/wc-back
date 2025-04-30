@@ -1,6 +1,6 @@
-import { DataTypes } from "sequelize";
+import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
-import { GroupModel } from "./group";
+import {GroupModel} from "./group";
 
 export const UserModel = sequelize.define("user", {
   id: {
@@ -25,15 +25,15 @@ export const UserModel = sequelize.define("user", {
   },
   user: {
     type: DataTypes.STRING,
-    unique:true,
+    unique: true,
   },
   pass: {
     type: DataTypes.STRING,
   },
-  turn: {
-    type: DataTypes.SMALLINT,
+  id_group: {
+    type: DataTypes.INTEGER,
   },
 });
 
-GroupModel.hasMany(UserModel, { foreignKey: "id_turn" });
-UserModel.belongsTo(GroupModel, { foreignKey: "id_turn" });
+GroupModel.hasMany(UserModel, {foreignKey: "id_group"});
+UserModel.belongsTo(GroupModel, {foreignKey: "id_group"});

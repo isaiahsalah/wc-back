@@ -2,6 +2,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
+import profileRoute from "./routes/profile.route";
 import authRoute from "./routes/auth.route";
 import colorRoute from "./routes/color.route";
 import userRoute from "./routes/user.route";
@@ -20,7 +22,8 @@ import formulaDetailRoute from "./routes/formula_detail.route";
 import formulaRoute from "./routes/formula.route";
 import productionRoute from "./routes/production.route";
 import productionDetailRoute from "./routes/production_detail.route";
- 
+import groupRoute from "./routes/group.route";
+
 // Configurar variables de entorno
 dotenv.config();
 
@@ -31,8 +34,12 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas de ejemplo
+app.use("/profile", profileRoute);
+
 app.use("/auth", authRoute);
 app.use("/pr/color", colorRoute);
+app.use("/pr/group", groupRoute);
+
 app.use("/pr/user", userRoute);
 app.use("/pr/unity", unityRoute);
 app.use("/pr/sector", sectorRoute);

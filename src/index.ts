@@ -2,8 +2,7 @@
 import app from "./app";
 import sequelize from "./database/sequelize";
 import models from "./database/models";
-import { seedDatabase } from "./database/seed";
-
+import {seedDatabase} from "./database/seed";
 
 // Obtener el puerto desde las variables de entorno o usar el puerto por defecto
 const PORT = Number(process.env.PORT) || 3000;
@@ -15,7 +14,7 @@ async function main() {
 
   //force: false, alter: false
   await sequelize.sync({
-   /* force: true, alter: false */
+    /* force: true, alter: false */
   });
   await seedDatabase();
   console.log("✅ Conectado a PostgreSQL");
