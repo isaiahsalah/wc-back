@@ -1,6 +1,5 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize"; 
- 
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
 
 export const InventoryModel = sequelize.define("inventory", {
   id: {
@@ -10,8 +9,10 @@ export const InventoryModel = sequelize.define("inventory", {
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
 });

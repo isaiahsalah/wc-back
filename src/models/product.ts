@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize"; 
- import { UnityModel } from "./unity";
-import { ModelModel } from "./model";
-import { ColorModel } from "./color";
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
+import {UnityModel} from "./unity";
+import {ModelModel} from "./model";
+import {ColorModel} from "./color";
 
 export const ProductModel = sequelize.define("product", {
   id: {
@@ -22,8 +22,14 @@ export const ProductModel = sequelize.define("product", {
   price: {
     type: DataTypes.INTEGER,
   },
-  amount:{
+  amount: {
     type: DataTypes.INTEGER,
+  },
+  isRawMaterial: {
+    type: DataTypes.BOOLEAN,
+  },
+  isFinishedProduct: {
+    type: DataTypes.BOOLEAN,
   },
   id_unity: {
     type: DataTypes.INTEGER,
@@ -39,11 +45,11 @@ export const ProductModel = sequelize.define("product", {
   },
 });
 
-ModelModel.hasMany(ProductModel, { foreignKey: "id_model" });
-ProductModel.belongsTo(ModelModel, { foreignKey: "id_model" });
+ModelModel.hasMany(ProductModel, {foreignKey: "id_model"});
+ProductModel.belongsTo(ModelModel, {foreignKey: "id_model"});
 
-UnityModel.hasMany(ProductModel, { foreignKey: "id_unity" });
-ProductModel.belongsTo(UnityModel, { foreignKey: "id_unity" });
+UnityModel.hasMany(ProductModel, {foreignKey: "id_unity"});
+ProductModel.belongsTo(UnityModel, {foreignKey: "id_unity"});
 
-ColorModel.hasMany(ProductModel, { foreignKey: "id_color" });
-ProductModel.belongsTo(ColorModel, { foreignKey: "id_color" });
+ColorModel.hasMany(ProductModel, {foreignKey: "id_color"});
+ProductModel.belongsTo(ColorModel, {foreignKey: "id_color"});

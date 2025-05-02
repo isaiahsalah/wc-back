@@ -9,11 +9,14 @@ export const GroupModel = sequelize.define("group", {
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   turn: {
     type: DataTypes.SMALLINT,
+    allowNull: false,
   },
 });

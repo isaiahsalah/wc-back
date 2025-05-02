@@ -1,6 +1,6 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize"; 
-import { ProductModel } from "./product";
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
+import {ProductModel} from "./product";
 
 export const FormulaModel = sequelize.define("formula", {
   id: {
@@ -10,19 +10,23 @@ export const FormulaModel = sequelize.define("formula", {
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   active: {
     type: DataTypes.BOOLEAN,
+    allowNull: false,
+
     defaultValue: true,
   },
   id_product: {
     type: DataTypes.INTEGER,
+
     allowNull: false,
   },
 });
 
-ProductModel.hasMany(FormulaModel, { foreignKey: "id_product" });
-FormulaModel.belongsTo(ProductModel, { foreignKey: "id_product" });
+ProductModel.hasMany(FormulaModel, {foreignKey: "id_product"});
+FormulaModel.belongsTo(ProductModel, {foreignKey: "id_product"});
 
 /*
 //Relacion con evento

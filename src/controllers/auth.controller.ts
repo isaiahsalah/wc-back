@@ -25,6 +25,7 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
         {
           model: models.Permission,
           required: true,
+          include: [{model: models.Sector}],
           where: {module},
         },
       ],
@@ -109,6 +110,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
               {
                 model: models.Permission,
                 required: true,
+                include: [{model: models.Sector}],
                 where: {module},
               },
             ],

@@ -1,9 +1,10 @@
-import { DataTypes } from "sequelize";
+import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
-import { UserModel } from "./user";
-import { OrderDetailModel } from "./order_detail";
-import { MachineModel } from "./machine";
-import { LoteModel } from "./lote";
+import {UserModel} from "./user";
+import {OrderDetailModel} from "./order_detail";
+import {MachineModel} from "./machine";
+import {LoteModel} from "./lote";
+import {UnityModel} from "./unity";
 
 export const ProductionModel = sequelize.define("production", {
   id: {
@@ -19,6 +20,18 @@ export const ProductionModel = sequelize.define("production", {
   },
   duration: {
     type: DataTypes.INTEGER, // in minutes
+  },
+  quality: {
+    type: DataTypes.SMALLINT,
+    allowNull: false,
+  },
+  amount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  id_unity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   id_machine: {
     type: DataTypes.INTEGER,
@@ -36,21 +49,19 @@ export const ProductionModel = sequelize.define("production", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  quality: {
-    type: DataTypes.SMALLINT,
-    allowNull: false,
-
-  },
 });
 
-MachineModel.hasMany(ProductionModel, { foreignKey: "id_machine" });
-ProductionModel.belongsTo(MachineModel, { foreignKey: "id_machine" });
+MachineModel.hasMany(ProductionModel, {foreignKey: "id_machine"});
+ProductionModel.belongsTo(MachineModel, {foreignKey: "id_machine"});
 
-OrderDetailModel.hasMany(ProductionModel, { foreignKey: "id_order_detail" });
-ProductionModel.belongsTo(OrderDetailModel, { foreignKey: "id_order_detail" });
+OrderDetailModel.hasMany(ProductionModel, {foreignKey: "id_order_detail"});
+ProductionModel.belongsTo(OrderDetailModel, {foreignKey: "id_order_detail"});
 
-UserModel.hasMany(ProductionModel, { foreignKey: "id_user" });
-ProductionModel.belongsTo(UserModel, { foreignKey: "id_user" });
+UserModel.hasMany(ProductionModel, {foreignKey: "id_user"});
+ProductionModel.belongsTo(UserModel, {foreignKey: "id_user"});
 
-LoteModel.hasMany(ProductionModel, { foreignKey: "id_lote" });
-ProductionModel.belongsTo(LoteModel, { foreignKey: "id_lote" });
+LoteModel.hasMany(ProductionModel, {foreignKey: "id_lote"});
+ProductionModel.belongsTo(LoteModel, {foreignKey: "id_lote"});
+
+UnityModel.hasMany(ProductionModel, {foreignKey: "id_unity"});
+ProductionModel.belongsTo(UnityModel, {foreignKey: "id_unity"});

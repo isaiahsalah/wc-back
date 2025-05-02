@@ -105,11 +105,15 @@ export const seedDatabase = async () => {
 
     // Inserta datos de permisos
     const permissionCount = await models.Permission.count();
-    if (modelCount === 0) {
+    if (permissionCount === 0) {
       await models.Permission.bulkCreate([
         {id: 11111, id_user: 1, id_sector: 1, degree: 1, screen: 1, module: 1},
         {id: 12221, id_user: 1, id_sector: 2, degree: 2, screen: 2, module: 1},
         {id: 13331, id_user: 1, id_sector: 3, degree: 3, screen: 3, module: 1},
+
+        {id: 14141, id_user: 1, id_sector: 4, degree: 1, screen: 4, module: 1},
+        {id: 15221, id_user: 1, id_sector: 5, degree: 2, screen: 2, module: 1},
+
         {id: 14441, id_user: 1, id_sector: 4, degree: 4, screen: 4, module: 4},
         {id: 15551, id_user: 1, id_sector: 5, degree: 5, screen: 5, module: 5},
         {id: 21112, id_user: 2, id_sector: 1, degree: 1, screen: 1, module: 2},
@@ -240,6 +244,8 @@ export const seedDatabase = async () => {
           id_order_detail: 1,
           id_user: 1,
           quality: 1,
+          id_unity: 1,
+          amount: 40,
         },
         {
           description: "Producción B",
@@ -250,6 +256,8 @@ export const seedDatabase = async () => {
           id_order_detail: 2,
           id_user: 2,
           quality: 1,
+          id_unity: 2,
+          amount: 2,
         },
         {
           description: "Producción C",
@@ -260,6 +268,8 @@ export const seedDatabase = async () => {
           id_order_detail: 1,
           id_user: 1,
           quality: 1,
+          id_unity: 2,
+          amount: 3,
         },
         {
           description: "Producción D",
@@ -270,6 +280,8 @@ export const seedDatabase = async () => {
           id_order_detail: 2,
           id_user: 2,
           quality: 1,
+          id_unity: 3,
+          amount: 4,
         },
       ]);
       console.log("✅ Datos de Producción insertados");

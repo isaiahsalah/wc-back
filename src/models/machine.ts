@@ -1,7 +1,6 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize"; 
-import { ProcessModel } from "./process";
- 
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
+import {ProcessModel} from "./process";
 
 export const MachineModel = sequelize.define("machine", {
   id: {
@@ -23,10 +22,10 @@ export const MachineModel = sequelize.define("machine", {
   },
   active: {
     type: DataTypes.BOOLEAN,
+    allowNull: false,
     defaultValue: true,
   },
 });
 
-ProcessModel.hasMany(MachineModel, { foreignKey: "id_process" });
-MachineModel.belongsTo(ProcessModel, { foreignKey: "id_process" });
-
+ProcessModel.hasMany(MachineModel, {foreignKey: "id_process"});
+MachineModel.belongsTo(ProcessModel, {foreignKey: "id_process"});

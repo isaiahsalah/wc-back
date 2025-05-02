@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize"; 
-import { ProductionModel } from "./production";
-import { ProductModel } from "./product";
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
+import {ProductionModel} from "./production";
+import {ProductModel} from "./product";
 
 export const ProductionDetailModel = sequelize.define("production_detail", {
   id: {
@@ -16,15 +16,19 @@ export const ProductionDetailModel = sequelize.define("production_detail", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_product_materia: {
+  id_production_material: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+  },
+  id_product_material: {
+    type: DataTypes.INTEGER,
   },
 });
 
-ProductionModel.hasMany(ProductionDetailModel, { foreignKey: "id_production" });
-ProductionDetailModel.belongsTo(ProductionModel, { foreignKey: "id_production" });
+ProductionModel.hasMany(ProductionDetailModel, {foreignKey: "id_production"});
+ProductionDetailModel.belongsTo(ProductionModel, {foreignKey: "id_production"});
 
-ProductModel.hasMany(ProductionDetailModel, { foreignKey: "id_product_materia" });
-ProductionDetailModel.belongsTo(ProductModel, { foreignKey: "id_product_materia" });
+ProductionModel.hasMany(ProductionDetailModel, {foreignKey: "id_production_material"});
+ProductionDetailModel.belongsTo(ProductionModel, {foreignKey: "id_production_material"});
 
+ProductModel.hasMany(ProductionDetailModel, {foreignKey: "id_product_material"});
+ProductionDetailModel.belongsTo(ProductModel, {foreignKey: "id_product_material"});

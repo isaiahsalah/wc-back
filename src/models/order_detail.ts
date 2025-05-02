@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize";
-import { OrderModel } from "./order";
-import { ProductModel } from "./product";
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
+import {OrderModel} from "./order";
+import {ProductModel} from "./product";
 
 export const OrderDetailModel = sequelize.define("order_detail", {
   id: {
@@ -11,6 +11,7 @@ export const OrderDetailModel = sequelize.define("order_detail", {
   },
   amount: {
     type: DataTypes.FLOAT,
+    allowNull: false,
   },
   id_product: {
     type: DataTypes.INTEGER,
@@ -22,8 +23,8 @@ export const OrderDetailModel = sequelize.define("order_detail", {
   },
 });
 
-ProductModel.hasMany(OrderDetailModel, { foreignKey: "id_product" });
-OrderDetailModel.belongsTo(ProductModel, { foreignKey: "id_product" });
+ProductModel.hasMany(OrderDetailModel, {foreignKey: "id_product"});
+OrderDetailModel.belongsTo(ProductModel, {foreignKey: "id_product"});
 
-OrderModel.hasMany(OrderDetailModel, { foreignKey: "id_order" });
-OrderDetailModel.belongsTo(OrderModel, { foreignKey: "id_order" });
+OrderModel.hasMany(OrderDetailModel, {foreignKey: "id_order"});
+OrderDetailModel.belongsTo(OrderModel, {foreignKey: "id_order"});
