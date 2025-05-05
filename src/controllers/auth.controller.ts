@@ -9,7 +9,7 @@ const jwtSecret = process.env.JWT_SECRET || "1234";
 
 export async function postLogin(req: Request, res: Response): Promise<void> {
   try {
-    const {user, pass, module} = req.body;
+    const {user, pass, type_module} = req.body;
 
     if (!user || !pass) {
       // Validar la presencia de los campos necesarios
@@ -19,14 +19,14 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
 
     // Buscar usuario en la base de datos
     const foundUser = (await models.User.findOne({
-      where: {user},
+      where: {user: (user as string).toLowerCase()},
       include: [
         {model: models.Group},
         {
           model: models.Permission,
           required: true,
           include: [{model: models.Sector}],
-          where: {module},
+          where: {type_module},
         },
       ],
     })) as IUser | null;
@@ -40,7 +40,7 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
     // Verificar contraseña
     const isPasswordValid = await bcryptjs.compare(pass, foundUser.pass);
 
-    if (!isPasswordValid && module) {
+    if (!isPasswordValid && type_module) {
       // Contraseña incorrecta
       res.status(401).json({message: "Contraseña incorrecta"});
       return;
@@ -56,7 +56,7 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
     // Preparar datos para el token
     const userPayload = {
       id: foundUser.id,
-      module: module,
+      type_module: type_module,
     };
 
     // Generar token de autenticación
@@ -97,11 +97,11 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
       // Verificar si decoded es un JwtPayload
       if (decoded && typeof decoded !== "string") {
         const userId = (decoded as JwtPayload).id; // Accede al campo 'id'
-        const module = (decoded as JwtPayload).module; // Accede al campo 'id'
+        const type_module = (decoded as JwtPayload).type_module; // Accede al campo 'id'
 
         console.log("😊😊😊", decoded, token);
 
-        if (userId && module) {
+        if (userId && type_module) {
           const foundUser = (await models.User.findOne({
             where: {id: userId as string},
 
@@ -111,7 +111,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
                 model: models.Permission,
                 required: true,
                 include: [{model: models.Sector}],
-                where: {module},
+                where: {type_module},
               },
             ],
           })) as IUser | null;
@@ -124,7 +124,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
           // Preparar datos para el token
           const userPayload = {
             id: foundUser.id,
-            module: module,
+            type_module: type_module,
           };
           const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "1h"});
 

@@ -1,8 +1,7 @@
-import { Router } from "express";
+import {Router} from "express";
 import {
   createProduct,
   deleteProduct,
-  getAllProducts,
   getProductById,
   getProducts,
   recoverProduct,
@@ -15,8 +14,7 @@ const router = Router();
 router.post("/", createProduct);
 router.put("/:id", updateProduct);
 router.get("/", getProducts);
-router.get("/all", getAllProducts);
 router.get("/:id", getProductById);
 router.delete("/:id", deleteProduct);
-router.patch("/:id", recoverProduct );
+router.patch("/:id", recoverProduct);
 export default router;

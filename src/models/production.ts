@@ -21,13 +21,16 @@ export const ProductionModel = sequelize.define("production", {
   duration: {
     type: DataTypes.INTEGER, // in minutes
   },
-  quality: {
+  type_quality: {
     type: DataTypes.SMALLINT,
     allowNull: false,
   },
   amount: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  micronage: {
+    type: DataTypes.ARRAY(DataTypes.DECIMAL),
   },
   id_unity: {
     type: DataTypes.INTEGER,

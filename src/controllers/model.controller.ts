@@ -1,68 +1,74 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import models from "../database/models";
+import {Op} from "sequelize";
 
 // Controlador para Models
 export const getAllModels = async (req: Request, res: Response): Promise<void> => {
   try {
-    const modelsList = await models.Model.findAll({ paranoid: false });
+    const {id_sector} = req.query;
+
+    const modelsList = await models.Model.findAll({
+      paranoid: false,
+      where: {
+        id_sector: id_sector ? id_sector : {[Op.ne]: null},
+      },
+      include: [{model: models.Process}, {model: models.Sector}],
+    });
     res.json(modelsList);
   } catch (error) {
     console.error("❌ Error al obtener los modelos:", error);
-    res.status(500).json({ error: "Error al obtener los modelos" });
+    res.status(500).json({error: "Error al obtener los modelos"});
   }
 };
 
 export const getModels = async (req: Request, res: Response): Promise<void> => {
   try {
-    const modelsList = await models.Model.findAll();
+    const {id_sector} = req.query;
+
+    const modelsList = await models.Model.findAll({
+      where: {
+        id_sector: id_sector ? id_sector : {[Op.ne]: null},
+      },
+    });
     res.json(modelsList);
   } catch (error) {
     console.error("❌ Error al obtener los modelos:", error);
-    res.status(500).json({ error: "Error al obtener los modelos" });
+    res.status(500).json({error: "Error al obtener los modelos"});
   }
 };
 
-export const getModelById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getModelById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const model = await models.Model.findByPk(id);
     if (!model) {
-      res.status(404).json({ error: "Modelo no encontrado" });
+      res.status(404).json({error: "Modelo no encontrado"});
       return;
     }
     res.json(model);
   } catch (error) {
     console.error("❌ Error al obtener el modelo:", error);
-    res.status(500).json({ error: "Error al obtener el modelo" });
+    res.status(500).json({error: "Error al obtener el modelo"});
   }
 };
 
-export const createModel = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createModel = async (req: Request, res: Response): Promise<void> => {
   try {
     const newModel = await models.Model.create(req.body);
     res.status(201).json(newModel);
   } catch (error) {
     console.error("❌ Error al crear el modelo:", error);
-    res.status(500).json({ error: "Error al crear el modelo" });
+    res.status(500).json({error: "Error al crear el modelo"});
   }
 };
 
-export const updateModel = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const updateModel = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     const TempModel = await models.Model.findByPk(id);
     if (!TempModel) {
-      res.status(404).json({ error: "Modelo no encontrado" });
+      res.status(404).json({error: "Modelo no encontrado"});
       return;
     }
     console.log(req.body);
@@ -70,37 +76,34 @@ export const updateModel = async (
     res.json(TempModel);
   } catch (error) {
     console.error("❌ Error al actualizar el modelo:", error);
-    res.status(500).json({ error: "Error al actualizar el modelo" });
+    res.status(500).json({error: "Error al actualizar el modelo"});
   }
 };
 
-export const deleteModel = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const deleteModel = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const model = await models.Model.findByPk(id);
     if (!model) {
-      res.status(404).json({ error: "Modelo no encontrado" });
+      res.status(404).json({error: "Modelo no encontrado"});
       return;
     }
     await model.destroy();
-    res.json({ message: "Modelo eliminado correctamente" });
+    res.json({message: "Modelo eliminado correctamente"});
   } catch (error) {
     console.error("❌ Error al eliminar el modelo:", error);
-    res.status(500).json({ error: "Error al eliminar el modelo" });
+    res.status(500).json({error: "Error al eliminar el modelo"});
   }
 };
 
 export const recoverModel = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempModel = await models.Model.findByPk(id, { paranoid: false });
+    const TempModel = await models.Model.findByPk(id, {paranoid: false});
     if (!TempModel) {
-      res.status(404).json({ error: "Modelo no encontrado" });
+      res.status(404).json({error: "Modelo no encontrado"});
       return;
     }
 
@@ -113,6 +116,6 @@ export const recoverModel = async (req: Request, res: Response): Promise<void> =
     res.json(updatedModel);
   } catch (error) {
     console.error("❌ Error al recuperar el modelo:", error);
-    res.status(500).json({ error: "Error al recuperar el modelo" });
+    res.status(500).json({error: "Error al recuperar el modelo"});
   }
 };

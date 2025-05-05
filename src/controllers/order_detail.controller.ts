@@ -129,7 +129,7 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
               SELECT COUNT(*)
               FROM productions
               WHERE productions.id_order_detail = order_detail.id
-              AND productions.quality = 1
+              AND productions.type_quality = 1
             )`),
             "production_count",
           ],
@@ -163,10 +163,10 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
       ],
       where: {
         "$order.init_date$": {
-          [Op.lte]: parsedDate, // Menor o igual que parsedDate
+          [Op.lte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Menor o igual que parsedDate
         },
         "$order.end_date$": {
-          [Op.gte]: parsedDate, // Mayor o igual que parsedDate
+          [Op.gte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Mayor o igual que parsedDate
         },
         "$product.model.id_process$": id_process ? id_process : {[Op.ne]: null},
         "$product.model.id_sector$": id_sector ? id_sector : {[Op.ne]: null},

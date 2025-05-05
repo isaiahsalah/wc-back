@@ -34,9 +34,9 @@ export const seedDatabase = async () => {
     const unityCount = await models.Unity.count();
     if (unityCount === 0) {
       await models.Unity.bulkCreate([
-        {name: "Kilogramos", shortname: "kg", description: "Unidad de medida en kilogramos"},
-        {name: "Litros", shortname: "l", description: "Unidad de medida en litros"},
-        {name: "Unidades", shortname: "u", description: "Unidad de medida por cantidad de piezas"},
+        {name: "Kilogramos", shortname: "Kg", description: "Unidad de medida en kilogramos"},
+        {name: "Litros", shortname: "L", description: "Unidad de medida en litros"},
+        {name: "Unidades", shortname: "U", description: "Unidad de medida por cantidad de piezas"},
       ]);
       console.log("✅ Datos de Unidad insertados");
     }
@@ -65,11 +65,11 @@ export const seedDatabase = async () => {
     const groupCount = await models.Machine.count();
     if (groupCount === 0) {
       await models.Group.bulkCreate([
-        {name: "Grupo A", description: "", turn: 1},
-        {name: "Grupo B", description: "", turn: 1},
+        {name: "Grupo A", description: "", type_turn: 1},
+        {name: "Grupo B", description: "", type_turn: 1},
 
-        {name: "Grupo A", description: "", turn: 2},
-        {name: "Grupo B", description: "", turn: 2},
+        {name: "Grupo A", description: "", type_turn: 2},
+        {name: "Grupo B", description: "", type_turn: 2},
       ]);
       console.log("✅ Datos de Máquinas insertados");
     }
@@ -107,18 +107,18 @@ export const seedDatabase = async () => {
     const permissionCount = await models.Permission.count();
     if (permissionCount === 0) {
       await models.Permission.bulkCreate([
-        {id: 11111, id_user: 1, id_sector: 1, degree: 1, screen: 1, module: 1},
-        {id: 12221, id_user: 1, id_sector: 2, degree: 2, screen: 2, module: 1},
-        {id: 13331, id_user: 1, id_sector: 3, degree: 3, screen: 3, module: 1},
+        {id: 11111, id_user: 1, id_sector: 1, degree: 1, screen: 1, type_module: 1},
+        {id: 12221, id_user: 1, id_sector: 2, degree: 2, screen: 2, type_module: 1},
+        {id: 13331, id_user: 1, id_sector: 3, degree: 3, screen: 3, type_module: 1},
 
-        {id: 14141, id_user: 1, id_sector: 4, degree: 1, screen: 4, module: 1},
-        {id: 15221, id_user: 1, id_sector: 5, degree: 2, screen: 2, module: 1},
+        {id: 14141, id_user: 1, id_sector: 4, degree: 1, screen: 4, type_module: 1},
+        {id: 15221, id_user: 1, id_sector: 5, degree: 2, screen: 2, type_module: 1},
 
-        {id: 14441, id_user: 1, id_sector: 4, degree: 4, screen: 4, module: 4},
-        {id: 15551, id_user: 1, id_sector: 5, degree: 5, screen: 5, module: 5},
-        {id: 21112, id_user: 2, id_sector: 1, degree: 1, screen: 1, module: 2},
-        {id: 22222, id_user: 2, id_sector: 2, degree: 2, screen: 2, module: 2},
-        {id: 23332, id_user: 2, id_sector: 3, degree: 3, screen: 3, module: 2},
+        {id: 14441, id_user: 1, id_sector: 4, degree: 4, screen: 4, type_module: 4},
+        {id: 15551, id_user: 1, id_sector: 5, degree: 5, screen: 5, type_module: 5},
+        {id: 21112, id_user: 2, id_sector: 1, degree: 1, screen: 1, type_module: 1},
+        {id: 22222, id_user: 2, id_sector: 2, degree: 2, screen: 2, type_module: 2},
+        {id: 23332, id_user: 2, id_sector: 3, degree: 3, screen: 3, type_module: 2},
       ]);
       console.log("✅ Datos de Permiso insertados");
     }
@@ -161,8 +161,8 @@ export const seedDatabase = async () => {
           name: "Producto A",
           amount: 20,
           description: "Producto de prueba A",
-          cost: 10,
-          price: 20,
+          micronage: 200,
+          type_product: 1,
           id_unity: 1,
           id_color: 1,
           id_model: 1,
@@ -171,8 +171,7 @@ export const seedDatabase = async () => {
           name: "Producto B",
           amount: 24,
           description: "Producto de prueba B",
-          cost: 15,
-          price: 30,
+          type_product: 1,
           id_unity: 2,
           id_color: 2,
           id_model: 2,
@@ -185,8 +184,8 @@ export const seedDatabase = async () => {
     const formulaCount = await models.Formula.count();
     if (formulaCount === 0) {
       await models.Formula.bulkCreate([
-        {name: "Fórmula A", id_product: 1},
-        {name: "Fórmula B", id_product: 2},
+        {name: "Fórmula A", description: "Fórmula A d ", id_product: 1},
+        {name: "Fórmula B", description: "Fórmula Ad ", id_product: 2},
       ]);
       console.log("✅ Datos de Fórmulas insertados");
     }
@@ -243,7 +242,8 @@ export const seedDatabase = async () => {
           id_lote: 1,
           id_order_detail: 1,
           id_user: 1,
-          quality: 1,
+          type_quality: 1,
+          micronage: [2.4, 5, 1.2],
           id_unity: 1,
           amount: 40,
         },
@@ -255,7 +255,7 @@ export const seedDatabase = async () => {
           id_lote: 2,
           id_order_detail: 2,
           id_user: 2,
-          quality: 1,
+          type_quality: 1,
           id_unity: 2,
           amount: 2,
         },
@@ -267,7 +267,7 @@ export const seedDatabase = async () => {
           id_lote: 1,
           id_order_detail: 1,
           id_user: 1,
-          quality: 1,
+          type_quality: 1,
           id_unity: 2,
           amount: 3,
         },
@@ -279,7 +279,7 @@ export const seedDatabase = async () => {
           id_lote: 2,
           id_order_detail: 2,
           id_user: 2,
-          quality: 1,
+          type_quality: 1,
           id_unity: 3,
           amount: 4,
         },

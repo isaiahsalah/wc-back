@@ -16,20 +16,14 @@ export const ProductModel = sequelize.define("product", {
   description: {
     type: DataTypes.STRING,
   },
-  cost: {
-    type: DataTypes.INTEGER,
-  },
-  price: {
-    type: DataTypes.INTEGER,
-  },
   amount: {
     type: DataTypes.INTEGER,
   },
-  isRawMaterial: {
-    type: DataTypes.BOOLEAN,
+  micronage: {
+    type: DataTypes.DECIMAL,
   },
-  isFinishedProduct: {
-    type: DataTypes.BOOLEAN,
+  type_product: {
+    type: DataTypes.SMALLINT,
   },
   id_unity: {
     type: DataTypes.INTEGER,

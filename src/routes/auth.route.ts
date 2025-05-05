@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { postLogin,getCheckToken } from "../controllers/auth.controller";
+import {Router} from "express";
+import {postLogin, getCheckToken} from "../controllers/auth.controller";
 
 const router = Router();
 

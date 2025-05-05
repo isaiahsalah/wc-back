@@ -1,14 +1,17 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import models from "../database/models";
 
 // Controlador para Machines
 export const getAllMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const machines = await models.Machine.findAll({ paranoid: false });
+    const machines = await models.Machine.findAll({
+      paranoid: false,
+      include: [{model: models.Process}],
+    });
     res.json(machines);
   } catch (error) {
     console.error("❌ Error al obtener las máquinas:", error);
-    res.status(500).json({ error: "Error al obtener las máquinas" });
+    res.status(500).json({error: "Error al obtener las máquinas"});
   }
 };
 
@@ -18,51 +21,42 @@ export const getMachines = async (req: Request, res: Response): Promise<void> =>
     res.json(machines);
   } catch (error) {
     console.error("❌ Error al obtener las máquinas:", error);
-    res.status(500).json({ error: "Error al obtener las máquinas" });
+    res.status(500).json({error: "Error al obtener las máquinas"});
   }
 };
 
-export const getMachineById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getMachineById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const machine = await models.Machine.findByPk(id);
     if (!machine) {
-      res.status(404).json({ error: "Máquina no encontrada" });
+      res.status(404).json({error: "Máquina no encontrada"});
       return;
     }
     res.json(machine);
   } catch (error) {
     console.error("❌ Error al obtener la máquina:", error);
-    res.status(500).json({ error: "Error al obtener la máquina" });
+    res.status(500).json({error: "Error al obtener la máquina"});
   }
 };
 
-export const createMachine = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const newMachine = await models.Machine.create(req.body);
     res.status(201).json(newMachine);
   } catch (error) {
     console.error("❌ Error al crear la máquina:", error);
-    res.status(500).json({ error: "Error al crear la máquina" });
+    res.status(500).json({error: "Error al crear la máquina"});
   }
 };
 
-export const updateMachine = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const updateMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     const TempMachine = await models.Machine.findByPk(id);
     if (!TempMachine) {
-      res.status(404).json({ error: "Máquina no encontrada" });
+      res.status(404).json({error: "Máquina no encontrada"});
       return;
     }
     console.log(req.body);
@@ -70,37 +64,34 @@ export const updateMachine = async (
     res.json(TempMachine);
   } catch (error) {
     console.error("❌ Error al actualizar la máquina:", error);
-    res.status(500).json({ error: "Error al actualizar la máquina" });
+    res.status(500).json({error: "Error al actualizar la máquina"});
   }
 };
 
-export const deleteMachine = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const deleteMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     const machine = await models.Machine.findByPk(id);
     if (!machine) {
-      res.status(404).json({ error: "Máquina no encontrada" });
+      res.status(404).json({error: "Máquina no encontrada"});
       return;
     }
     await machine.destroy();
-    res.json({ message: "Máquina eliminada correctamente" });
+    res.json({message: "Máquina eliminada correctamente"});
   } catch (error) {
     console.error("❌ Error al eliminar la máquina:", error);
-    res.status(500).json({ error: "Error al eliminar la máquina" });
+    res.status(500).json({error: "Error al eliminar la máquina"});
   }
 };
 
 export const recoverMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempMachine = await models.Machine.findByPk(id, { paranoid: false });
+    const TempMachine = await models.Machine.findByPk(id, {paranoid: false});
     if (!TempMachine) {
-      res.status(404).json({ error: "Máquina no encontrada" });
+      res.status(404).json({error: "Máquina no encontrada"});
       return;
     }
 
@@ -113,6 +104,6 @@ export const recoverMachine = async (req: Request, res: Response): Promise<void>
     res.json(updatedMachine);
   } catch (error) {
     console.error("❌ Error al recuperar la máquina:", error);
-    res.status(500).json({ error: "Error al recuperar la máquina" });
+    res.status(500).json({error: "Error al recuperar la máquina"});
   }
 };

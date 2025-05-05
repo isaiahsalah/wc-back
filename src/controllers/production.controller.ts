@@ -4,17 +4,37 @@ import {Op} from "sequelize";
 
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
-    const productions = await models.Production.findAll();
-    res.json(productions);
-  } catch (error) {
-    console.error("❌ Error al obtener las producciones:", error);
-    res.status(500).json({error: "Error al obtener las producciones"});
-  }
-};
-
-export const getAllProductions = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const productions = await models.Production.findAll({paranoid: false});
+    const {id_sector, id_process, id_user, paranoid} = req.query;
+    const productions = await models.Production.findAll({
+      paranoid: paranoid ? true : false,
+      where: {id_user: id_user ? id_user : {[Op.ne]: null}},
+      include: [
+        {
+          model: models.OrderDetail,
+          required: true,
+          include: [
+            {
+              model: models.Product,
+              required: true,
+              include: [
+                {
+                  model: models.Model,
+                  required: true,
+                  where: {
+                    id_sector: id_sector ? id_sector : {[Op.ne]: null},
+                    id_process: id_process ? id_process : {[Op.ne]: null},
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {model: models.User},
+        {model: models.Lote},
+        {model: models.Machine},
+        {model: models.Unity},
+      ],
+    });
     res.json(productions);
   } catch (error) {
     console.error("❌ Error al obtener las producciones:", error);

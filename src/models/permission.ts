@@ -27,7 +27,7 @@ export const PermissionModel = sequelize.define("permission", {
     allowNull: false,
     validate: {min: 1, max: 30},
   },
-  module: {
+  type_module: {
     type: DataTypes.SMALLINT,
     allowNull: false,
     validate: {min: 1, max: 5},
