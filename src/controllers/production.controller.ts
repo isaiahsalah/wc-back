@@ -184,13 +184,14 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
           include: [
             {
               model: models.Product,
-              include: [{model: models.Unity}, {model: models.Model}],
+              include: [{model: models.Model}],
             },
           ],
         },
         {
           model: models.Lote,
         },
+        {model: models.Unity},
       ],
       transaction: t,
     });
