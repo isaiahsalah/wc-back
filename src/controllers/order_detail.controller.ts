@@ -51,14 +51,15 @@ export const createOrderDetail = async (req: Request, res: Response): Promise<vo
 export const updateOrderDetail = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
+    const dataUpdate = req.body;
 
     const TempOrderDetail = await models.OrderDetail.findByPk(id);
     if (!TempOrderDetail) {
       res.status(404).json({error: "Detalle de la orden no encontrado"});
       return;
     }
-    console.log(req.body);
-    await TempOrderDetail.update(req.body);
+    console.log(dataUpdate);
+    await TempOrderDetail.update(dataUpdate);
     res.json(TempOrderDetail);
   } catch (error) {
     console.error("❌ Error al actualizar el detalle de la orden:", error);
