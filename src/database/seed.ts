@@ -7,11 +7,11 @@ export const seedDatabase = async () => {
     const sectorCount = await models.Sector.count();
     if (sectorCount === 0) {
       await models.Sector.bulkCreate([
-        {id: 1, name: "Bolsas", description: "Sector de producción de productos"},
-        {id: 2, name: "Inyección", description: "Sector encargado del reciclaje de materiales"},
-        {id: 3, name: "Termoformado", description: "Sector de almacenamiento de productos"},
-        {id: 4, name: "Expandido", description: "Sector de almacenamiento de productos"},
-        {id: 5, name: "Reciclado", description: "Sector de almacenamiento de productos"},
+        {id: 1, name: "Bolsas", description: "Sector de producción "},
+        {id: 2, name: "Inyección", description: "Sector de producción"},
+        {id: 3, name: "Termoformado", description: "Sector de producción"},
+        {id: 4, name: "Expandido", description: "Sector de producción"},
+        {id: 5, name: "Reciclado", description: "Sector de producción"},
       ]);
       console.log("✅ Datos de Sector insertados");
     }
@@ -47,6 +47,8 @@ export const seedDatabase = async () => {
       await models.Process.bulkCreate([
         {name: "Extrusión", description: "Proceso de extrusión de materiales"},
         {name: "Impresión", description: "Proceso de impresión en productos"},
+        {name: "Termoformado", description: "Proceso de termoformado de productos"},
+        {name: "Corte", description: "Proceso de corte de productos"},
       ]);
       console.log("✅ Datos de Proceso insertados");
     }
@@ -81,10 +83,10 @@ export const seedDatabase = async () => {
       await models.User.bulkCreate([
         {
           name: "Isaias",
-          lastname: "Salas",
+          lastname: "Salas Montesinos",
           birthday: "1990-01-01",
           image: "juan.jpg",
-          phone: "123456789",
+          phone: "70881108",
           user: "admin",
           pass: pass,
           id_group: 4,
@@ -94,7 +96,7 @@ export const seedDatabase = async () => {
           lastname: "Gómez",
           birthday: "1992-05-10",
           image: "ana.jpg",
-          phone: "987654321",
+          phone: "65457810",
           user: "anag",
           pass: pass,
           id_group: 1,

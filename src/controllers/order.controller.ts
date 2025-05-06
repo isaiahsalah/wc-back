@@ -25,7 +25,11 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
 export const getOrderById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const order = await models.Order.findByPk(id);
+    const order = await models.Order.findByPk(id, {
+      include: [
+        {model: models.OrderDetail, include: [{model: models.Production}, {model: models.Product}]},
+      ],
+    });
     if (!order) {
       res.status(404).json({error: "Orden no encontrada"});
       return;
@@ -48,16 +52,62 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const updateOrder = async (req: Request, res: Response): Promise<void> => {
+  const transaction = await  sequelize.transaction(); // Iniciamos una transacción
+
   try {
     const {id} = req.params;
+    //const dataUpdate = req.body;
+    const { order_details, ...orderData } = req.body; 
+    console.log("🤣🤣", orderData);
+    console.log("😊😊", order_details);
+
+
+   // 1. Actualizar la orden principal
+   const order = await models.Order.findByPk(id, { transaction });
+   if (!order) {
+     await transaction.rollback();
+     res.status(404).json({ error: "Orden no encontrada" });
+     return;
+   }
+
+   await order.update(orderData, { transaction });
+
+// 2. Manejar los order_details
+if (order_details && Array.isArray(order_details)) {
+  // Eliminar detalles que no están en el nuevo array
+  const existingDetails = await models.OrderDetail.findAll({
+    where: { id_order: id },
+    transaction
+  });
+
+
+   // IDs de los detalles que vienen en la solicitud (los que queremos mantener)
+   const incomingIds = order_details
+   .map(detail => detail.id)
+   .filter(id => id !== undefined && id !== 0);
+
+ // Detalles a eliminar (los que existen pero no vienen en la solicitud)
+ const detailsToRemove = existingDetails.filter(
+   detail => order_details.includes(det=>det.id===detail.id)
+ );
+
+ // Eliminar los que ya no están
+ await models.OrderDetail.destroy({
+   where: {
+     id: detailsToRemove.map(detail => detail.id),
+   },
+   transaction
+ });
+
+
 
     const TempOrder = await models.Order.findByPk(id);
     if (!TempOrder) {
       res.status(404).json({error: "Orden no encontrada"});
       return;
     }
-    console.log(req.body);
-    await TempOrder.update(req.body);
+    console.log(dataUpdate);
+    await TempOrder.update(dataUpdate);
     res.json(TempOrder);
   } catch (error) {
     console.error("❌ Error al actualizar la orden:", error);

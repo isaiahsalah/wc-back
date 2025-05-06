@@ -122,7 +122,7 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
     }
 
     const orderDetails = await models.OrderDetail.findAll({
-      attributes: {
+      /*attributes: {
         include: [
           [
             Sequelize.literal(`(
@@ -134,21 +134,32 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
             "production_count",
           ],
         ],
-      },
+      },*/
       include: [
+        {model: models.Production},
         {
           model: models.Order,
           required: true,
-          as: "order",
+          //as: "order",
+          where: {
+            init_date: {
+              [Op.lte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Menor o igual que parsedDate
+            },
+            end_date: {
+              [Op.gte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Mayor o igual que parsedDate
+            },
+          },
         },
-        {model: models.Production},
+
         {
           model: models.Product,
-          as: "product",
+          //as: "product",
+          required: true,
           include: [
             {
               model: models.Model,
-              as: "model",
+              required: true,
+              //as: "model",
               include: [
                 {
                   model: models.Process,
@@ -157,19 +168,23 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
                   model: models.Sector,
                 },
               ],
+              where: {
+                id_process: id_process ? id_process : {[Op.ne]: null},
+                id_sector: id_sector ? id_sector : {[Op.ne]: null},
+              },
             },
           ],
         },
       ],
       where: {
-        "$order.init_date$": {
+        /*"$order.init_date$": {
           [Op.lte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Menor o igual que parsedDate
         },
         "$order.end_date$": {
           [Op.gte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Mayor o igual que parsedDate
         },
         "$product.model.id_process$": id_process ? id_process : {[Op.ne]: null},
-        "$product.model.id_sector$": id_sector ? id_sector : {[Op.ne]: null},
+        "$product.model.id_sector$": id_sector ? id_sector : {[Op.ne]: null},*/
       },
     });
 
