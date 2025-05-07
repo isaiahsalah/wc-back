@@ -16,8 +16,6 @@ import orderDetailRoute from "./routes/order_detail.route";
 import orderRoute from "./routes/order.route";
 import modelRoute from "./routes/model.route";
 import machineRoute from "./routes/machine.route";
-import loteRoute from "./routes/lote.routes";
-import inventoryRoute from "./routes/inventory.route";
 import formulaDetailRoute from "./routes/formula_detail.route";
 import formulaRoute from "./routes/formula.route";
 import productionRoute from "./routes/production.route";
@@ -35,11 +33,9 @@ app.use(express.json());
 
 // Rutas de ejemplo
 app.use("/profile", profileRoute);
-
 app.use("/auth", authRoute);
 app.use("/pr/color", colorRoute);
 app.use("/pr/group", groupRoute);
-
 app.use("/pr/user", userRoute);
 app.use("/pr/unity", unityRoute);
 app.use("/pr/sector", sectorRoute);
@@ -50,8 +46,6 @@ app.use("/pr/order-detail", orderDetailRoute);
 app.use("/pr/order", orderRoute);
 app.use("/pr/model", modelRoute);
 app.use("/pr/machine", machineRoute);
-app.use("/pr/lote", loteRoute);
-app.use("/pr/inventory", inventoryRoute);
 app.use("/pr/formula-detail", formulaDetailRoute);
 app.use("/pr/formula", formulaRoute);
 app.use("/pr/production", productionRoute);

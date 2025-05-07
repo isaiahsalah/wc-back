@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import models, {sequelize} from "../database/models";
 import {Op} from "sequelize";
+import {formatDate} from "../utils/func";
 
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -30,7 +31,6 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
           ],
         },
         {model: models.User},
-        {model: models.Lote},
         {model: models.Machine},
         {model: models.Unity},
       ],
@@ -147,25 +147,38 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
     if (!orderDetail) {
       throw new Error("OrderDetail no encontrado");
     }
+    const machineCode = productions[0].id_machine; // Recuperamos el id_machine
     const productCode = orderDetail.get("id_product"); // Recuperamos el id_product
-    const loteName = `${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${productCode}`; // Formato del código de lote
+    const date = formatDate(productions[0].date); // Fecha actual en formato YYYYMMDD
 
-    // Crear el lote con el código generado
-    const lote = await models.Lote.create(
-      {
-        name: loteName,
-        id_inventory: 1,
+    const loteBase = `${date}-P${productCode}-M${machineCode}`; // Base del código del lote (ej. P123-20230507)
+
+    // Obtener el número secuencial más alto del lote para este producto y fecha
+    const maxLote = await models.Production.max("lote", {
+      where: {
+        lote: {
+          [Op.like]: `${loteBase}-%`, // Buscar lotes que empiecen con la base
+        },
       },
-      {transaction: t}
-    );
+      transaction: t, // Usar la misma transacción
+    });
+
+    // Generar el nuevo número secuencial basado en el último lote
+    const nextSequence =
+      maxLote && typeof maxLote === "string"
+        ? parseInt(maxLote.split("-").pop() || "0", 10) + 1
+        : 1;
+    //const loteCode = `${loteBase}-${String(nextSequence).padStart(3, "0")}`; // Lote con secuencia (ej. P123-20230507-001)
 
     // Crear las producciones e incluir el id_lote
     const createdProductions = await Promise.all(
-      productions.map(async (production: any) => {
+      productions.map(async (production: any, index: number) => {
+        const currentLote = `${loteBase}-${String(nextSequence + index).padStart(3, "0")}`;
+
         return await models.Production.create(
           {
             ...production,
-            id_lote: lote.get("id"), // Asociamos el lote creado
+            lote: currentLote, // Asociamos el lote generado
             duration: Math.round(production.duration),
           },
           {transaction: t}
@@ -188,9 +201,6 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
             },
           ],
         },
-        {
-          model: models.Lote,
-        },
         {model: models.Unity},
       ],
       transaction: t,
@@ -200,7 +210,6 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
     await t.commit();
     console.log("➡️➡️➡️➡️ IDs creados:", ids);
 
-    console.log("🚩🚩🚩", JSON.stringify(detailedProductions, null, 2));
     // Responder con las producciones creadas
     res.status(201).json(detailedProductions);
   } catch (error) {

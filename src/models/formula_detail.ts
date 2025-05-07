@@ -1,6 +1,7 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 import {ProductModel} from "./product";
+import {FormulaModel} from "./formula";
 
 export const FormulaDetailModel = sequelize.define("formula_detail", {
   id: {
@@ -20,10 +21,17 @@ export const FormulaDetailModel = sequelize.define("formula_detail", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  id_formula: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 ProductModel.hasMany(FormulaDetailModel, {foreignKey: "id_product_material"});
 FormulaDetailModel.belongsTo(ProductModel, {foreignKey: "id_product_material"});
+
+FormulaModel.hasMany(FormulaDetailModel, {foreignKey: "id_formula"});
+FormulaDetailModel.belongsTo(FormulaModel, {foreignKey: "id_formula"});
 
 /*
 //Relacion con evento

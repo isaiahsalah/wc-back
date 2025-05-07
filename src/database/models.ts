@@ -6,8 +6,6 @@ import {ColorModel} from "../models/color";
 import {SectorModel} from "../models/sector";
 import {FormulaModel} from "../models/formula";
 import {FormulaDetailModel} from "../models/formula_detail";
-import {InventoryModel} from "../models/inventory";
-import {LoteModel} from "../models/lote";
 import {MachineModel} from "../models/machine";
 import {OrderModel} from "../models/order";
 import {OrderDetailModel} from "../models/order_detail";
@@ -26,8 +24,6 @@ const models = {
   Sector: SectorModel,
   Formula: FormulaModel,
   FormulaDetail: FormulaDetailModel,
-  Inventory: InventoryModel,
-  Lote: LoteModel,
   Machine: MachineModel,
   Order: OrderModel,
   OrderDetail: OrderDetailModel,
