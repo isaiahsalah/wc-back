@@ -25,7 +25,7 @@ export const ProductionModel = sequelize.define("production", {
     allowNull: false,
   },
   amount: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DECIMAL,
     allowNull: false,
   },
   micronage: {

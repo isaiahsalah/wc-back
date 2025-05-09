@@ -17,7 +17,7 @@ export const ProductModel = sequelize.define("product", {
     type: DataTypes.STRING,
   },
   amount: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DECIMAL,
   },
   micronage: {
     type: DataTypes.DECIMAL,
