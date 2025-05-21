@@ -17,9 +17,6 @@ export const UserModel = sequelize.define("user", {
   birthday: {
     type: DataTypes.DATE,
   },
-  image: {
-    type: DataTypes.STRING,
-  },
   phone: {
     type: DataTypes.STRING,
   },

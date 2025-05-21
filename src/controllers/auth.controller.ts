@@ -60,7 +60,7 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
     };
 
     // Generar token de autenticación
-    const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "1h"});
+    const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "8h"});
     console.log("😁😁😁😁", foundUser);
     // Responder con éxito
     res.status(200).json({
@@ -126,7 +126,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
             id: foundUser.id,
             type_module: type_module,
           };
-          const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "1h"});
+          const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "8h"});
 
           // Responder con éxito
           res.status(200).json({

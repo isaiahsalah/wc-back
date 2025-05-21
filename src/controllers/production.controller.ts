@@ -5,9 +5,9 @@ import {formatDate} from "../utils/func";
 
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, id_process, id_user, paranoid} = req.query;
+    const {id_sector, id_process, id_user, all} = req.query;
     const productions = await models.Production.findAll({
-      paranoid: paranoid ? true : false,
+      paranoid: all ? false : true,
       where: {id_user: id_user ? id_user : {[Op.ne]: null}},
       include: [
         {
@@ -32,7 +32,8 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
         },
         {model: models.User},
         {model: models.Machine},
-        {model: models.Unity},
+        {model: models.Unit, as: "production_unit"},
+        {model: models.Unit, as: "production_equivalent_unit"},
       ],
     });
     res.json(productions);
@@ -201,7 +202,8 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
             },
           ],
         },
-        {model: models.Unity},
+        {model: models.Unit, as: "production_unit"},
+        {model: models.Unit, as: "production_equivalent_unit"},
       ],
       transaction: t,
     });

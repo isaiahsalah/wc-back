@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import models from "../database/models";
 import {Op} from "sequelize";
-
+/*
 // Controlador para Models
 export const getAllModels = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,16 +19,19 @@ export const getAllModels = async (req: Request, res: Response): Promise<void> =
     console.error("❌ Error al obtener los modelos:", error);
     res.status(500).json({error: "Error al obtener los modelos"});
   }
-};
+};*/
 
 export const getModels = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector} = req.query;
+    const {id_sector, all} = req.query;
 
     const modelsList = await models.Model.findAll({
+      paranoid: all ? true : false,
+
       where: {
         id_sector: id_sector ? id_sector : {[Op.ne]: null},
       },
+      include: [{model: models.Process}, {model: models.Sector}],
     });
     res.json(modelsList);
   } catch (error) {

@@ -1,8 +1,7 @@
-import { Router } from "express";
+import {Router} from "express";
 import {
   createMachine,
   deleteMachine,
-  getAllMachines,
   getMachineById,
   getMachines,
   recoverMachine,
@@ -15,8 +14,7 @@ const router = Router();
 router.post("/", createMachine);
 router.put("/:id", updateMachine);
 router.get("/", getMachines);
-router.get("/all", getAllMachines);
 router.get("/:id", getMachineById);
 router.delete("/:id", deleteMachine);
-router.patch("/:id", recoverMachine );
+router.patch("/:id", recoverMachine);
 export default router;

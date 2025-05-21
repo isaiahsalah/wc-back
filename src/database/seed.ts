@@ -31,12 +31,13 @@ export const seedDatabase = async () => {
     }
 
     // Inserta datos de unidad
-    const unityCount = await models.Unity.count();
+    const unityCount = await models.Unit.count();
     if (unityCount === 0) {
-      await models.Unity.bulkCreate([
-        {name: "Kilogramos", shortname: "Kg", description: "Unidad de medida en kilogramos"},
-        {name: "Litros", shortname: "L", description: "Unidad de medida en litros"},
-        {name: "Unidades", shortname: "U", description: "Unidad de medida por cantidad de piezas"},
+      await models.Unit.bulkCreate([
+        {name: "Bobina", shortname: "bob", description: "Unidad de medida en Bobinas"},
+        {name: "Bulto", shortname: "bul", description: "Unidad de medida en Bultos"},
+        {name: "Unidad", shortname: "u", description: "Unidad de medida por cantidad de piezas"},
+        {name: "Metro", shortname: "m", description: "Unidad de medida en Metros"},
       ]);
       console.log("✅ Datos de Unidad insertados");
     }
@@ -57,11 +58,8 @@ export const seedDatabase = async () => {
     const groupCount = await models.Machine.count();
     if (groupCount === 0) {
       await models.Group.bulkCreate([
-        {name: "Grupo A", description: "", type_turn: 1},
-        {name: "Grupo B", description: "", type_turn: 1},
-
-        {name: "Grupo A", description: "", type_turn: 2},
-        {name: "Grupo B", description: "", type_turn: 2},
+        {name: "Grupo A", description: ""},
+        {name: "Grupo B", description: ""},
       ]);
       console.log("✅ Datos de Máquinas insertados");
     }
@@ -105,7 +103,7 @@ export const seedDatabase = async () => {
         {id_user: 1, id_sector: 4, degree: 1, screen: 2, type_module: 1},
         {id_user: 1, id_sector: 4, degree: 1, screen: 3, type_module: 1},
         {id_user: 1, id_sector: 4, degree: 1, screen: 4, type_module: 1},
-        //{id_user: 1, id_sector: 4, degree: 1, screen: 5, type_module: 1},
+        {id_user: 1, id_sector: 4, degree: 1, screen: 5, type_module: 1},
 
         {id_user: 2, id_sector: 4, degree: 2, screen: 2, type_module: 1},
       ]);

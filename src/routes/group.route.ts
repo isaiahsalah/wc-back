@@ -5,7 +5,6 @@ import {
   getGroups,
   getGroupById,
   updateGroup,
-  getAllGroups,
   recoverGroup,
 } from "../controllers/group.controller";
 
@@ -15,7 +14,6 @@ const router = Router();
 router.post("/", createGroup);
 router.put("/:id", updateGroup);
 router.get("/", getGroups);
-router.get("/all", getAllGroups);
 router.get("/:id", getGroupById);
 router.delete("/:id", deleteGroup);
 router.patch("/:id", recoverGroup);

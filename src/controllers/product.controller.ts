@@ -4,11 +4,13 @@ import {Op} from "sequelize";
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, paranoid} = req.query;
+    const {id_sector, all} = req.query;
     const products = await models.Product.findAll({
-      paranoid: paranoid ? true : false,
+      paranoid: all ? true : false,
       include: [
-        {model: models.Unity},
+        {model: models.Unit, as: "product_unit"},
+        {model: models.Unit, as: "product_equivalent_unit"},
+
         {model: models.Color},
         {
           model: models.Model,

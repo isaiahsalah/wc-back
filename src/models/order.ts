@@ -1,6 +1,7 @@
-import { DataTypes } from "sequelize";
-import sequelize  from "../database/sequelize";
-import { UserModel } from "./user";
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
+import {UserModel} from "./user";
+import {GroupModel} from "./group";
 
 export const OrderModel = sequelize.define("order", {
   id: {
@@ -14,16 +15,22 @@ export const OrderModel = sequelize.define("order", {
   end_date: {
     type: DataTypes.DATE,
   },
+  type_turn: {
+    type: DataTypes.SMALLINT,
+    allowNull: false,
+  },
+  id_group: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   id_user: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
 
-UserModel.hasMany(OrderModel, { foreignKey: "id_user" });
-OrderModel.belongsTo(UserModel, { foreignKey: "id_user" });
+UserModel.hasMany(OrderModel, {foreignKey: "id_user"});
+OrderModel.belongsTo(UserModel, {foreignKey: "id_user"});
 
-/*
-//Relacion con evento
-
-*/
+GroupModel.hasMany(OrderModel, {foreignKey: "id_group"});
+OrderModel.belongsTo(GroupModel, {foreignKey: "id_group"});

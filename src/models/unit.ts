@@ -1,8 +1,7 @@
+import {DataTypes} from "sequelize";
+import sequelize from "../database/sequelize";
 
-import { DataTypes } from "sequelize";
-import  sequelize  from "../database/sequelize";
-
-export const UnityModel = sequelize.define("unity", {
+export const UnitModel = sequelize.define("unit", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

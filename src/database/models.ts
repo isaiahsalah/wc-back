@@ -15,8 +15,9 @@ import {ProductModel} from "../models/product";
 import {ProductionModel} from "../models/production";
 import {ProductionDetailModel} from "../models/production_detail";
 import {UserModel} from "../models/user";
-import {UnityModel} from "../models/unity";
+import {UnitModel} from "../models/unit";
 import {GroupModel} from "../models/group";
+import {WorkModel} from "../models/work";
 
 const models = {
   Color: ColorModel,
@@ -33,8 +34,9 @@ const models = {
   Production: ProductionModel,
   ProductionDetail: ProductionDetailModel,
   User: UserModel,
-  Unity: UnityModel,
+  Unit: UnitModel,
   Group: GroupModel,
+  Work: WorkModel,
 };
 
 export default models;

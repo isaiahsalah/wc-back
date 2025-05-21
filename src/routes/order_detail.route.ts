@@ -1,8 +1,7 @@
-import { Router } from "express";
+import {Router} from "express";
 import {
   createOrderDetail,
   deleteOrderDetail,
-  getAllOrderDetails,
   getOrderDetailById,
   getOrderDetails,
   getOrderDetails_date,
@@ -19,10 +18,8 @@ router.get("/date", getOrderDetails_date);
 router.post("/", createOrderDetail);
 router.put("/:id", updateOrderDetail);
 router.get("/", getOrderDetails);
-router.get("/all", getAllOrderDetails);
 router.get("/:id", getOrderDetailById);
 router.delete("/:id", deleteOrderDetail);
-router.patch("/:id", recoverOrderDetail );
-
+router.patch("/:id", recoverOrderDetail);
 
 export default router;

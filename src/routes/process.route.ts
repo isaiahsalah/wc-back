@@ -1,8 +1,7 @@
-import { Router } from "express";
+import {Router} from "express";
 import {
   createProcess,
   deleteProcess,
-  getAllProcesses,
   getProcessById,
   getProcesses,
   recoverProcess,
@@ -15,8 +14,7 @@ const router = Router();
 router.post("/", createProcess);
 router.put("/:id", updateProcess);
 router.get("/", getProcesses);
-router.get("/all", getAllProcesses);
 router.get("/:id", getProcessById);
 router.delete("/:id", deleteProcess);
-router.patch("/:id", recoverProcess );
+router.patch("/:id", recoverProcess);
 export default router;

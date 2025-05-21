@@ -15,8 +15,4 @@ export const GroupModel = sequelize.define("group", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  type_turn: {
-    type: DataTypes.SMALLINT,
-    allowNull: false,
-  },
 });

@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import models from "../database/models";
-
+/*
 // Controlador para Grupos
 export const getAllGroups = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -11,11 +11,15 @@ export const getAllGroups = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({error: "Error al obtener los grupos"});
   }
 };
-
+*/
 // Controlador para Grupos
 export const getGroups = async (req: Request, res: Response): Promise<void> => {
   try {
-    const groups = await models.Group.findAll();
+    const {all} = req.query;
+
+    const groups = await models.Group.findAll({
+      paranoid: all ? true : false,
+    });
     res.json(groups);
   } catch (error) {
     console.error("❌ Error al obtener los grupos:", error);

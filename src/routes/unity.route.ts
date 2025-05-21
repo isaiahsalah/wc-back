@@ -1,8 +1,7 @@
-import { Router } from "express";
+import {Router} from "express";
 import {
   createUnity,
   deleteUnity,
-  getAllUnities,
   getUnities,
   getUnityById,
   recoverUnity,
@@ -15,8 +14,7 @@ const router = Router();
 router.post("/", createUnity);
 router.put("/:id", updateUnity);
 router.get("/", getUnities);
-router.get("/all", getAllUnities);
 router.get("/:id", getUnityById);
 router.delete("/:id", deleteUnity);
-router.patch("/:id", recoverUnity );
+router.patch("/:id", recoverUnity);
 export default router;

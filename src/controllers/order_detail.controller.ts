@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import models from "../database/models";
 import {Op, Sequelize} from "sequelize";
-
+/*
 // Controlador para OrderDetails
 export const getAllOrderDetails = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -11,11 +11,15 @@ export const getAllOrderDetails = async (req: Request, res: Response): Promise<v
     console.error("❌ Error al obtener los detalles de las órdenes:", error);
     res.status(500).json({error: "Error al obtener los detalles de las órdenes"});
   }
-};
+};*/
 
 export const getOrderDetails = async (req: Request, res: Response): Promise<void> => {
   try {
-    const orderDetails = await models.OrderDetail.findAll();
+    const {all} = req.query;
+
+    const orderDetails = await models.OrderDetail.findAll({
+      paranoid: all ? true : false,
+    });
     res.json(orderDetails);
   } catch (error) {
     console.error("❌ Error al obtener los detalles de las órdenes:", error);

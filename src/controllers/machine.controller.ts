@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import models from "../database/models";
-
+/*
 // Controlador para Machines
 export const getAllMachines = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -14,10 +14,14 @@ export const getAllMachines = async (req: Request, res: Response): Promise<void>
     res.status(500).json({error: "Error al obtener las máquinas"});
   }
 };
-
+*/
 export const getMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const machines = await models.Machine.findAll();
+    const {all} = req.query;
+
+    const machines = await models.Machine.findAll({
+      paranoid: all ? true : false,
+    });
     res.json(machines);
   } catch (error) {
     console.error("❌ Error al obtener las máquinas:", error);

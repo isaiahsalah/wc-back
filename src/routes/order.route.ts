@@ -1,9 +1,8 @@
-import { Router } from "express";
+import {Router} from "express";
 import {
   createOrder,
   createOrderWithDetails,
   deleteOrder,
-  getAllOrders,
   getOrderById,
   getOrders,
   recoverOrder,
@@ -17,7 +16,6 @@ router.post("/", createOrder);
 router.post("/WithDetails", createOrderWithDetails);
 router.put("/:id", updateOrder);
 router.get("/", getOrders);
-router.get("/all", getAllOrders);
 router.get("/:id", getOrderById);
 router.delete("/:id", deleteOrder);
 router.patch("/:id", recoverOrder);
