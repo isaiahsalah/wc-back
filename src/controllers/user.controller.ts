@@ -49,10 +49,19 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    req.body.pass = await bcryptjs.hash(req.body.pass, 8);
+    // Encriptar la contraseña antes de crear el usuario
+    const hashedPassword = await bcryptjs.hash(req.body.pass, 8); // Usando un factor de costo de 10
+    req.body.pass = hashedPassword;
+
+    // Convertir el nombre de usuario a minúsculas
     req.body.user = (req.body.user as string).toLowerCase();
+
+    // Crear el usuario en la base de datos
     const newUser = await models.User.create(req.body);
-    res.status(201).json(newUser);
+
+    // Responder con el usuario creado (sin la contraseña)
+    const {pass, ...userWithoutPassword} = newUser.toJSON(); // Excluir el hash de la respuesta
+    res.status(201).json(userWithoutPassword);
   } catch (error) {
     console.error("❌ Error al crear el usuario:", error);
     res.status(500).json({error: "Error al crear el usuario"});
@@ -166,7 +175,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
     }
 
     // Eliminar permisos que ya no existen
-    await models.Permission.destroy({where: {id: deletedPermissions}});
+    await models.Permission.destroy({where: {id: deletedPermissions}, force: true});
 
     // Devolver la respuesta actualizada
     const updatedUser = await models.User.findByPk(id, {

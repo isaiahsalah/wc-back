@@ -1,6 +1,7 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 import {ProcessModel} from "./process";
+import {SectorModel} from "./sector";
 
 export const MachineModel = sequelize.define("machine", {
   id: {
@@ -20,6 +21,11 @@ export const MachineModel = sequelize.define("machine", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  id_sector: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+    allowNull: false,
+  },
   active: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
@@ -29,3 +35,6 @@ export const MachineModel = sequelize.define("machine", {
 
 ProcessModel.hasMany(MachineModel, {foreignKey: "id_process"});
 MachineModel.belongsTo(ProcessModel, {foreignKey: "id_process"});
+
+SectorModel.hasMany(MachineModel, {foreignKey: "id_sector"});
+MachineModel.belongsTo(SectorModel, {foreignKey: "id_sector"});

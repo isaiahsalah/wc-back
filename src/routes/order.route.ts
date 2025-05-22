@@ -3,6 +3,7 @@ import {
   createOrder,
   createOrderWithDetails,
   deleteOrder,
+  editOrderWithDetails,
   getOrderById,
   getOrders,
   recoverOrder,
@@ -12,8 +13,9 @@ import {
 const router = Router();
 
 // Routes
+router.post("/details", createOrderWithDetails);
+router.put("/details/:id", editOrderWithDetails);
 router.post("/", createOrder);
-router.post("/WithDetails", createOrderWithDetails);
 router.put("/:id", updateOrder);
 router.get("/", getOrders);
 router.get("/:id", getOrderById);

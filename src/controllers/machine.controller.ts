@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import models from "../database/models";
+import {Op} from "sequelize";
 /*
 // Controlador para Machines
 export const getAllMachines = async (req: Request, res: Response): Promise<void> => {
@@ -17,10 +18,15 @@ export const getAllMachines = async (req: Request, res: Response): Promise<void>
 */
 export const getMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {all} = req.query;
+    const {id_sector, id_process, all} = req.query;
 
     const machines = await models.Machine.findAll({
       paranoid: all ? true : false,
+      include: [{model: models.Process}, {model: models.Sector}],
+      where: {
+        id_sector: id_sector ? id_sector : {[Op.ne]: null},
+        id_process: id_process ? id_process : {[Op.ne]: null},
+      },
     });
     res.json(machines);
   } catch (error) {
