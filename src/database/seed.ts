@@ -75,7 +75,6 @@ export const seedDatabase = async () => {
           name: "Usuario",
           lastname: "Administrador",
           birthday: "1990-01-01",
-          image: "juan.jpg",
           phone: "00000000",
           user: "adminex",
           pass: passAdminEx,
@@ -85,7 +84,6 @@ export const seedDatabase = async () => {
           name: "Usuario",
           lastname: "Operador",
           birthday: "1990-01-01",
-          image: "ana.jpg",
           phone: "00000000",
           user: "operex",
           pass: passOperEx,
@@ -99,9 +97,12 @@ export const seedDatabase = async () => {
     const permissionCount = await models.Permission.count();
     if (permissionCount === 0) {
       await models.Permission.bulkCreate([
+        //{id_user: 1, id_sector: 4, id_process: 1, degree: 4, screen: 41, type_module: 1},
+        {id_user: 1, id_sector: 4, id_process: 2, degree: 4, screen: 41, type_module: 1},
+        {id_user: 1, id_sector: 4, id_process: 3, degree: 4, screen: 41, type_module: 1},
         {id_user: 1, id_sector: 4, id_process: 4, degree: 4, screen: 41, type_module: 1},
 
-        {id_user: 2, id_sector: 4, id_process: 4, degree: 2, screen: 2, type_module: 1},
+        //{id_user: 2, id_sector: 4, id_process: 4, degree: 2, screen: 2, type_module: 1},
       ]);
       console.log("✅ Datos de Permiso insertados");
     }

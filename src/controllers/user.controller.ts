@@ -2,7 +2,8 @@ import {Request, Response} from "express";
 
 import models from "../database/models";
 import bcryptjs from "bcryptjs";
-import {IUser} from "../utils/interfaces";
+import {IPermission, IUser} from "../utils/interfaces";
+import {Op} from "sequelize";
 /*
 // Controlador para Users
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
@@ -33,8 +34,19 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
+    const {id_sector, id_process, type_module} = req.query;
+
     const user = await models.User.findByPk(id, {
-      include: [{model: models.Permission}],
+      include: [
+        {
+          model: models.Permission,
+          where: {
+            type_module: type_module ? type_module : {[Op.ne]: null},
+            id_sector: id_sector ? id_sector : {[Op.ne]: null},
+            id_process: id_process ? id_process : {[Op.ne]: null},
+          },
+        },
+      ],
     });
     if (!user) {
       res.status(404).json({error: "Usuario no encontrado"});
@@ -135,7 +147,8 @@ export const recoverUser = async (req: Request, res: Response): Promise<void> =>
 export const updateUserPermissions = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params; // ID del usuario
-    const {permissions} = req.body; // Array de permisos enviados en el body
+    const {permissions, id_process, id_sector, type_module} = req.body; // Array de permisos enviados en el body
+    console.log("🚩🚩🚩", req.body);
 
     // Buscar el usuario
     const user = await models.User.findByPk(id, {
@@ -143,6 +156,11 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
         {
           model: models.Permission,
           as: "permissions",
+          where: {
+            id_sector: id_sector ? id_sector : {[Op.ne]: null},
+            id_process: id_process ? id_process : {[Op.ne]: null},
+            type_module: type_module ? type_module : {[Op.ne]: null},
+          },
         },
       ],
     });
@@ -156,12 +174,14 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
     const currentPermissions = userData.permissions.map((perm: any) => perm.id);
 
     // Determinar los permisos a crear, actualizar y eliminar
-    const newPermissions = permissions.filter((perm: any) => !currentPermissions.includes(perm.id));
-    const updatedPermissions = permissions.filter((perm: any) =>
+    const newPermissions: IPermission[] = (permissions as []).filter(
+      (perm: any) => !currentPermissions.includes(perm.id)
+    );
+    const updatedPermissions: IPermission[] = (permissions as []).filter((perm: any) =>
       currentPermissions.includes(perm.id)
     );
-    const deletedPermissions = currentPermissions.filter(
-      (permId: number) => !permissions.some((perm: any) => perm.id === permId)
+    const deletedPermissions: IPermission[] = currentPermissions.filter(
+      (permId: number) => !(permissions as [])?.some((perm: any) => perm.id === permId)
     );
 
     // Actualizar permisos existentes
@@ -175,7 +195,15 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
     }
 
     // Eliminar permisos que ya no existen
-    await models.Permission.destroy({where: {id: deletedPermissions}, force: true});
+    await models.Permission.destroy({
+      where: {
+        id: deletedPermissions,
+        id_sector: id_sector ? id_sector : {[Op.ne]: null},
+        id_process: id_process ? id_process : {[Op.ne]: null},
+        type_module: type_module ? type_module : {[Op.ne]: null},
+      },
+      force: true,
+    });
 
     // Devolver la respuesta actualizada
     const updatedUser = await models.User.findByPk(id, {

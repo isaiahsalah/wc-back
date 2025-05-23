@@ -106,14 +106,13 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
         if (userId && type_module) {
           const foundUser = (await models.User.findOne({
             where: {id: userId as string},
-
             include: [
               {model: models.Group},
               {
                 model: models.Permission,
                 required: true,
                 include: [{model: models.Sector}, {model: models.Process}],
-                where: {type_module},
+                where: {type_module, id_sector},
               },
             ],
           })) as IUser | null;

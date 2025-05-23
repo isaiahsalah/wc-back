@@ -14,13 +14,14 @@ export const getAllOrders = async (req: Request, res: Response): Promise<void> =
 };*/
 
 export const getOrders = async (req: Request, res: Response): Promise<void> => {
-  const {id_sector, all} = req.query;
+  const {id_sector, id_process, all} = req.query;
 
   try {
     const orders = await models.Order.findAll({
       paranoid: all ? false : true,
       include: [
         {model: models.User},
+        {model: models.Group},
         {
           model: models.OrderDetail,
           required: true,
@@ -34,6 +35,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
                   required: true,
                   where: {
                     id_sector: id_sector ? id_sector : {[Op.ne]: null},
+                    id_process: id_process ? id_process : {[Op.ne]: null},
                   },
                 },
               ],
