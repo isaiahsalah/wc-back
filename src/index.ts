@@ -1,7 +1,6 @@
 // index.ts
 import app from "./app";
 import sequelize from "./database/sequelize";
-import models from "./database/models";
 import {seedDatabase} from "./database/seed";
 
 // Obtener el puerto desde las variables de entorno o usar el puerto por defecto

@@ -9,7 +9,7 @@ const jwtSecret = process.env.JWT_SECRET || "1234";
 
 export async function postLogin(req: Request, res: Response): Promise<void> {
   try {
-    const {user, pass, type_module} = req.body;
+    const {user, pass, type_module, id_sector} = req.body;
 
     if (!user || !pass) {
       // Validar la presencia de los campos necesarios
@@ -25,8 +25,8 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
         {
           model: models.Permission,
           required: true,
-          include: [{model: models.Sector}],
-          where: {type_module},
+          include: [{model: models.Sector}, {model: models.Process}],
+          where: {type_module, id_sector},
         },
       ],
     })) as IUser | null;
@@ -57,10 +57,11 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
     const userPayload = {
       id: foundUser.id,
       type_module: type_module,
+      id_sector: id_sector,
     };
 
     // Generar token de autenticación
-    const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "8h"});
+    const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "12h"});
     console.log("😁😁😁😁", foundUser);
     // Responder con éxito
     res.status(200).json({
@@ -98,6 +99,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
       if (decoded && typeof decoded !== "string") {
         const userId = (decoded as JwtPayload).id; // Accede al campo 'id'
         const type_module = (decoded as JwtPayload).type_module; // Accede al campo 'id'
+        const id_sector = (decoded as JwtPayload).id_sector; // Accede al campo 'id'
 
         console.log("😊😊😊", decoded, token);
 
@@ -110,7 +112,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
               {
                 model: models.Permission,
                 required: true,
-                include: [{model: models.Sector}],
+                include: [{model: models.Sector}, {model: models.Process}],
                 where: {type_module},
               },
             ],
@@ -125,8 +127,9 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
           const userPayload = {
             id: foundUser.id,
             type_module: type_module,
+            id_sector: id_sector,
           };
-          const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "8h"});
+          const token = jwt.sign(userPayload, jwtSecret, {expiresIn: "12h"});
 
           // Responder con éxito
           res.status(200).json({

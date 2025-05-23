@@ -38,6 +38,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
                 },
               ],
             },
+            {model: models.Machine},
           ],
         },
       ],
@@ -54,7 +55,10 @@ export const getOrderById = async (req: Request, res: Response): Promise<void> =
     const {id} = req.params;
     const order = await models.Order.findByPk(id, {
       include: [
-        {model: models.OrderDetail, include: [{model: models.Production}, {model: models.Product}]},
+        {
+          model: models.OrderDetail,
+          include: [{model: models.Production}, {model: models.Product}, {model: models.Machine}],
+        },
       ],
     });
     if (!order) {

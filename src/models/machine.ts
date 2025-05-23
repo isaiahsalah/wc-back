@@ -23,7 +23,6 @@ export const MachineModel = sequelize.define("machine", {
   },
   id_sector: {
     type: DataTypes.INTEGER,
-    defaultValue: 1,
     allowNull: false,
   },
   active: {

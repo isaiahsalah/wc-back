@@ -13,6 +13,7 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
         {
           model: models.Permission,
           required: true,
+          include: [{model: models.Sector}],
         },
       ],
     });

@@ -5,7 +5,7 @@ export const getProductionDetails = async (req: Request, res: Response): Promise
   try {
     const {all} = req.query;
 
-    const productionDetails = await models.ProductionDetail.findAll({
+    const productionDetails = await models.ProductionCost.findAll({
       paranoid: all ? true : false,
     });
     res.json(productionDetails);
@@ -28,7 +28,7 @@ export const getAllProductionDetails = async (req: Request, res: Response): Prom
 export const getProductionDetailById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const productionDetail = await models.ProductionDetail.findByPk(id);
+    const productionDetail = await models.ProductionCost.findByPk(id);
     if (!productionDetail) {
       res.status(404).json({error: "Detalle de producción no encontrado"});
       return;
@@ -42,7 +42,7 @@ export const getProductionDetailById = async (req: Request, res: Response): Prom
 
 export const createProductionDetail = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newProductionDetail = await models.ProductionDetail.create(req.body);
+    const newProductionDetail = await models.ProductionCost.create(req.body);
     res.status(201).json(newProductionDetail);
   } catch (error) {
     console.error("❌ Error al crear el detalle de producción:", error);
@@ -53,7 +53,7 @@ export const createProductionDetail = async (req: Request, res: Response): Promi
 export const updateProductionDetail = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const productionDetail = await models.ProductionDetail.findByPk(id);
+    const productionDetail = await models.ProductionCost.findByPk(id);
     if (!productionDetail) {
       res.status(404).json({error: "Detalle de producción no encontrado"});
       return;
@@ -69,7 +69,7 @@ export const updateProductionDetail = async (req: Request, res: Response): Promi
 export const deleteProductionDetail = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const productionDetail = await models.ProductionDetail.findByPk(id);
+    const productionDetail = await models.ProductionCost.findByPk(id);
     if (!productionDetail) {
       res.status(404).json({error: "Detalle de producción no encontrado"});
       return;
@@ -87,7 +87,7 @@ export const recoverProductionDetail = async (req: Request, res: Response): Prom
     const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempProductionDetail = await models.ProductionDetail.findByPk(id, {paranoid: false});
+    const TempProductionDetail = await models.ProductionCost.findByPk(id, {paranoid: false});
     if (!TempProductionDetail) {
       res.status(404).json({error: "ProductionDetail no encontrado"});
       return;
@@ -97,7 +97,7 @@ export const recoverProductionDetail = async (req: Request, res: Response): Prom
     await TempProductionDetail.restore();
 
     // Busca nuevamente el registro para confirmar
-    const updatedProductionDetail = await models.ProductionDetail.findByPk(id);
+    const updatedProductionDetail = await models.ProductionCost.findByPk(id);
     // Devuelve el registro actualizado
     res.json(updatedProductionDetail);
   } catch (error) {

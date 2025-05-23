@@ -13,13 +13,15 @@ import {PermissionModel} from "../models/permission";
 import {ProcessModel} from "../models/process";
 import {ProductModel} from "../models/product";
 import {ProductionModel} from "../models/production";
-import {ProductionDetailModel} from "../models/production_detail";
+import {ProductionCostModel} from "../models/production_cost";
 import {UserModel} from "../models/user";
 import {UnitModel} from "../models/unit";
 import {GroupModel} from "../models/group";
 import {WorkModel} from "../models/work";
+import {ProductionOperatorModel} from "../models/production_operator";
 
 const models = {
+  ProductionOperator: ProductionOperatorModel,
   Color: ColorModel,
   Model: ModelModel,
   Sector: SectorModel,
@@ -32,7 +34,7 @@ const models = {
   Process: ProcessModel,
   Product: ProductModel,
   Production: ProductionModel,
-  ProductionDetail: ProductionDetailModel,
+  ProductionCost: ProductionCostModel,
   User: UserModel,
   Unit: UnitModel,
   Group: GroupModel,

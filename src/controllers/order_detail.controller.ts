@@ -117,7 +117,7 @@ export const recoverOrderDetail = async (req: Request, res: Response): Promise<v
 
 export const getOrderDetails_date = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, id_process, date} = req.query;
+    const {id_sector, id_process, id_machine, date} = req.query;
 
     // Asegúrate de que 'date' sea una cadena antes de usarlo
     const parsedDate = date ? new Date(date as string) : undefined;
@@ -142,6 +142,7 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
       },*/
       include: [
         {model: models.Production},
+        {model: models.Machine},
         {
           model: models.Order,
           required: true,
@@ -182,14 +183,7 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
         },
       ],
       where: {
-        /*"$order.init_date$": {
-          [Op.lte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Menor o igual que parsedDate
-        },
-        "$order.end_date$": {
-          [Op.gte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Mayor o igual que parsedDate
-        },
-        "$product.model.id_process$": id_process ? id_process : {[Op.ne]: null},
-        "$product.model.id_sector$": id_sector ? id_sector : {[Op.ne]: null},*/
+        id_machine: id_machine ? id_machine : {[Op.ne]: null},
       },
     });
 

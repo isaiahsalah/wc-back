@@ -99,13 +99,9 @@ export const seedDatabase = async () => {
     const permissionCount = await models.Permission.count();
     if (permissionCount === 0) {
       await models.Permission.bulkCreate([
-        {id_user: 1, id_sector: 4, degree: 1, screen: 1, type_module: 1},
-        {id_user: 1, id_sector: 4, degree: 1, screen: 2, type_module: 1},
-        {id_user: 1, id_sector: 4, degree: 1, screen: 3, type_module: 1},
-        {id_user: 1, id_sector: 4, degree: 1, screen: 4, type_module: 1},
-        {id_user: 1, id_sector: 4, degree: 1, screen: 5, type_module: 1},
+        {id_user: 1, id_sector: 4, id_process: 4, degree: 4, screen: 41, type_module: 1},
 
-        {id_user: 2, id_sector: 4, degree: 2, screen: 2, type_module: 1},
+        {id_user: 2, id_sector: 4, id_process: 4, degree: 2, screen: 2, type_module: 1},
       ]);
       console.log("✅ Datos de Permiso insertados");
     }
@@ -124,8 +120,8 @@ export const seedDatabase = async () => {
     const machineCount = await models.Machine.count();
     if (machineCount === 0) {
       await models.Machine.bulkCreate([
-        {name: "Máquina A", description: "", id_process: 1},
-        {name: "Máquina B", description: "", id_process: 2},
+        {name: "Máquina A", description: "", id_process: 1, id_sector: 4},
+        {name: "Máquina B", description: "", id_process: 2, id_sector: 4},
       ]);
       console.log("✅ Datos de Máquinas insertados");
     }
@@ -140,7 +136,10 @@ export const seedDatabase = async () => {
           description: "Producto de prueba A",
           micronage: 200,
           type_product: 1,
-          id_unity: 1,
+          weight: 40,
+          id_unit: 1,
+          id_equivalent_unit: 4,
+          equivalent_amount: 20,
           id_color: 1,
           id_model: 1,
         },
@@ -149,7 +148,10 @@ export const seedDatabase = async () => {
           amount: 24,
           description: "Producto de prueba B",
           type_product: 1,
-          id_unity: 2,
+          weight: 40,
+          id_unit: 2,
+          id_equivalent_unit: 3,
+          equivalent_amount: 24,
           id_color: 2,
           id_model: 2,
         },
