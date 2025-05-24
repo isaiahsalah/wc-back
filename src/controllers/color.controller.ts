@@ -18,7 +18,7 @@ export const getColors = async (req: Request, res: Response): Promise<void> => {
     const {all} = req.query;
 
     const colors = await models.Color.findAll({
-      paranoid: all ? true : false,
+      paranoid: all ? false : true,
     });
     res.json(colors);
   } catch (error) {

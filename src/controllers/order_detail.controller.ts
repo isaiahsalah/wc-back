@@ -18,7 +18,7 @@ export const getOrderDetails = async (req: Request, res: Response): Promise<void
     const {all} = req.query;
 
     const orderDetails = await models.OrderDetail.findAll({
-      paranoid: all ? true : false,
+      paranoid: all ? false : true,
     });
     res.json(orderDetails);
   } catch (error) {
@@ -117,7 +117,7 @@ export const recoverOrderDetail = async (req: Request, res: Response): Promise<v
 
 export const getOrderDetails_date = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, id_process, id_machine, date} = req.query;
+    const {id_sector_process, id_machine, date} = req.query;
 
     // Asegúrate de que 'date' sea una cadena antes de usarlo
     const parsedDate = date ? new Date(date as string) : undefined;
@@ -127,19 +127,6 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
     }
 
     const orderDetails = await models.OrderDetail.findAll({
-      /*attributes: {
-        include: [
-          [
-            Sequelize.literal(`(
-              SELECT COUNT(*)
-              FROM productions
-              WHERE productions.id_order_detail = order_detail.id
-              AND productions.type_quality = 1
-            )`),
-            "production_count",
-          ],
-        ],
-      },*/
       include: [
         {model: models.Production},
         {model: models.Machine},
@@ -159,24 +146,19 @@ export const getOrderDetails_date = async (req: Request, res: Response): Promise
 
         {
           model: models.Product,
-          //as: "product",
           required: true,
           include: [
             {
               model: models.Model,
               required: true,
-              //as: "model",
               include: [
                 {
-                  model: models.Process,
-                },
-                {
-                  model: models.Sector,
+                  model: models.SectorProcess,
+                  include: [{model: models.Process}, {model: models.Sector}],
                 },
               ],
               where: {
-                id_process: id_process ? id_process : {[Op.ne]: null},
-                id_sector: id_sector ? id_sector : {[Op.ne]: null},
+                id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
               },
             },
           ],

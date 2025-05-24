@@ -17,7 +17,7 @@ export const getSectors = async (req: Request, res: Response): Promise<void> => 
     const {all} = req.query;
 
     const sectors = await models.Sector.findAll({
-      paranoid: all ? true : false,
+      paranoid: all ? false : true,
     });
     res.json(sectors);
   } catch (error) {

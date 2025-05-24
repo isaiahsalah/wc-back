@@ -5,7 +5,7 @@ import {formatDate} from "../utils/func";
 
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, id_process, id_machine, all} = req.query;
+    const {id_sector_process, id_machine, all} = req.query;
     const productions = await models.Production.findAll({
       paranoid: all ? false : true,
       where: {
@@ -24,8 +24,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
                   model: models.Model,
                   required: true,
                   where: {
-                    id_sector: id_sector ? id_sector : {[Op.ne]: null},
-                    id_process: id_process ? id_process : {[Op.ne]: null},
+                    id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
                   },
                 },
               ],

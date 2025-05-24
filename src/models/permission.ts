@@ -1,8 +1,7 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 import {UserModel} from "./user";
-import {SectorModel} from "./sector";
-import {ProcessModel} from "./process";
+import {SectorProcessModel} from "./sector_process";
 
 export const PermissionModel = sequelize.define(
   "permission",
@@ -16,20 +15,16 @@ export const PermissionModel = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    id_sector: {
+    id_sector_process: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    id_process: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    degree: {
+    type_degree: {
       type: DataTypes.SMALLINT,
       allowNull: false,
       validate: {min: 1, max: 5},
     },
-    screen: {
+    type_screen: {
       type: DataTypes.SMALLINT,
       allowNull: false,
     },
@@ -38,6 +33,9 @@ export const PermissionModel = sequelize.define(
       allowNull: false,
       validate: {min: 1, max: 5},
     },
+  },
+  {
+    tableName: "permission",
   }
   /*{
     indexes: [
@@ -52,11 +50,8 @@ export const PermissionModel = sequelize.define(
 UserModel.hasMany(PermissionModel, {foreignKey: "id_user"});
 PermissionModel.belongsTo(UserModel, {foreignKey: "id_user"});
 
-SectorModel.hasMany(PermissionModel, {foreignKey: "id_sector"});
-PermissionModel.belongsTo(SectorModel, {foreignKey: "id_sector"});
-
-ProcessModel.hasMany(PermissionModel, {foreignKey: "id_process"});
-PermissionModel.belongsTo(ProcessModel, {foreignKey: "id_process"});
+SectorProcessModel.hasMany(PermissionModel, {foreignKey: "id_sector_process"});
+PermissionModel.belongsTo(SectorProcessModel, {foreignKey: "id_sector_process"});
 
 /*
 //Relacion con evento

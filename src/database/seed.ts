@@ -55,7 +55,7 @@ export const seedDatabase = async () => {
     }
 
     // Inserta datos de Grupos
-    const groupCount = await models.Machine.count();
+    const groupCount = await models.Group.count();
     if (groupCount === 0) {
       await models.Group.bulkCreate([
         {name: "Grupo A", description: ""},
@@ -93,14 +93,28 @@ export const seedDatabase = async () => {
       console.log("✅ Datos de Usuario insertados");
     }
 
+    // Inserta datos de process sector
+    const processSectorCount = await models.SectorProcess.count();
+    if (processSectorCount === 0) {
+      await models.SectorProcess.bulkCreate([
+        //{id_user: 1, id_sector: 4, id_process: 1, degree: 4, screen: 41, type_module: 1},
+        {id_process: 1, id_sector: 4},
+        {id_process: 2, id_sector: 4},
+        {id_process: 3, id_sector: 4},
+        {id_process: 4, id_sector: 4},
+        //{id_user: 2, id_sector: 4, id_process: 4, degree: 2, screen: 2, type_module: 1},
+      ]);
+      console.log("✅ Datos de Permiso insertados");
+    }
+
     // Inserta datos de permisos
     const permissionCount = await models.Permission.count();
     if (permissionCount === 0) {
       await models.Permission.bulkCreate([
-        //{id_user: 1, id_sector: 4, id_process: 1, degree: 4, screen: 41, type_module: 1},
-        {id_user: 1, id_sector: 4, id_process: 2, degree: 4, screen: 41, type_module: 1},
-        {id_user: 1, id_sector: 4, id_process: 3, degree: 4, screen: 41, type_module: 1},
-        {id_user: 1, id_sector: 4, id_process: 4, degree: 4, screen: 41, type_module: 1},
+        {id_user: 1, id_sector_process: 1, type_degree: 4, type_screen: 41, type_module: 1},
+        {id_user: 1, id_sector_process: 2, type_degree: 4, type_screen: 41, type_module: 1},
+        {id_user: 1, id_sector_process: 3, type_degree: 4, type_screen: 41, type_module: 1},
+        {id_user: 1, id_sector_process: 4, type_degree: 4, type_screen: 41, type_module: 1},
 
         //{id_user: 2, id_sector: 4, id_process: 4, degree: 2, screen: 2, type_module: 1},
       ]);
@@ -111,8 +125,8 @@ export const seedDatabase = async () => {
     const modelCount = await models.Model.count();
     if (modelCount === 0) {
       await models.Model.bulkCreate([
-        {name: "Modelo A", description: "", id_process: 1, id_sector: 4},
-        {name: "Modelo B", description: "", id_process: 2, id_sector: 4},
+        {name: "Modelo A", description: "", id_sector_process: 1},
+        {name: "Modelo B", description: "", id_sector_process: 2},
       ]);
       console.log("✅ Datos de Modelo insertados");
     }
@@ -121,8 +135,8 @@ export const seedDatabase = async () => {
     const machineCount = await models.Machine.count();
     if (machineCount === 0) {
       await models.Machine.bulkCreate([
-        {name: "Máquina A", description: "", id_process: 1, id_sector: 4},
-        {name: "Máquina B", description: "", id_process: 2, id_sector: 4},
+        {name: "Máquina A", description: "", id_sector_process: 1},
+        {name: "Máquina B", description: "", id_sector_process: 2},
       ]);
       console.log("✅ Datos de Máquinas insertados");
     }

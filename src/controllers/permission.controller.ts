@@ -17,7 +17,7 @@ export const getPermissions = async (req: Request, res: Response): Promise<void>
     const {all} = req.query;
 
     const permissions = await models.Permission.findAll({
-      paranoid: all ? true : false,
+      paranoid: all ? false : true,
     });
     res.json(permissions);
   } catch (error) {

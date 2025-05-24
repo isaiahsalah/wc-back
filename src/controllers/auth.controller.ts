@@ -25,8 +25,15 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
         {
           model: models.Permission,
           required: true,
-          include: [{model: models.Sector}, {model: models.Process}],
-          where: {type_module, id_sector},
+          include: [
+            {
+              model: models.SectorProcess,
+              required: true,
+              include: [{model: models.Sector}, {model: models.Process}],
+              where: {id_sector},
+            },
+          ],
+          where: {type_module},
         },
       ],
     })) as IUser | null;
@@ -111,8 +118,15 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
               {
                 model: models.Permission,
                 required: true,
-                include: [{model: models.Sector}, {model: models.Process}],
-                where: {type_module, id_sector},
+                include: [
+                  {
+                    model: models.SectorProcess,
+                    required: true,
+                    include: [{model: models.Sector}, {model: models.Process}],
+                    where: {id_sector},
+                  },
+                ],
+                where: {type_module},
               },
             ],
           })) as IUser | null;

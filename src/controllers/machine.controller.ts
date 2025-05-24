@@ -18,14 +18,18 @@ export const getAllMachines = async (req: Request, res: Response): Promise<void>
 */
 export const getMachines = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, id_process, all} = req.query;
+    const {id_sector_process, all} = req.query;
 
     const machines = await models.Machine.findAll({
-      paranoid: all ? true : false,
-      include: [{model: models.Process}, {model: models.Sector}],
+      paranoid: all ? false : true,
+      include: [
+        {
+          model: models.SectorProcess,
+          include: [{model: models.Sector}, {model: models.Sector}],
+        },
+      ],
       where: {
-        id_sector: id_sector ? id_sector : {[Op.ne]: null},
-        id_process: id_process ? id_process : {[Op.ne]: null},
+        id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
       },
     });
     res.json(machines);

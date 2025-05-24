@@ -23,15 +23,20 @@ export const getAllModels = async (req: Request, res: Response): Promise<void> =
 
 export const getModels = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, all} = req.query;
+    const {id_sector_process, all} = req.query;
 
     const modelsList = await models.Model.findAll({
-      paranoid: all ? true : false,
+      paranoid: all ? false : true,
 
+      include: [
+        {
+          model: models.SectorProcess,
+          include: [{model: models.Sector}, {model: models.Sector}],
+        },
+      ],
       where: {
-        id_sector: id_sector ? id_sector : {[Op.ne]: null},
+        id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
       },
-      include: [{model: models.Process}, {model: models.Sector}],
     });
     res.json(modelsList);
   } catch (error) {

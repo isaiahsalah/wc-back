@@ -5,8 +5,8 @@ export const getFormulaDetails = async (req: Request, res: Response): Promise<vo
   try {
     const {all} = req.query;
 
-    const formulaDetails = await models.FormulaDetail.findAll({
-      paranoid: all ? true : false,
+    const formulaDetails = await models.FormulaCost.findAll({
+      paranoid: all ? false : true,
 
       include: [models.Product],
     });
@@ -20,7 +20,7 @@ export const getFormulaDetails = async (req: Request, res: Response): Promise<vo
 export const getFormulaDetailById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const formulaDetail = await models.FormulaDetail.findByPk(id);
+    const formulaDetail = await models.FormulaCost.findByPk(id);
     if (!formulaDetail) {
       res.status(404).json({error: "Detalle de fórmula no encontrado"});
       return;
@@ -34,7 +34,7 @@ export const getFormulaDetailById = async (req: Request, res: Response): Promise
 
 export const createFormulaDetail = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newFormulaDetail = await models.FormulaDetail.create(req.body);
+    const newFormulaDetail = await models.FormulaCost.create(req.body);
     res.status(201).json(newFormulaDetail);
   } catch (error) {
     console.error("❌ Error al crear el detalle de fórmula:", error);
@@ -45,7 +45,7 @@ export const createFormulaDetail = async (req: Request, res: Response): Promise<
 export const updateFormulaDetail = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const formulaDetail = await models.FormulaDetail.findByPk(id);
+    const formulaDetail = await models.FormulaCost.findByPk(id);
     if (!formulaDetail) {
       res.status(404).json({error: "Detalle de fórmula no encontrado"});
       return;
@@ -61,7 +61,7 @@ export const updateFormulaDetail = async (req: Request, res: Response): Promise<
 export const deleteFormulaDetail = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const formulaDetail = await models.FormulaDetail.findByPk(id);
+    const formulaDetail = await models.FormulaCost.findByPk(id);
     if (!formulaDetail) {
       res.status(404).json({error: "Detalle de fórmula no encontrado"});
       return;
@@ -79,7 +79,7 @@ export const recoverFormulaDetail = async (req: Request, res: Response): Promise
     const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempFormulaDetail = await models.FormulaDetail.findByPk(id, {paranoid: false});
+    const TempFormulaDetail = await models.FormulaCost.findByPk(id, {paranoid: false});
     if (!TempFormulaDetail) {
       res.status(404).json({error: "FormulaDetail no encontrado"});
       return;
@@ -89,7 +89,7 @@ export const recoverFormulaDetail = async (req: Request, res: Response): Promise
     await TempFormulaDetail.restore();
 
     // Busca nuevamente el registro para confirmar
-    const updatedFormulaDetail = await models.FormulaDetail.findByPk(id);
+    const updatedFormulaDetail = await models.FormulaCost.findByPk(id);
     // Devuelve el registro actualizado
     res.json(updatedFormulaDetail);
   } catch (error) {

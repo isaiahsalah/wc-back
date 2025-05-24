@@ -9,6 +9,8 @@ import colorRoute from "./routes/color.route";
 import userRoute from "./routes/user.route";
 import unityRoute from "./routes/unity.route";
 import sectorRoute from "./routes/sector.route";
+import sectorProcessRoute from "./routes/sector_process.route";
+
 import productRoute from "./routes/product.route";
 import processRoute from "./routes/process.route";
 import permissionRoute from "./routes/permission.route";
@@ -39,16 +41,18 @@ app.use("/pr/group", groupRoute);
 app.use("/pr/user", userRoute);
 app.use("/pr/unity", unityRoute);
 app.use("/pr/sector", sectorRoute);
+app.use("/pr/sector_process", sectorProcessRoute);
+
 app.use("/pr/product", productRoute);
 app.use("/pr/process", processRoute);
 app.use("/pr/permission", permissionRoute);
-app.use("/pr/order-detail", orderDetailRoute);
+app.use("/pr/order_detail", orderDetailRoute);
 app.use("/pr/order", orderRoute);
 app.use("/pr/model", modelRoute);
 app.use("/pr/machine", machineRoute);
-app.use("/pr/formula-detail", formulaDetailRoute);
+app.use("/pr/formula_detail", formulaDetailRoute);
 app.use("/pr/formula", formulaRoute);
 app.use("/pr/production", productionRoute);
-app.use("/pr/production-detail", productionDetailRoute);
+app.use("/pr/production_detail", productionDetailRoute);
 
 export default app;

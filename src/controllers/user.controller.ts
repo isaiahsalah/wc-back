@@ -18,11 +18,21 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {all} = req.query;
+    const {all, id_sector_process, type_module} = req.query;
 
     const users = await models.User.findAll({
       paranoid: all ? false : true,
-      include: [{model: models.Group}],
+      include: [
+        {model: models.Group},
+        {
+          model: models.Permission,
+          required: type_module || id_sector_process ? true : false,
+          where: {
+            type_module: type_module ? type_module : {[Op.ne]: null},
+            id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
+          },
+        },
+      ],
     });
     res.json(users);
   } catch (error) {
@@ -34,16 +44,16 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const {id_sector, id_process, type_module} = req.query;
+    const {id_sector_process, type_module} = req.query;
 
     const user = await models.User.findByPk(id, {
       include: [
         {
           model: models.Permission,
+          required: type_module || id_sector_process ? true : false,
           where: {
             type_module: type_module ? type_module : {[Op.ne]: null},
-            id_sector: id_sector ? id_sector : {[Op.ne]: null},
-            id_process: id_process ? id_process : {[Op.ne]: null},
+            id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
           },
         },
       ],
@@ -147,8 +157,7 @@ export const recoverUser = async (req: Request, res: Response): Promise<void> =>
 export const updateUserPermissions = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params; // ID del usuario
-    const {permissions, id_process, id_sector, type_module} = req.body; // Array de permisos enviados en el body
-    console.log("🚩🚩🚩", req.body);
+    const {permissions, id_sector_process, type_module} = req.body; // Array de permisos enviados en el body
 
     // Buscar el usuario
     const user = await models.User.findByPk(id, {
@@ -157,8 +166,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
           model: models.Permission,
           as: "permissions",
           where: {
-            id_sector: id_sector ? id_sector : {[Op.ne]: null},
-            id_process: id_process ? id_process : {[Op.ne]: null},
+            id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
             type_module: type_module ? type_module : {[Op.ne]: null},
           },
         },
@@ -198,8 +206,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
     await models.Permission.destroy({
       where: {
         id: deletedPermissions,
-        id_sector: id_sector ? id_sector : {[Op.ne]: null},
-        id_process: id_process ? id_process : {[Op.ne]: null},
+        id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
         type_module: type_module ? type_module : {[Op.ne]: null},
       },
       force: true,

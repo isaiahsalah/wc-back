@@ -14,7 +14,7 @@ export const getAllOrders = async (req: Request, res: Response): Promise<void> =
 };*/
 
 export const getOrders = async (req: Request, res: Response): Promise<void> => {
-  const {id_sector, id_process, all} = req.query;
+  const {id_sector_process, all} = req.query;
 
   try {
     const orders = await models.Order.findAll({
@@ -34,8 +34,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
                   model: models.Model,
                   required: true,
                   where: {
-                    id_sector: id_sector ? id_sector : {[Op.ne]: null},
-                    id_process: id_process ? id_process : {[Op.ne]: null},
+                    id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
                   },
                 },
               ],

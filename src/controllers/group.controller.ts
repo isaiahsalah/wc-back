@@ -18,7 +18,7 @@ export const getGroups = async (req: Request, res: Response): Promise<void> => {
     const {all} = req.query;
 
     const groups = await models.Group.findAll({
-      paranoid: all ? true : false,
+      paranoid: all ? false : true,
     });
     res.json(groups);
   } catch (error) {

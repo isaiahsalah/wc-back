@@ -5,7 +5,7 @@ import {ColorModel} from "../models/color";
 
 import {SectorModel} from "../models/sector";
 import {FormulaModel} from "../models/formula";
-import {FormulaDetailModel} from "../models/formula_detail";
+import {FormulaCostModel} from "../models/formula_cost";
 import {MachineModel} from "../models/machine";
 import {OrderModel} from "../models/order";
 import {OrderDetailModel} from "../models/order_detail";
@@ -19,6 +19,7 @@ import {UnitModel} from "../models/unit";
 import {GroupModel} from "../models/group";
 import {WorkModel} from "../models/work";
 import {ProductionOperatorModel} from "../models/production_operator";
+import {SectorProcessModel} from "../models/sector_process";
 
 const models = {
   ProductionOperator: ProductionOperatorModel,
@@ -26,12 +27,13 @@ const models = {
   Model: ModelModel,
   Sector: SectorModel,
   Formula: FormulaModel,
-  FormulaDetail: FormulaDetailModel,
+  FormulaCost: FormulaCostModel,
   Machine: MachineModel,
   Order: OrderModel,
   OrderDetail: OrderDetailModel,
   Permission: PermissionModel,
   Process: ProcessModel,
+  SectorProcess: SectorProcessModel,
   Product: ProductModel,
   Production: ProductionModel,
   ProductionCost: ProductionCostModel,

@@ -6,7 +6,7 @@ export const getProductionDetails = async (req: Request, res: Response): Promise
     const {all} = req.query;
 
     const productionDetails = await models.ProductionCost.findAll({
-      paranoid: all ? true : false,
+      paranoid: all ? false : true,
     });
     res.json(productionDetails);
   } catch (error) {
