@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 import {ProductionModel} from "./production";
-import {UserModel} from "./user";
+import {SystemUserModel} from "./sys_user";
 
 export const ProductionUserModel = sequelize.define(
   "production_user",
@@ -11,7 +11,7 @@ export const ProductionUserModel = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    id_user: {
+    id_sys_user: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -28,5 +28,5 @@ export const ProductionUserModel = sequelize.define(
 ProductionModel.hasMany(ProductionUserModel, {foreignKey: "id_production"});
 ProductionUserModel.belongsTo(ProductionModel, {foreignKey: "id_production"});
 
-UserModel.hasMany(ProductionUserModel, {foreignKey: "id_user"});
-ProductionUserModel.belongsTo(UserModel, {foreignKey: "id_user"});
+SystemUserModel.hasMany(ProductionUserModel, {foreignKey: "id_sys_user"});
+ProductionUserModel.belongsTo(SystemUserModel, {foreignKey: "id_sys_user"});

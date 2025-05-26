@@ -1,8 +1,8 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 
-export const GroupModel = sequelize.define(
-  "group",
+export const WorkGroupModel = sequelize.define(
+  "work_group",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -19,6 +19,6 @@ export const GroupModel = sequelize.define(
     },
   },
   {
-    tableName: "group",
+    tableName: "work_group",
   }
 );

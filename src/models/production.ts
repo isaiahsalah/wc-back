@@ -1,7 +1,6 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
-import {UserModel} from "./user";
-import {OrderDetailModel} from "./order_detail";
+import {ProductionOrderDetailModel} from "./production_order_detail";
 import {MachineModel} from "./machine";
 import {UnitModel} from "./unit";
 
@@ -54,7 +53,7 @@ export const ProductionModel = sequelize.define(
       unique: true,
       allowNull: false,
     },
-    id_order_detail: {
+    id_production_order_detail: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -67,8 +66,8 @@ export const ProductionModel = sequelize.define(
 MachineModel.hasMany(ProductionModel, {foreignKey: "id_machine"});
 ProductionModel.belongsTo(MachineModel, {foreignKey: "id_machine"});
 
-OrderDetailModel.hasMany(ProductionModel, {foreignKey: "id_order_detail"});
-ProductionModel.belongsTo(OrderDetailModel, {foreignKey: "id_order_detail"});
+ProductionOrderDetailModel.hasMany(ProductionModel, {foreignKey: "id_production_order_detail"});
+ProductionModel.belongsTo(ProductionOrderDetailModel, {foreignKey: "id_production_order_detail"});
 
 UnitModel.hasMany(ProductionModel, {foreignKey: "id_unit", as: "production_unit"});
 ProductionModel.belongsTo(UnitModel, {foreignKey: "id_unit", as: "production_unit"});

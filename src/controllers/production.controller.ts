@@ -15,14 +15,19 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
       paranoid: all ? false : true,
       where: {
         id_machine: id_machine ? id_machine : {[Op.ne]: null},
-        date: {
-          ...(init_date ? {[Op.gte]: init_date} : {}),
-          ...(end_date ? {[Op.lte]: endDate} : {}),
-        },
+
+        ...(init_date && end_date
+          ? {
+              date: {
+                [Op.gte]: init_date,
+                [Op.lte]: endDate, // Asegúrate de que `end_date` está correctamente definido
+              },
+            }
+          : {}),
       },
       include: [
         {
-          model: models.OrderDetail,
+          model: models.ProductionOrderDetail,
           required: true,
           include: [
             {
@@ -30,7 +35,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
               required: true,
               include: [
                 {
-                  model: models.Model,
+                  model: models.ProductModel,
                   required: true,
                   where: {
                     id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
@@ -40,7 +45,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
             },
           ],
         },
-        {model: models.ProductionUser, include: [{model: models.User}]},
+        {model: models.ProductionUser, include: [{model: models.SystemUser}]},
         {model: models.Machine},
         {model: models.Unit, as: "production_unit"},
         {model: models.Unit, as: "production_equivalent_unit"},
@@ -146,11 +151,11 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
     // Suponiendo que 'req.body' es un array de producciones
     const {productions} = req.body;
 
-    // Obtener el id_order_detail de la primera producción
-    const orderDetailId = productions[0].id_order_detail;
+    // Obtener el id_production_order_detail de la primera producción
+    const orderDetailId = productions[0].id_production_order_detail;
 
-    // Obtener el id_product desde la tabla OrderDetail usando el id_order_detail
-    const orderDetail = await models.OrderDetail.findOne({
+    // Obtener el id_product desde la tabla OrderDetail usando el id_production_order_detail
+    const orderDetail = await models.ProductionOrderDetail.findOne({
       where: {id: orderDetailId},
       attributes: ["id_product"], // Solo obtener el id_product
       transaction: t, // Incluir la transacción para mantener la integridad
@@ -199,7 +204,7 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
         if (production.production_users.length > 0) {
           const productionUsersData = production.production_users.map((user: any) => ({
             id_production: createdProduction.get("id"), // ID de la producción recién creada
-            id_user: user.id_user,
+            id_sys_user: user.id_sys_user,
           }));
 
           await models.ProductionUser.bulkCreate(productionUsersData, {transaction: t});
@@ -217,11 +222,11 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
       },
       include: [
         {
-          model: models.OrderDetail,
+          model: models.ProductionOrderDetail,
           include: [
             {
               model: models.Product,
-              include: [{model: models.Model}],
+              include: [{model: models.ProductModel}],
             },
           ],
         },

@@ -1,6 +1,6 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
-import {UserModel} from "./user";
+import {SystemUserModel} from "./sys_user";
 import {SectorProcessModel} from "./sector_process";
 
 export const PermissionModel = sequelize.define(
@@ -11,7 +11,7 @@ export const PermissionModel = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    id_user: {
+    id_sys_user: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -41,14 +41,14 @@ export const PermissionModel = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["id_user", "id_sector", "id_process", "degree", "screen", "type_module"], // Define las columnas combinadas que serán únicas
+        fields: ["id_sys_user", "id_sector", "id_process", "degree", "screen", "type_module"], // Define las columnas combinadas que serán únicas
       },
     ],
   }*/
 );
 
-UserModel.hasMany(PermissionModel, {foreignKey: "id_user"});
-PermissionModel.belongsTo(UserModel, {foreignKey: "id_user"});
+SystemUserModel.hasMany(PermissionModel, {foreignKey: "id_sys_user"});
+PermissionModel.belongsTo(SystemUserModel, {foreignKey: "id_sys_user"});
 
 SectorProcessModel.hasMany(PermissionModel, {foreignKey: "id_sector_process"});
 PermissionModel.belongsTo(SectorProcessModel, {foreignKey: "id_sector_process"});

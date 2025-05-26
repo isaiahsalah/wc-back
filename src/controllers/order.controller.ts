@@ -5,7 +5,7 @@ import {Op} from "sequelize";
 // Controlador para Orders
 export const getAllOrders = async (req: Request, res: Response): Promise<void> => {
   try {
-    const orders = await models.Order.findAll({paranoid: false, include: [{model: models.User}]});
+    const orders = await models.ProductionOrder.findAll({paranoid: false, include: [{model: models.User}]});
     res.json(orders);
   } catch (error) {
     console.error("❌ Error al obtener las órdenes:", error);
@@ -17,13 +17,13 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
   const {id_sector_process, all} = req.query;
 
   try {
-    const orders = await models.Order.findAll({
+    const orders = await models.ProductionOrder.findAll({
       paranoid: all ? false : true,
       include: [
-        {model: models.User},
-        {model: models.Group},
+        {model: models.SystemUser},
+        {model: models.WorkGroup},
         {
-          model: models.OrderDetail,
+          model: models.ProductionOrderDetail,
           required: true,
           include: [
             {
@@ -31,7 +31,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
               required: true,
               include: [
                 {
-                  model: models.Model,
+                  model: models.ProductModel,
                   required: true,
                   where: {
                     id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
@@ -54,10 +54,10 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
 export const getOrderById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const order = await models.Order.findByPk(id, {
+    const order = await models.ProductionOrder.findByPk(id, {
       include: [
         {
-          model: models.OrderDetail,
+          model: models.ProductionOrderDetail,
           include: [{model: models.Production}, {model: models.Product}, {model: models.Machine}],
         },
       ],
@@ -75,7 +75,7 @@ export const getOrderById = async (req: Request, res: Response): Promise<void> =
 
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newOrder = await models.Order.create(req.body);
+    const newOrder = await models.ProductionOrder.create(req.body);
     res.status(201).json(newOrder);
   } catch (error) {
     console.error("❌ Error al crear la orden:", error);
@@ -92,7 +92,7 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
     const {order_details, ...orderData} = req.body;
 
     // 1. Actualizar la orden principal
-    const order = await models.Order.findByPk(id, {transaction});
+    const order = await models.ProductionOrder.findByPk(id, {transaction});
     if (!order) {
       await transaction.rollback();
       res.status(404).json({error: "Orden no encontrada"});
@@ -104,8 +104,8 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
     // 2. Manejar los order_details
     if (order_details && Array.isArray(order_details)) {
       // Eliminar detalles que no están en el nuevo array
-      const existingDetails = await models.OrderDetail.findAll({
-        where: {id_order: id},
+      const existingDetails = await models.ProductionOrderDetail.findAll({
+        where: {id_production_order: id},
         transaction,
       });
 
@@ -117,7 +117,7 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
       );
 
       // Eliminar los que ya no están
-      await models.OrderDetail.destroy({
+      await models.ProductionOrderDetail.destroy({
         where: {
           id: detailsToRemove.map((detail: any) => detail.id),
         },
@@ -128,16 +128,16 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
       for (const detailData of order_details) {
         if (detailData.id) {
           // Actualizar detalle existente
-          const detail = await models.OrderDetail.findByPk(detailData.id, {transaction});
+          const detail = await models.ProductionOrderDetail.findByPk(detailData.id, {transaction});
           if (detail) {
             await detail.update(detailData, {transaction});
           }
         } else {
           // Crear nuevo detalle
-          await models.OrderDetail.create(
+          await models.ProductionOrderDetail.create(
             {
               ...detailData,
-              id_order: id, // Asegurar que pertenece a esta orden
+              id_production_order: id, // Asegurar que pertenece a esta orden
             },
             {transaction}
           );
@@ -148,10 +148,10 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
     await transaction.commit(); // Confirmar todos los cambios
 
     // Obtener la orden actualizada con sus detalles para la respuesta
-    const updatedOrder = await models.Order.findByPk(id, {
+    const updatedOrder = await models.ProductionOrder.findByPk(id, {
       include: [
         {
-          model: models.OrderDetail,
+          model: models.ProductionOrderDetail,
           include: [models.Product], // Incluir información del producto si es necesario
         },
       ],
@@ -159,7 +159,7 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
 
     res.json(updatedOrder);
     /*
-    const TempOrder = await models.Order.findByPk(id);
+    const TempOrder = await models.ProductionOrder.findByPk(id);
     if (!TempOrder) {
       res.status(404).json({error: "Orden no encontrada"});
       return;
@@ -176,7 +176,7 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
 export const deleteOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const order = await models.Order.findByPk(id);
+    const order = await models.ProductionOrder.findByPk(id);
     if (!order) {
       res.status(404).json({error: "Orden no encontrada"});
       return;
@@ -194,7 +194,7 @@ export const recoverOrder = async (req: Request, res: Response): Promise<void> =
     const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempOrder = await models.Order.findByPk(id, {paranoid: false});
+    const TempOrder = await models.ProductionOrder.findByPk(id, {paranoid: false});
     if (!TempOrder) {
       res.status(404).json({error: "Orden no encontrada"});
       return;
@@ -204,7 +204,7 @@ export const recoverOrder = async (req: Request, res: Response): Promise<void> =
     await TempOrder.restore();
 
     // Busca nuevamente el registro para confirmar
-    const updatedOrder = await models.Order.findByPk(id);
+    const updatedOrder = await models.ProductionOrder.findByPk(id);
     // Devuelve el registro actualizado
     res.json(updatedOrder);
   } catch (error) {
@@ -228,17 +228,17 @@ export const createOrderWithDetails = async (req: Request, res: Response): Promi
     }
 
     // Crear la orden dentro de la transacción
-    const newOrder = await models.Order.create(order, {transaction});
+    const newOrder = await models.ProductionOrder.create(order, {transaction});
 
     // 2. Crear los detalles de la orden (OrderDetails)
     // Asegurarse de asociar el ID de la orden a los detalles
     const orderDetailsWithOrderId = orderDetails.map((detail) => ({
       ...detail,
-      id_order: newOrder.get("id"), // Asignar el id de la nueva orden a los detalles
+      id_production_order: newOrder.get("id"), // Asignar el id de la nueva orden a los detalles
     }));
 
     // Crear múltiples detalles de la orden
-    await models.OrderDetail.bulkCreate(orderDetailsWithOrderId, {
+    await models.ProductionOrderDetail.bulkCreate(orderDetailsWithOrderId, {
       transaction,
     });
 
@@ -261,7 +261,7 @@ export const editOrderWithDetails = async (req: Request, res: Response): Promise
     const {order_details, ...orderData} = req.body;
 
     // 1. Actualizar la orden principal
-    const order = await models.Order.findByPk(id, {transaction});
+    const order = await models.ProductionOrder.findByPk(id, {transaction});
     if (!order) {
       await transaction.rollback();
       res.status(404).json({error: "Orden no encontrada"});
@@ -273,8 +273,8 @@ export const editOrderWithDetails = async (req: Request, res: Response): Promise
     // 2. Manejar los order_details
     if (order_details && Array.isArray(order_details)) {
       // Eliminar detalles que no están en el nuevo array
-      const existingDetails = await models.OrderDetail.findAll({
-        where: {id_order: id},
+      const existingDetails = await models.ProductionOrderDetail.findAll({
+        where: {id_production_order: id},
         transaction,
       });
 
@@ -286,7 +286,7 @@ export const editOrderWithDetails = async (req: Request, res: Response): Promise
       );
 
       // Eliminar los que ya no están
-      await models.OrderDetail.destroy({
+      await models.ProductionOrderDetail.destroy({
         where: {
           id: detailsToRemove.map((detail: any) => detail.id),
         },
@@ -297,16 +297,16 @@ export const editOrderWithDetails = async (req: Request, res: Response): Promise
       for (const detailData of order_details) {
         if (detailData.id) {
           // Actualizar detalle existente
-          const detail = await models.OrderDetail.findByPk(detailData.id, {transaction});
+          const detail = await models.ProductionOrderDetail.findByPk(detailData.id, {transaction});
           if (detail) {
             await detail.update(detailData, {transaction});
           }
         } else {
           // Crear nuevo detalle
-          await models.OrderDetail.create(
+          await models.ProductionOrderDetail.create(
             {
               ...detailData,
-              id_order: id, // Asegurar que pertenece a esta orden
+              id_production_order: id, // Asegurar que pertenece a esta orden
             },
             {transaction}
           );
@@ -317,10 +317,10 @@ export const editOrderWithDetails = async (req: Request, res: Response): Promise
     await transaction.commit(); // Confirmar todos los cambios
 
     // Obtener la orden actualizada con sus detalles para la respuesta
-    const updatedOrder = await models.Order.findByPk(id, {
+    const updatedOrder = await models.ProductionOrder.findByPk(id, {
       include: [
         {
-          model: models.OrderDetail,
+          model: models.ProductionOrderDetail,
           include: [models.Product], // Incluir información del producto si es necesario
         },
       ],

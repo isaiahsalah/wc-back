@@ -17,7 +17,7 @@ export const getGroups = async (req: Request, res: Response): Promise<void> => {
   try {
     const {all} = req.query;
 
-    const groups = await models.Group.findAll({
+    const groups = await models.WorkGroup.findAll({
       paranoid: all ? false : true,
     });
     res.json(groups);
@@ -30,7 +30,7 @@ export const getGroups = async (req: Request, res: Response): Promise<void> => {
 export const getGroupById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const group = await models.Group.findByPk(id);
+    const group = await models.WorkGroup.findByPk(id);
     if (!group) {
       res.status(404).json({error: "Grupo no encontrado"});
       return;
@@ -44,7 +44,7 @@ export const getGroupById = async (req: Request, res: Response): Promise<void> =
 
 export const createGroup = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newGroup = await models.Group.create(req.body);
+    const newGroup = await models.WorkGroup.create(req.body);
     res.status(201).json(newGroup);
   } catch (error) {
     console.error("❌ Error al crear el grupo:", error);
@@ -56,7 +56,7 @@ export const updateGroup = async (req: Request, res: Response): Promise<void> =>
   try {
     const {id} = req.params;
 
-    const TempGroup = await models.Group.findByPk(id);
+    const TempGroup = await models.WorkGroup.findByPk(id);
     if (!TempGroup) {
       res.status(404).json({error: "Grupo no encontrado"});
       return;
@@ -73,7 +73,7 @@ export const updateGroup = async (req: Request, res: Response): Promise<void> =>
 export const deleteGroup = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const group = await models.Group.findByPk(id);
+    const group = await models.WorkGroup.findByPk(id);
     if (!group) {
       res.status(404).json({error: "Grupo no encontrado"});
       return;
@@ -91,7 +91,7 @@ export const recoverGroup = async (req: Request, res: Response): Promise<void> =
     const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempGroup = await models.Group.findByPk(id, {paranoid: false});
+    const TempGroup = await models.WorkGroup.findByPk(id, {paranoid: false});
     if (!TempGroup) {
       res.status(404).json({error: "Grupo no encontrado"});
       return;
@@ -101,7 +101,7 @@ export const recoverGroup = async (req: Request, res: Response): Promise<void> =
     await TempGroup.restore();
 
     // Busca nuevamente el registro para confirmar
-    const updatedGroup = await models.Group.findByPk(id);
+    const updatedGroup = await models.WorkGroup.findByPk(id);
     // Devuelve el registro actualizado
     res.json(updatedGroup);
   } catch (error) {

@@ -7,9 +7,9 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
   try {
     const {id} = req.params;
 
-    const TempUser = await models.User.findByPk(id, {
+    const TempUser = await models.SystemUser.findByPk(id, {
       include: [
-        {model: models.Group},
+        {model: models.WorkGroup},
         {
           model: models.Permission,
           required: true,
@@ -21,8 +21,8 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
       res.status(404).json({error: "Usuario no encontrado"});
       return;
     }
-    const {name, lastname, birthday, image, phone, id_group} = req.body;
-    await TempUser.update({name, lastname, birthday, image, phone, id_group});
+    const {name, lastname, birthday, image, phone, id_work_group} = req.body;
+    await TempUser.update({name, lastname, birthday, image, phone, id_work_group});
     res.json(TempUser);
   } catch (error) {
     console.error("❌ Error al actualizar el usuario:", error);
@@ -42,7 +42,7 @@ export const updatePassword = async (req: Request, res: Response): Promise<void>
     }
 
     // Buscar el usuario por su ID
-    const TempUser = await models.User.findByPk(id);
+    const TempUser = await models.SystemUser.findByPk(id);
     if (!TempUser) {
       res.status(404).json({error: "Usuario no encontrado"});
       return;

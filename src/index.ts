@@ -6,6 +6,23 @@ import {seedDatabase} from "./database/seed";
 // Obtener el puerto desde las variables de entorno o usar el puerto por defecto
 const PORT = Number(process.env.PORT) || 3000;
 
+// Función para manejar el cierre de la aplicación
+const gracefulShutdown = async () => {
+  console.log("Cerrando conexión con la base de datos...");
+  try {
+    await sequelize.close();
+    console.log("Conexión cerrada exitosamente.");
+    process.exit(0); // Salir sin errores
+  } catch (error) {
+    console.error("Error al cerrar la conexión:", error);
+    process.exit(1); // Salir con error
+  }
+};
+
+// Capturar eventos del sistema
+process.on("SIGINT", gracefulShutdown); // Ctrl+C
+process.on("SIGTERM", gracefulShutdown); // Terminación del sistema
+
 async function main() {
   //console.log("📦 Modelos registrados:", models);
 

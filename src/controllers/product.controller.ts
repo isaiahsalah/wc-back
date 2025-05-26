@@ -13,7 +13,7 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
 
         {model: models.Color},
         {
-          model: models.Model,
+          model: models.ProductModel,
           where: {
             id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
           },

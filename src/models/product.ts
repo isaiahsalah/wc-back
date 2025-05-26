@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 import {UnitModel} from "./unit";
-import {ModelModel} from "./model";
+import {ProductModelModel} from "./product_model";
 import {ColorModel} from "./color";
 
 export const ProductModel = sequelize.define(
@@ -46,7 +46,7 @@ export const ProductModel = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    id_model: {
+    id_product_model: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -56,8 +56,8 @@ export const ProductModel = sequelize.define(
   }
 );
 
-ModelModel.hasMany(ProductModel, {foreignKey: "id_model"});
-ProductModel.belongsTo(ModelModel, {foreignKey: "id_model"});
+ProductModelModel.hasMany(ProductModel, {foreignKey: "id_product_model"});
+ProductModel.belongsTo(ProductModelModel, {foreignKey: "id_product_model"});
 
 UnitModel.hasMany(ProductModel, {foreignKey: "id_unit", as: "product_unit"});
 ProductModel.belongsTo(UnitModel, {foreignKey: "id_unit", as: "product_unit"});

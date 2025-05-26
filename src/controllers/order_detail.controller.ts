@@ -1,29 +1,18 @@
 import {Request, Response} from "express";
 import models from "../database/models";
 import {Op, Sequelize} from "sequelize";
-/*
-// Controlador para OrderDetails
-export const getAllOrderDetails = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const orderDetails = await models.OrderDetail.findAll({paranoid: false});
-    res.json(orderDetails);
-  } catch (error) {
-    console.error("❌ Error al obtener los detalles de las órdenes:", error);
-    res.status(500).json({error: "Error al obtener los detalles de las órdenes"});
-  }
-};*/
 
 export const getOrderDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const {all, id_sector_process, id_machine, date} = req.query;
 
-    const orderDetails = await models.OrderDetail.findAll({
+    const orderDetails = await models.ProductionOrderDetail.findAll({
       paranoid: all ? false : true,
       include: [
         {model: models.Production},
         {model: models.Machine},
         {
-          model: models.Order,
+          model: models.ProductionOrder,
           required: date ? true : false,
           where: {
             init_date: {
@@ -40,7 +29,7 @@ export const getOrderDetails = async (req: Request, res: Response): Promise<void
           required: true,
           include: [
             {
-              model: models.Model,
+              model: models.ProductModel,
               required: id_sector_process ? true : false,
               include: [
                 {
@@ -69,7 +58,7 @@ export const getOrderDetails = async (req: Request, res: Response): Promise<void
 export const getOrderDetailById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const orderDetail = await models.OrderDetail.findByPk(id);
+    const orderDetail = await models.ProductionOrderDetail.findByPk(id);
     if (!orderDetail) {
       res.status(404).json({error: "Detalle de la orden no encontrado"});
       return;
@@ -83,7 +72,7 @@ export const getOrderDetailById = async (req: Request, res: Response): Promise<v
 
 export const createOrderDetail = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newOrderDetail = await models.OrderDetail.create(req.body);
+    const newOrderDetail = await models.ProductionOrderDetail.create(req.body);
     res.status(201).json(newOrderDetail);
   } catch (error) {
     console.error("❌ Error al crear el detalle de la orden:", error);
@@ -96,7 +85,7 @@ export const updateOrderDetail = async (req: Request, res: Response): Promise<vo
     const {id} = req.params;
     const dataUpdate = req.body;
 
-    const TempOrderDetail = await models.OrderDetail.findByPk(id);
+    const TempOrderDetail = await models.ProductionOrderDetail.findByPk(id);
     if (!TempOrderDetail) {
       res.status(404).json({error: "Detalle de la orden no encontrado"});
       return;
@@ -113,7 +102,7 @@ export const updateOrderDetail = async (req: Request, res: Response): Promise<vo
 export const deleteOrderDetail = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const orderDetail = await models.OrderDetail.findByPk(id);
+    const orderDetail = await models.ProductionOrderDetail.findByPk(id);
     if (!orderDetail) {
       res.status(404).json({error: "Detalle de la orden no encontrado"});
       return;
@@ -131,7 +120,7 @@ export const recoverOrderDetail = async (req: Request, res: Response): Promise<v
     const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempOrderDetail = await models.OrderDetail.findByPk(id, {
+    const TempOrderDetail = await models.ProductionOrderDetail.findByPk(id, {
       paranoid: false,
     });
     if (!TempOrderDetail) {
@@ -143,7 +132,7 @@ export const recoverOrderDetail = async (req: Request, res: Response): Promise<v
     await TempOrderDetail.restore();
 
     // Busca nuevamente el registro para confirmar
-    const updatedOrderDetail = await models.OrderDetail.findByPk(id);
+    const updatedOrderDetail = await models.ProductionOrderDetail.findByPk(id);
     // Devuelve el registro actualizado
     res.json(updatedOrderDetail);
   } catch (error) {

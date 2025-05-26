@@ -1,9 +1,9 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
-import {GroupModel} from "./group";
+import {WorkGroupModel} from "./work_group";
 
-export const UserModel = sequelize.define(
-  "user",
+export const SystemUserModel = sequelize.define(
+  "sys_user",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -29,14 +29,14 @@ export const UserModel = sequelize.define(
     pass: {
       type: DataTypes.STRING,
     },
-    id_group: {
+    id_work_group: {
       type: DataTypes.INTEGER,
     },
   },
   {
-    tableName: "user",
+    tableName: "sys_user",
   }
 );
 
-GroupModel.hasMany(UserModel, {foreignKey: "id_group"});
-UserModel.belongsTo(GroupModel, {foreignKey: "id_group"});
+WorkGroupModel.hasMany(SystemUserModel, {foreignKey: "id_work_group"});
+SystemUserModel.belongsTo(WorkGroupModel, {foreignKey: "id_work_group"});

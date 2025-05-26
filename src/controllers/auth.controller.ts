@@ -18,10 +18,10 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
     }
 
     // Buscar usuario en la base de datos
-    const foundUser = (await models.User.findOne({
+    const foundUser = (await models.SystemUser.findOne({
       where: {user: (user as string).toLowerCase()},
       include: [
-        {model: models.Group},
+        {model: models.WorkGroup},
         {
           model: models.Permission,
           required: true,
@@ -72,7 +72,7 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
     console.log("😁😁😁😁", foundUser);
     // Responder con éxito
     res.status(200).json({
-      user: foundUser,
+      sys_user: foundUser,
       token,
     });
   } catch (error) {
@@ -111,10 +111,10 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
         console.log("😊😊😊", decoded, token);
 
         if (userId && type_module) {
-          const foundUser = (await models.User.findOne({
+          const foundUser = (await models.SystemUser.findOne({
             where: {id: userId as string},
             include: [
-              {model: models.Group},
+              {model: models.WorkGroup},
               {
                 model: models.Permission,
                 required: true,
@@ -146,7 +146,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
 
           // Responder con éxito
           res.status(200).json({
-            user: foundUser,
+            sys_user: foundUser,
             token: token,
           });
         } else {

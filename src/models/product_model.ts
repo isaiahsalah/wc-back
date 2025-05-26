@@ -2,8 +2,8 @@ import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 import {SectorProcessModel} from "./sector_process";
 
-export const ModelModel = sequelize.define(
-  "model",
+export const ProductModelModel = sequelize.define(
+  "product_model",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,9 +24,9 @@ export const ModelModel = sequelize.define(
     },
   },
   {
-    tableName: "model",
+    tableName: "product_model",
   }
 );
 
-SectorProcessModel.hasMany(ModelModel, {foreignKey: "id_sector_process"});
-ModelModel.belongsTo(SectorProcessModel, {foreignKey: "id_sector_process"});
+SectorProcessModel.hasMany(ProductModelModel, {foreignKey: "id_sector_process"});
+ProductModelModel.belongsTo(SectorProcessModel, {foreignKey: "id_sector_process"});

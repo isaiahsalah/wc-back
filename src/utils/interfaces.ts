@@ -91,7 +91,7 @@ export interface IProduct {
   unity?: IUnity | null;
   id_color: number;
   color?: IColor | null;
-  id_model: number;
+  id_product_model: number;
   model?: IModel | null;
   createdAt?: Date | null;
   updatedAt?: Date | null;
@@ -151,7 +151,7 @@ export interface IOrder {
   id?: number | null;
   order_date: Date;
   completion_date?: Date | null;
-  id_user: number;
+  id_sys_user: number;
   user?: IUser | null;
   createdAt?: Date | null;
   updatedAt?: Date | null;
@@ -164,7 +164,7 @@ export interface IOrderDetail {
   amount: number;
   id_product: number;
   product?: IProduct | null;
-  id_order: number;
+  id_production_order: number;
   order?: IOrder | null;
   createdAt?: Date | null;
   updatedAt?: Date | null;
@@ -175,7 +175,7 @@ export interface IOrderDetail {
 export interface IPermission {
   id?: number | null;
   name: string;
-  id_user: number;
+  id_sys_user: number;
   user?: IUser | null;
   degree?: number;
   screen?: number;
@@ -195,9 +195,9 @@ export interface IProduction {
   machine?: IMachine | null;
   id_lote: number;
   lote?: ILote | null;
-  id_order_detail: number;
+  id_production_order_detail: number;
   orderDetail?: IOrderDetail | null;
-  id_user: number;
+  id_sys_user: number;
   user?: IUser | null;
   state?: number;
   createdAt?: Date | null;

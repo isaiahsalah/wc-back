@@ -18,7 +18,7 @@ export const getFormulas = async (req: Request, res: Response): Promise<void> =>
 
           include: [
             {
-              model: models.Model,
+              model: models.ProductModel,
               required: true,
               where: {
                 id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},

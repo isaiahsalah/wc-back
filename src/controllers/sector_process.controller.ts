@@ -24,6 +24,7 @@ export const getSectorProcesses = async (req: Request, res: Response): Promise<v
         id_sector: id_sector ? id_sector : {[Op.ne]: null},
       },
     });
+    console.log("🚩🚩Sectors:", JSON.stringify({id_sector}, null, 2));
     res.json(sectors);
   } catch (error) {
     console.error("❌ Error al obtener los procesos del sector:", error);

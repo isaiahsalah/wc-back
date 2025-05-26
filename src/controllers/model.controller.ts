@@ -25,7 +25,7 @@ export const getModels = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id_sector_process, all} = req.query;
 
-    const modelsList = await models.Model.findAll({
+    const modelsList = await models.ProductModel.findAll({
       paranoid: all ? false : true,
 
       include: [
@@ -48,7 +48,7 @@ export const getModels = async (req: Request, res: Response): Promise<void> => {
 export const getModelById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const model = await models.Model.findByPk(id);
+    const model = await models.ProductModel.findByPk(id);
     if (!model) {
       res.status(404).json({error: "Modelo no encontrado"});
       return;
@@ -62,7 +62,7 @@ export const getModelById = async (req: Request, res: Response): Promise<void> =
 
 export const createModel = async (req: Request, res: Response): Promise<void> => {
   try {
-    const newModel = await models.Model.create(req.body);
+    const newModel = await models.ProductModel.create(req.body);
     res.status(201).json(newModel);
   } catch (error) {
     console.error("❌ Error al crear el modelo:", error);
@@ -74,7 +74,7 @@ export const updateModel = async (req: Request, res: Response): Promise<void> =>
   try {
     const {id} = req.params;
 
-    const TempModel = await models.Model.findByPk(id);
+    const TempModel = await models.ProductModel.findByPk(id);
     if (!TempModel) {
       res.status(404).json({error: "Modelo no encontrado"});
       return;
@@ -91,7 +91,7 @@ export const updateModel = async (req: Request, res: Response): Promise<void> =>
 export const deleteModel = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const model = await models.Model.findByPk(id);
+    const model = await models.ProductModel.findByPk(id);
     if (!model) {
       res.status(404).json({error: "Modelo no encontrado"});
       return;
@@ -109,7 +109,7 @@ export const recoverModel = async (req: Request, res: Response): Promise<void> =
     const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempModel = await models.Model.findByPk(id, {paranoid: false});
+    const TempModel = await models.ProductModel.findByPk(id, {paranoid: false});
     if (!TempModel) {
       res.status(404).json({error: "Modelo no encontrado"});
       return;
@@ -119,7 +119,7 @@ export const recoverModel = async (req: Request, res: Response): Promise<void> =
     await TempModel.restore();
 
     // Busca nuevamente el registro para confirmar
-    const updatedModel = await models.Model.findByPk(id);
+    const updatedModel = await models.ProductModel.findByPk(id);
     // Devuelve el registro actualizado
     res.json(updatedModel);
   } catch (error) {
