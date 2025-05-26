@@ -4,7 +4,6 @@ import {
   deleteOrderDetail,
   getOrderDetailById,
   getOrderDetails,
-  getOrderDetails_date,
   recoverOrderDetail,
   updateOrderDetail,
 } from "../controllers/order_detail.controller";
@@ -12,8 +11,6 @@ import {
 const router = Router();
 
 // Routes
-router.get("/date", getOrderDetails_date);
-//////////////////////////////////////////////////////////////
 
 router.post("/", createOrderDetail);
 router.put("/:id", updateOrderDetail);

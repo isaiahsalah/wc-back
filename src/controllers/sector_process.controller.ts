@@ -19,6 +19,7 @@ export const getSectorProcesses = async (req: Request, res: Response): Promise<v
 
     const sectors = await models.SectorProcess.findAll({
       paranoid: all ? false : true,
+      include: [{model: models.Process}, {model: models.Sector}],
       where: {
         id_sector: id_sector ? id_sector : {[Op.ne]: null},
       },

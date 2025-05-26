@@ -70,9 +70,6 @@ ProductionModel.belongsTo(MachineModel, {foreignKey: "id_machine"});
 OrderDetailModel.hasMany(ProductionModel, {foreignKey: "id_order_detail"});
 ProductionModel.belongsTo(OrderDetailModel, {foreignKey: "id_order_detail"});
 
-UserModel.hasMany(ProductionModel, {foreignKey: "id_user"});
-ProductionModel.belongsTo(UserModel, {foreignKey: "id_user"});
-
 UnitModel.hasMany(ProductionModel, {foreignKey: "id_unit", as: "production_unit"});
 ProductionModel.belongsTo(UnitModel, {foreignKey: "id_unit", as: "production_unit"});
 

@@ -4,7 +4,7 @@ import {Op} from "sequelize";
 
 export const getFormulas = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector, id_product, paranoid} = req.query;
+    const {id_sector_process, id_product, paranoid} = req.query;
 
     const formulas = await models.Formula.findAll({
       paranoid: paranoid ? true : false,
@@ -21,7 +21,7 @@ export const getFormulas = async (req: Request, res: Response): Promise<void> =>
               model: models.Model,
               required: true,
               where: {
-                id_sector: id_sector ? id_sector : {[Op.ne]: null},
+                id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
               },
             },
           ],

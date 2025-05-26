@@ -18,7 +18,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {all, id_sector_process, type_module} = req.query;
+    const {all, id_sector_process, type_module, type_screen} = req.query;
 
     const users = await models.User.findAll({
       paranoid: all ? false : true,
@@ -26,10 +26,11 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
         {model: models.Group},
         {
           model: models.Permission,
-          required: type_module || id_sector_process ? true : false,
+          required: type_module || id_sector_process || type_screen ? true : false,
           where: {
             type_module: type_module ? type_module : {[Op.ne]: null},
             id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
+            type_screen: type_screen ? type_screen : {[Op.ne]: null},
           },
         },
       ],
@@ -50,7 +51,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
       include: [
         {
           model: models.Permission,
-          required: type_module || id_sector_process ? true : false,
+          required: false,
           where: {
             type_module: type_module ? type_module : {[Op.ne]: null},
             id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
@@ -58,6 +59,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
         },
       ],
     });
+
     if (!user) {
       res.status(404).json({error: "Usuario no encontrado"});
       return;
@@ -165,6 +167,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
         {
           model: models.Permission,
           as: "permissions",
+          required: false,
           where: {
             id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
             type_module: type_module ? type_module : {[Op.ne]: null},
@@ -172,6 +175,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
         },
       ],
     });
+    console.log("🚩🚩🚩", JSON.stringify(user));
 
     if (!user) {
       res.status(404).json({error: "Usuario no encontrado"});
@@ -185,6 +189,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
     const newPermissions: IPermission[] = (permissions as []).filter(
       (perm: any) => !currentPermissions.includes(perm.id)
     );
+
     const updatedPermissions: IPermission[] = (permissions as []).filter((perm: any) =>
       currentPermissions.includes(perm.id)
     );

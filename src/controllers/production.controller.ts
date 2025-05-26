@@ -1,15 +1,24 @@
 import {Request, Response} from "express";
 import models, {sequelize} from "../database/models";
 import {Op} from "sequelize";
-import {formatDate} from "../utils/func";
+import {formatDate, normalizeDateParam, setSecondsToEndOfMinute} from "../utils/func";
 
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id_sector_process, id_machine, all} = req.query;
+    const {init_date, end_date, id_sector_process, id_machine, all} = req.query;
+
+    const normalizedEndDate = normalizeDateParam(end_date);
+
+    const endDate = normalizedEndDate ? setSecondsToEndOfMinute(new Date(normalizedEndDate)) : null;
+
     const productions = await models.Production.findAll({
       paranoid: all ? false : true,
       where: {
         id_machine: id_machine ? id_machine : {[Op.ne]: null},
+        date: {
+          ...(init_date ? {[Op.gte]: init_date} : {}),
+          ...(end_date ? {[Op.lte]: endDate} : {}),
+        },
       },
       include: [
         {
@@ -31,12 +40,13 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
             },
           ],
         },
-        {model: models.User},
+        {model: models.ProductionUser, include: [{model: models.User}]},
         {model: models.Machine},
         {model: models.Unit, as: "production_unit"},
         {model: models.Unit, as: "production_equivalent_unit"},
       ],
     });
+
     res.json(productions);
   } catch (error) {
     console.error("❌ Error al obtener las producciones:", error);
@@ -134,7 +144,7 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
 
   try {
     // Suponiendo que 'req.body' es un array de producciones
-    const productions = req.body;
+    const {productions} = req.body;
 
     // Obtener el id_order_detail de la primera producción
     const orderDetailId = productions[0].id_order_detail;
@@ -177,7 +187,7 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
       productions.map(async (production: any, index: number) => {
         const currentLote = `${loteBase}-${String(nextSequence + index).padStart(3, "0")}`;
 
-        return await models.Production.create(
+        const createdProduction = await models.Production.create(
           {
             ...production,
             lote: currentLote, // Asociamos el lote generado
@@ -185,8 +195,20 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
           },
           {transaction: t}
         );
+
+        if (production.production_users.length > 0) {
+          const productionUsersData = production.production_users.map((user: any) => ({
+            id_production: createdProduction.get("id"), // ID de la producción recién creada
+            id_user: user.id_user,
+          }));
+
+          await models.ProductionUser.bulkCreate(productionUsersData, {transaction: t});
+        }
+
+        return createdProduction;
       })
     );
+
     const ids: Number[] = Array.from(createdProductions.map((p) => p.get("id")));
 
     const detailedProductions = await models.Production.findAll({

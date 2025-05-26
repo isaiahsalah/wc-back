@@ -31,6 +31,7 @@ export const ProductModel = sequelize.define(
     },
     type_product: {
       type: DataTypes.SMALLINT,
+      allowNull: false,
     },
     id_unit: {
       type: DataTypes.INTEGER,
@@ -43,7 +44,7 @@ export const ProductModel = sequelize.define(
 
     id_color: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     id_model: {
       type: DataTypes.INTEGER,

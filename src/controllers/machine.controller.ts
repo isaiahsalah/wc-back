@@ -25,7 +25,7 @@ export const getMachines = async (req: Request, res: Response): Promise<void> =>
       include: [
         {
           model: models.SectorProcess,
-          include: [{model: models.Sector}, {model: models.Sector}],
+          include: [{model: models.Sector}, {model: models.Process}],
         },
       ],
       where: {

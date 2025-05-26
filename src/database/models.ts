@@ -18,11 +18,11 @@ import {UserModel} from "../models/user";
 import {UnitModel} from "../models/unit";
 import {GroupModel} from "../models/group";
 import {WorkModel} from "../models/work";
-import {ProductionOperatorModel} from "../models/production_operator";
+import {ProductionUserModel} from "../models/production_user";
 import {SectorProcessModel} from "../models/sector_process";
 
 const models = {
-  ProductionOperator: ProductionOperatorModel,
+  ProductionUser: ProductionUserModel,
   Color: ColorModel,
   Model: ModelModel,
   Sector: SectorModel,

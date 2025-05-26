@@ -15,10 +15,49 @@ export const getAllOrderDetails = async (req: Request, res: Response): Promise<v
 
 export const getOrderDetails = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {all} = req.query;
+    const {all, id_sector_process, id_machine, date} = req.query;
 
     const orderDetails = await models.OrderDetail.findAll({
       paranoid: all ? false : true,
+      include: [
+        {model: models.Production},
+        {model: models.Machine},
+        {
+          model: models.Order,
+          required: date ? true : false,
+          where: {
+            init_date: {
+              [Op.lte]: date ? date : {[Op.ne]: null}, // Menor o igual que date
+            },
+            end_date: {
+              [Op.gte]: date ? date : {[Op.ne]: null}, // Mayor o igual que date
+            },
+          },
+        },
+
+        {
+          model: models.Product,
+          required: true,
+          include: [
+            {
+              model: models.Model,
+              required: id_sector_process ? true : false,
+              include: [
+                {
+                  model: models.SectorProcess,
+                  include: [{model: models.Process}, {model: models.Sector}],
+                },
+              ],
+              where: {
+                id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
+              },
+            },
+          ],
+        },
+      ],
+      where: {
+        id_machine: id_machine ? id_machine : {[Op.ne]: null},
+      },
     });
     res.json(orderDetails);
   } catch (error) {
@@ -110,70 +149,5 @@ export const recoverOrderDetail = async (req: Request, res: Response): Promise<v
   } catch (error) {
     console.error("❌ Error al recuperar el detalle de la orden:", error);
     res.status(500).json({error: "Error al recuperar el detalle de la orden"});
-  }
-};
-
-////////////////////////////////////////////////////////////////////////////////////
-
-export const getOrderDetails_date = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const {id_sector_process, id_machine, date} = req.query;
-
-    // Asegúrate de que 'date' sea una cadena antes de usarlo
-    const parsedDate = date ? new Date(date as string) : undefined;
-    if (date && parsedDate && isNaN(parsedDate.getTime())) {
-      res.status(400).json({error: "El formato de la fecha es inválido."});
-      return;
-    }
-
-    const orderDetails = await models.OrderDetail.findAll({
-      include: [
-        {model: models.Production},
-        {model: models.Machine},
-        {
-          model: models.Order,
-          required: true,
-          //as: "order",
-          where: {
-            init_date: {
-              [Op.lte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Menor o igual que parsedDate
-            },
-            end_date: {
-              [Op.gte]: parsedDate ? parsedDate : {[Op.ne]: null}, // Mayor o igual que parsedDate
-            },
-          },
-        },
-
-        {
-          model: models.Product,
-          required: true,
-          include: [
-            {
-              model: models.Model,
-              required: true,
-              include: [
-                {
-                  model: models.SectorProcess,
-                  include: [{model: models.Process}, {model: models.Sector}],
-                },
-              ],
-              where: {
-                id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
-              },
-            },
-          ],
-        },
-      ],
-      where: {
-        id_machine: id_machine ? id_machine : {[Op.ne]: null},
-      },
-    });
-
-    console.log("🤣🤣🤣🤣🤣", JSON.stringify(orderDetails, null, 2));
-
-    res.json(orderDetails);
-  } catch (error) {
-    console.error("❌ Error al obtener los detalles de las órdenes:", error);
-    res.status(500).json({error: "Error al obtener los detalles de las órdenes"});
   }
 };

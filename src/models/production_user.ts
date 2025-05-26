@@ -3,8 +3,8 @@ import sequelize from "../database/sequelize";
 import {ProductionModel} from "./production";
 import {UserModel} from "./user";
 
-export const ProductionOperatorModel = sequelize.define(
-  "production_operator",
+export const ProductionUserModel = sequelize.define(
+  "production_user",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -21,12 +21,12 @@ export const ProductionOperatorModel = sequelize.define(
     },
   },
   {
-    tableName: "production_operator",
+    tableName: "production_user",
   }
 );
 
-ProductionModel.hasMany(ProductionOperatorModel, {foreignKey: "id_production"});
-ProductionOperatorModel.belongsTo(ProductionModel, {foreignKey: "id_production"});
+ProductionModel.hasMany(ProductionUserModel, {foreignKey: "id_production"});
+ProductionUserModel.belongsTo(ProductionModel, {foreignKey: "id_production"});
 
-UserModel.hasMany(ProductionOperatorModel, {foreignKey: "id_user"});
-ProductionOperatorModel.belongsTo(UserModel, {foreignKey: "id_user"});
+UserModel.hasMany(ProductionUserModel, {foreignKey: "id_user"});
+ProductionUserModel.belongsTo(UserModel, {foreignKey: "id_user"});
