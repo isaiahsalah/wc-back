@@ -18,7 +18,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {all, id_sector_process, type_module, type_screen} = req.query;
+    const {all, id_sector_process, type_module, type_screen, id_work_group} = req.query;
 
     const users = await models.SystemUser.findAll({
       paranoid: all ? false : true,
@@ -34,8 +34,16 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
           },
         },
       ],
+      where: {
+        [Op.or]: [
+          {id_work_group: id_work_group ? id_work_group : {[Op.ne]: null}}, // Coincide con el valor especificado
+          {id_work_group: null}, // Incluye los nulos
+        ],
+      },
     });
-    res.json(users);
+
+    const plainUsers = users.map((user) => user.get({plain: true}));
+    res.json(plainUsers);
   } catch (error) {
     console.error("❌ Error al obtener los usuarios:", error);
     res.status(500).json({error: "Error al obtener los usuarios"});

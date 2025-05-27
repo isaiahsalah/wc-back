@@ -4,7 +4,7 @@ import {Op, Sequelize} from "sequelize";
 
 export const getOrderDetails = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {all, id_sector_process, id_machine, date} = req.query;
+    const {all, id_sector_process, id_machine, id_work_group, date} = req.query;
 
     const orderDetails = await models.ProductionOrderDetail.findAll({
       paranoid: all ? false : true,
@@ -14,6 +14,7 @@ export const getOrderDetails = async (req: Request, res: Response): Promise<void
         {
           model: models.ProductionOrder,
           required: date ? true : false,
+          include: [{model: models.WorkGroup}],
           where: {
             init_date: {
               [Op.lte]: date ? date : {[Op.ne]: null}, // Menor o igual que date
@@ -21,6 +22,7 @@ export const getOrderDetails = async (req: Request, res: Response): Promise<void
             end_date: {
               [Op.gte]: date ? date : {[Op.ne]: null}, // Mayor o igual que date
             },
+            id_work_group: id_work_group ? id_work_group : {[Op.ne]: null}, // Filtrar por grupo de trabajo si se proporciona
           },
         },
 

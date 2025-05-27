@@ -16,7 +16,6 @@ export const ProductModelModel = sequelize.define(
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     id_sector_process: {
       type: DataTypes.INTEGER,

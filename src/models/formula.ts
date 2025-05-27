@@ -16,7 +16,6 @@ export const FormulaModel = sequelize.define(
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     active: {
       type: DataTypes.BOOLEAN,

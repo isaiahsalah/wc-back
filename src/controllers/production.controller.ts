@@ -43,6 +43,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
                 },
               ],
             },
+            {model: models.ProductionOrder},
           ],
         },
         {model: models.ProductionUser, include: [{model: models.SystemUser}]},
@@ -51,6 +52,8 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
         {model: models.Unit, as: "production_equivalent_unit"},
       ],
     });
+
+    console.log("➡️➡️➡️➡️ Producciones obtenidas:", JSON.stringify(productions, null, 3));
 
     res.json(productions);
   } catch (error) {

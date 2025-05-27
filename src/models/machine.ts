@@ -16,7 +16,6 @@ export const MachineModel = sequelize.define(
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     id_sector_process: {
       type: DataTypes.INTEGER,
