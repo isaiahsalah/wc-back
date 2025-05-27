@@ -15,11 +15,14 @@ export const ProductionModel = sequelize.define(
     description: {
       type: DataTypes.STRING,
     },
+    type_size: {
+      type: DataTypes.SMALLINT,
+    },
     date: {
       type: DataTypes.DATE,
     },
     duration: {
-      type: DataTypes.INTEGER, // in minutes
+      type: DataTypes.SMALLINT, // in minutes
     },
     type_quality: {
       type: DataTypes.SMALLINT,
