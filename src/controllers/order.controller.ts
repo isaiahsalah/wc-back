@@ -89,7 +89,7 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
   try {
     const {id} = req.params;
     //const dataUpdate = req.body;
-    const {order_details, ...orderData} = req.body;
+    const orderData = req.body;
 
     // 1. Actualizar la orden principal
     const order = await models.ProductionOrder.findByPk(id, {transaction});
@@ -102,7 +102,7 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
     await order.update(orderData, {transaction});
 
     // 2. Manejar los order_details
-    if (order_details && Array.isArray(order_details)) {
+    if (orderData.production_order_details && Array.isArray(orderData.production_order_details)) {
       // Eliminar detalles que no están en el nuevo array
       const existingDetails = await models.ProductionOrderDetail.findAll({
         where: {id_production_order: id},
@@ -110,7 +110,9 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
       });
 
       // Detalles a eliminar (los que existen pero no vienen en la solicitud)
-      const existingDetailsTemp = new Set(order_details.map((elemento) => elemento.id));
+      const existingDetailsTemp = new Set(
+        orderData.production_order_details.map((elemento: {id: any}) => elemento.id)
+      );
 
       const detailsToRemove = existingDetails.filter(
         (detail: any) => !existingDetailsTemp.has(detail.id)
@@ -125,7 +127,7 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
       });
 
       // Actualizar/Crear los detalles
-      for (const detailData of order_details) {
+      for (const detailData of orderData.production_order_details) {
         if (detailData.id) {
           // Actualizar detalle existente
           const detail = await models.ProductionOrderDetail.findByPk(detailData.id, {transaction});
@@ -253,6 +255,8 @@ export const createOrderWithDetails = async (req: Request, res: Response): Promi
 };
 
 export const editOrderWithDetails = async (req: Request, res: Response): Promise<void> => {
+  console.log("🅿️🅿️🅿️");
+
   const transaction = await sequelize.transaction(); // Iniciamos una transacción
 
   try {

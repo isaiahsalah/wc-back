@@ -53,8 +53,6 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
       ],
     });
 
-    console.log("➡️➡️➡️➡️ Producciones obtenidas:", JSON.stringify(productions, null, 3));
-
     res.json(productions);
   } catch (error) {
     console.error("❌ Error al obtener las producciones:", error);
@@ -241,7 +239,6 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
 
     // Si todo es exitoso, confirmamos la transacción
     await t.commit();
-    console.log("➡️➡️➡️➡️ IDs creados:", ids);
 
     // Responder con las producciones creadas
     res.status(201).json(detailedProductions);
