@@ -178,6 +178,7 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
           [Op.like]: `${loteBase}-%`, // Buscar lotes que empiecen con la base
         },
       },
+      paranoid: false,
       transaction: t, // Usar la misma transacción
     });
 
