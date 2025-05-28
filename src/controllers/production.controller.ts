@@ -43,7 +43,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
                 },
               ],
             },
-            {model: models.ProductionOrder},
+            {model: models.ProductionOrder, include: [{model: models.WorkGroup}]},
           ],
         },
         {model: models.ProductionUser, include: [{model: models.SystemUser}]},
