@@ -1,17 +1,6 @@
 import {Request, Response} from "express";
 import models from "../database/models";
 import {Op} from "sequelize";
-/*
-// Controlador para Sectors
-export const getAllSectors = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const sectors = await models.Sector.findAll({ paranoid: false });
-    res.json(sectors);
-  } catch (error) {
-    console.error("❌ Error al obtener los sectores:", error);
-    res.status(500).json({ error: "Error al obtener los sectores" });
-  }
-};*/
 
 export const getSectorProcesses = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -75,19 +64,43 @@ export const updateSectorProcess = async (req: Request, res: Response): Promise<
   }
 };
 
-export const deleteSectorProcess = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteSectorProcess = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const sector = await models.SectorProcess.findByPk(id);
-    if (!sector) {
-      res.status(404).json({error: "proceso del Sector no encontrado"});
+
+    const sectorProcess = await models.SectorProcess.findByPk(id);
+    if (!sectorProcess) {
+      res.status(404).json({error: "Proceso del sector no encontrado"});
       return;
     }
-    await sector.destroy();
-    res.json({message: "proceso del Sector eliminado correctamente"});
+
+    // Soft delete: Marca el registro como eliminado
+    await sectorProcess.destroy();
+
+    res.status(200).json({message: "Proceso del sector eliminado lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar el proceso del sector:", error);
-    res.status(500).json({error: "Error al eliminar el proceso del sector"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar el proceso del sector lógicamente"});
+  }
+};
+
+export const hardDeleteSectorProcess = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const sectorProcess = await models.SectorProcess.findOne({where: {id}, paranoid: false});
+    if (!sectorProcess) {
+      res.status(404).json({error: "Proceso del sector no encontrado"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await sectorProcess.destroy({force: true});
+
+    res.status(200).json({message: "Proceso del sector eliminado completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar el proceso del sector completamente"});
   }
 };
 

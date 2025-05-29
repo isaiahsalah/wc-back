@@ -18,7 +18,7 @@ export async function postLogin(req: Request, res: Response): Promise<void> {
     }
 
     // Buscar usuario en la base de datos
-    const foundUser = (await models.SystemUser.findOne({
+    const foundUser = (await models.SysUser.findOne({
       where: {user: (user as string).toLowerCase()},
       include: [
         {model: models.WorkGroup},
@@ -111,7 +111,7 @@ export async function getCheckToken(req: Request, res: Response): Promise<void> 
         console.log("😊😊😊", decoded, token);
 
         if (userId && type_module) {
-          const foundUser = (await models.SystemUser.findOne({
+          const foundUser = (await models.SysUser.findOne({
             where: {id: userId as string},
             include: [
               {model: models.WorkGroup},

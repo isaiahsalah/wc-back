@@ -2,10 +2,11 @@ import {Router} from "express";
 import {
   createProduction,
   createProductions,
-  deleteProduction,
   getProductionById,
   getProductions,
+  hardDeleteProduction,
   recoverProduction,
+  softDeleteProduction,
   updateProduction,
 } from "../controllers/production.controller";
 
@@ -21,6 +22,7 @@ router.get("/", getProductions);
 
 router.get("/:id", getProductionById);
 
-router.delete("/:id", deleteProduction);
+router.delete("/soft/:id", softDeleteProduction);
+router.delete("/hard/:id", hardDeleteProduction);
 router.patch("/:id", recoverProduction);
 export default router;

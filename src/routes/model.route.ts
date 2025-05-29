@@ -1,20 +1,22 @@
 import {Router} from "express";
 import {
-  createModel,
-  deleteModel,
-  getModelById,
-  getModels,
-  recoverModel,
-  updateModel,
+  createProductModel,
+  getProductModelById,
+  getProductModels,
+  hardDeleteProductModel,
+  recoverProductModel,
+  softDeleteProductModel,
+  updateProductModel,
 } from "../controllers/model.controller";
 
 const router = Router();
 
 // Routes
-router.post("/", createModel);
-router.put("/:id", updateModel);
-router.get("/", getModels);
-router.get("/:id", getModelById);
-router.delete("/:id", deleteModel);
-router.patch("/:id", recoverModel);
+router.post("/", createProductModel);
+router.put("/:id", updateProductModel);
+router.get("/", getProductModels);
+router.get("/:id", getProductModelById);
+router.delete("/soft/:id", softDeleteProductModel);
+router.delete("/hard/:id", hardDeleteProductModel);
+router.patch("/:id", recoverProductModel);
 export default router;

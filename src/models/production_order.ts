@@ -1,6 +1,6 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
-import {SystemUserModel} from "./sys_user";
+import {SysUserModel} from "./sys_user";
 import {WorkGroupModel} from "./work_group";
 
 export const ProductionOrderModel = sequelize.define(
@@ -35,8 +35,8 @@ export const ProductionOrderModel = sequelize.define(
   }
 );
 
-SystemUserModel.hasMany(ProductionOrderModel, {foreignKey: "id_sys_user"});
-ProductionOrderModel.belongsTo(SystemUserModel, {foreignKey: "id_sys_user"});
+SysUserModel.hasMany(ProductionOrderModel, {foreignKey: "id_sys_user"});
+ProductionOrderModel.belongsTo(SysUserModel, {foreignKey: "id_sys_user"});
 
 WorkGroupModel.hasMany(ProductionOrderModel, {foreignKey: "id_work_group"});
 ProductionOrderModel.belongsTo(WorkGroupModel, {foreignKey: "id_work_group"});

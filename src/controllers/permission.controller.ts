@@ -69,19 +69,43 @@ export const updatePermission = async (req: Request, res: Response): Promise<voi
   }
 };
 
-export const deletePermission = async (req: Request, res: Response): Promise<void> => {
+export const softDeletePermission = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
+
     const permission = await models.Permission.findByPk(id);
     if (!permission) {
       res.status(404).json({error: "Permiso no encontrado"});
       return;
     }
+
+    // Soft delete: Marca el registro como eliminado
     await permission.destroy();
-    res.json({message: "Permiso eliminado correctamente"});
+
+    res.status(200).json({message: "Permiso eliminado lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar el permiso:", error);
-    res.status(500).json({error: "Error al eliminar el permiso"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar el permiso lógicamente"});
+  }
+};
+
+export const hardDeletePermission = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const permission = await models.Permission.findOne({where: {id}, paranoid: false});
+    if (!permission) {
+      res.status(404).json({error: "Permiso no encontrado"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await permission.destroy({force: true});
+
+    res.status(200).json({message: "Permiso eliminado completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar el permiso completamente"});
   }
 };
 

@@ -1,10 +1,11 @@
 import {Router} from "express";
 import {
   createUser,
-  deleteUser,
   getUserById,
   getUsers,
+  hardDeleteSysUser,
   recoverUser,
+  softDeleteSysUser,
   updateUser,
   updateUserPermissions,
 } from "../controllers/user.controller";
@@ -18,6 +19,7 @@ router.put("/permission/:id", updateUserPermissions);
 
 router.get("/", getUsers);
 router.get("/:id", getUserById);
-router.delete("/:id", deleteUser);
+router.delete("/soft/:id", softDeleteSysUser);
+router.delete("/hard/:id", hardDeleteSysUser);
 router.patch("/:id", recoverUser);
 export default router;

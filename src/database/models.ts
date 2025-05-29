@@ -14,7 +14,7 @@ import {ProcessModel} from "../models/process";
 import {ProductModel} from "../models/product";
 import {ProductionModel} from "../models/production";
 import {ProductionCostModel} from "../models/production_cost";
-import {SystemUserModel} from "../models/sys_user";
+import {SysUserModel} from "../models/sys_user";
 import {UnitModel} from "../models/unit";
 import {WorkGroupModel} from "../models/work_group";
 import {ProductionUserModel} from "../models/production_user";
@@ -36,7 +36,7 @@ const models = {
   Product: ProductModel,
   Production: ProductionModel,
   ProductionCost: ProductionCostModel,
-  SystemUser: SystemUserModel,
+  SysUser: SysUserModel,
   Unit: UnitModel,
   WorkGroup: WorkGroupModel,
 };

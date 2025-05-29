@@ -14,17 +14,7 @@ export const getProductionDetails = async (req: Request, res: Response): Promise
     res.status(500).json({error: "Error al obtener los detalles de producción"});
   }
 };
-/*
-export const getAllProductionDetails = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const productionDetails = await models.ProductionDetail.findAll({ paranoid: false });
-    res.json(productionDetails);
-  } catch (error) {
-    console.error("❌ Error al obtener los detalles de producción:", error);
-    res.status(500).json({ error: "Error al obtener los detalles de producción" });
-  }
-};
-*/
+
 export const getProductionDetailById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;

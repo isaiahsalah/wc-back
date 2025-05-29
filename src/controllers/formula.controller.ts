@@ -76,21 +76,47 @@ export const updateFormula = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const deleteFormula = async (req: Request, res: Response): Promise<void> => {
+ 
+export const softDeleteFormula = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
+
     const formula = await models.Formula.findByPk(id);
     if (!formula) {
-      res.status(404).json({error: "Fórmula no encontrada"});
+      res.status(404).json({ error: "Fórmula no encontrada" });
       return;
     }
+
+    // Soft delete: Marca el registro como eliminado
     await formula.destroy();
-    res.json({message: "Fórmula eliminada correctamente"});
+
+    res.status(200).json({ message: "Fórmula eliminada lógicamente (soft delete)." });
   } catch (error) {
-    console.error("❌ Error al eliminar la fórmula:", error);
-    res.status(500).json({error: "Error al eliminar la fórmula"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({ error: "Error al eliminar la fórmula lógicamente" });
   }
 };
+
+export const hardDeleteFormula = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const formula = await models.Formula.findOne({ where: { id }, paranoid: false });
+    if (!formula) {
+      res.status(404).json({ error: "Fórmula no encontrada" });
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await formula.destroy({ force: true });
+
+    res.status(200).json({ message: "Fórmula eliminada completamente (hard delete)." });
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({ error: "Error al eliminar la fórmula completamente" });
+  }
+};
+
 
 export const recoverFormula = async (req: Request, res: Response): Promise<void> => {
   try {

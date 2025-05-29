@@ -87,11 +87,11 @@ export const seedDatabase = async () => {
     }
 
     // Inserta datos de usuario
-    const userCount = await models.SystemUser.count();
+    const userCount = await models.SysUser.count();
     if (userCount === 0) {
       const passAdmin = await bcryptjs.hash("admin", 8);
 
-      await models.SystemUser.bulkCreate([
+      await models.SysUser.bulkCreate([
         {
           name: "Usuario",
           lastname: "Administrador",

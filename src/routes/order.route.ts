@@ -1,24 +1,26 @@
 import {Router} from "express";
 import {
-  createOrder,
-  createOrderWithDetails,
-  deleteOrder,
-  editOrderWithDetails,
-  getOrderById,
-  getOrders,
-  recoverOrder,
-  updateOrder,
+  createProductionOrder,
+  createProductionOrderWithDetails,
+  editProductionOrderWithDetails,
+  getProductionOrderById,
+  getProductionOrders,
+  hardDeleteProductionOrder,
+  recoverProductionOrder,
+  softDeleteProductionOrder,
+  updateProductionOrder,
 } from "../controllers/order.controller";
 
 const router = Router();
 
 // Routes
-router.post("/details", createOrderWithDetails);
-router.put("/details/:id", editOrderWithDetails);
-router.post("/", createOrder);
-router.put("/:id", updateOrder);
-router.get("/", getOrders);
-router.get("/:id", getOrderById);
-router.delete("/:id", deleteOrder);
-router.patch("/:id", recoverOrder);
+router.post("/details", createProductionOrderWithDetails);
+router.put("/details/:id", editProductionOrderWithDetails);
+router.post("/", createProductionOrder);
+router.put("/:id", updateProductionOrder);
+router.get("/", getProductionOrders);
+router.get("/:id", getProductionOrderById);
+router.delete("/soft/:id", softDeleteProductionOrder);
+router.delete("/hard/:id", hardDeleteProductionOrder);
+router.patch("/:id", recoverProductionOrder);
 export default router;

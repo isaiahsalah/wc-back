@@ -1,10 +1,11 @@
 import {Router} from "express";
 import {
   createSectorProcess,
-  deleteSectorProcess,
   getSectorProcessById,
   getSectorProcesses,
+  hardDeleteSectorProcess,
   recoverSectorProcess,
+  softDeleteSectorProcess,
   updateSectorProcess,
 } from "../controllers/sector_process.controller";
 
@@ -15,6 +16,7 @@ router.post("/", createSectorProcess);
 router.put("/:id", updateSectorProcess);
 router.get("/", getSectorProcesses);
 router.get("/:id", getSectorProcessById);
-router.delete("/:id", deleteSectorProcess);
+router.delete("/soft/:id", softDeleteSectorProcess);
+router.delete("/hard/:id", hardDeleteSectorProcess);
 router.patch("/:id", recoverSectorProcess);
 export default router;

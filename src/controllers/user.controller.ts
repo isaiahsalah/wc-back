@@ -4,23 +4,12 @@ import models from "../database/models";
 import bcryptjs from "bcryptjs";
 import {IPermission, IUser} from "../utils/interfaces";
 import {Op} from "sequelize";
-/*
-// Controlador para Users
-export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const users = await models.User.findAll({paranoid: false, include: [{model: models.Group}]});
-    res.json(users);
-  } catch (error) {
-    console.error("❌ Error al obtener los usuarios:", error);
-    res.status(500).json({error: "Error al obtener los usuarios"});
-  }
-};*/
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const {all, id_sector_process, type_module, type_screen, id_work_group} = req.query;
 
-    const users = await models.SystemUser.findAll({
+    const users = await models.SysUser.findAll({
       paranoid: all ? false : true,
       include: [
         {model: models.WorkGroup},
@@ -55,7 +44,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
     const {id} = req.params;
     const {id_sector_process, type_module} = req.query;
 
-    const user = await models.SystemUser.findByPk(id, {
+    const user = await models.SysUser.findByPk(id, {
       include: [
         {
           model: models.Permission,
@@ -89,7 +78,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
     req.body.user = (req.body.user as string).toLowerCase();
 
     // Crear el usuario en la base de datos
-    const newUser = await models.SystemUser.create(req.body);
+    const newUser = await models.SysUser.create(req.body);
 
     // Responder con el usuario creado (sin la contraseña)
     const {pass, ...userWithoutPassword} = newUser.toJSON(); // Excluir el hash de la respuesta
@@ -104,7 +93,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
   try {
     const {id} = req.params;
 
-    const TempUser = await models.SystemUser.findByPk(id);
+    const TempUser = await models.SysUser.findByPk(id);
     if (!TempUser) {
       res.status(404).json({error: "Usuario no encontrado"});
       return;
@@ -122,19 +111,43 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteSysUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const user = await models.SystemUser.findByPk(id);
-    if (!user) {
-      res.status(404).json({error: "Usuario no encontrado"});
+
+    const sysUser = await models.SysUser.findByPk(id);
+    if (!sysUser) {
+      res.status(404).json({error: "Usuario del sistema no encontrado"});
       return;
     }
-    await user.destroy();
-    res.json({message: "Usuario eliminado correctamente"});
+
+    // Soft delete: Marca el registro como eliminado
+    await sysUser.destroy();
+
+    res.status(200).json({message: "Usuario del sistema eliminado lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar el usuario:", error);
-    res.status(500).json({error: "Error al eliminar el usuario"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar el usuario del sistema lógicamente"});
+  }
+};
+
+export const hardDeleteSysUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const sysUser = await models.SysUser.findOne({where: {id}, paranoid: false});
+    if (!sysUser) {
+      res.status(404).json({error: "Usuario del sistema no encontrado"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await sysUser.destroy({force: true});
+
+    res.status(200).json({message: "Usuario del sistema eliminado completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar el usuario del sistema completamente"});
   }
 };
 
@@ -143,7 +156,7 @@ export const recoverUser = async (req: Request, res: Response): Promise<void> =>
     const {id} = req.params;
 
     // Busca el registro incluso si está marcado como eliminado
-    const TempUser = await models.SystemUser.findByPk(id, {paranoid: false});
+    const TempUser = await models.SysUser.findByPk(id, {paranoid: false});
     if (!TempUser) {
       res.status(404).json({error: "Usuario no encontrado"});
       return;
@@ -153,7 +166,7 @@ export const recoverUser = async (req: Request, res: Response): Promise<void> =>
     await TempUser.restore();
 
     // Busca nuevamente el registro para confirmar
-    const updatedUser = await models.SystemUser.findByPk(id);
+    const updatedUser = await models.SysUser.findByPk(id);
     // Devuelve el registro actualizado
     res.json(updatedUser);
   } catch (error) {
@@ -170,7 +183,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
     const {permissions, id_sector_process, type_module} = req.body; // Array de permisos enviados en el body
 
     // Buscar el usuario
-    const user = await models.SystemUser.findByPk(id, {
+    const user = await models.SysUser.findByPk(id, {
       include: [
         {
           model: models.Permission,
@@ -226,7 +239,7 @@ export const updateUserPermissions = async (req: Request, res: Response): Promis
     });
 
     // Devolver la respuesta actualizada
-    const updatedUser = await models.SystemUser.findByPk(id, {
+    const updatedUser = await models.SysUser.findByPk(id, {
       include: [
         {
           model: models.Permission,

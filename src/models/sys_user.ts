@@ -2,7 +2,7 @@ import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
 import {WorkGroupModel} from "./work_group";
 
-export const SystemUserModel = sequelize.define(
+export const SysUserModel = sequelize.define(
   "sys_user",
   {
     id: {
@@ -38,5 +38,5 @@ export const SystemUserModel = sequelize.define(
   }
 );
 
-WorkGroupModel.hasMany(SystemUserModel, {foreignKey: "id_work_group"});
-SystemUserModel.belongsTo(WorkGroupModel, {foreignKey: "id_work_group"});
+WorkGroupModel.hasMany(SysUserModel, {foreignKey: "id_work_group"});
+SysUserModel.belongsTo(WorkGroupModel, {foreignKey: "id_work_group"});

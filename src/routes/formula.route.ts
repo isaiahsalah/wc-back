@@ -1,7 +1,8 @@
 import {Router} from "express";
 import {
   createFormula,
-  deleteFormula,
+  hardDeleteFormula,
+  softDeleteFormula,
   getFormulaById,
   getFormulas,
   recoverFormula,
@@ -15,7 +16,9 @@ router.post("/", createFormula);
 router.put("/:id", updateFormula);
 router.get("/", getFormulas);
 router.get("/:id", getFormulaById);
-router.delete("/:id", deleteFormula);
+router.delete("/soft/:id", softDeleteFormula);
+router.delete("/hard/:id", hardDeleteFormula);
+
 router.patch("/:id", recoverFormula);
 
 export default router;

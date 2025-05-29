@@ -13,7 +13,7 @@ export const getAllGroups = async (req: Request, res: Response): Promise<void> =
 };
 */
 // Controlador para Grupos
-export const getGroups = async (req: Request, res: Response): Promise<void> => {
+export const getWorkGroups = async (req: Request, res: Response): Promise<void> => {
   try {
     const {all} = req.query;
 
@@ -27,7 +27,7 @@ export const getGroups = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getGroupById = async (req: Request, res: Response): Promise<void> => {
+export const getWorkGroupById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
     const group = await models.WorkGroup.findByPk(id);
@@ -42,7 +42,7 @@ export const getGroupById = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-export const createGroup = async (req: Request, res: Response): Promise<void> => {
+export const createWorkGroup = async (req: Request, res: Response): Promise<void> => {
   try {
     const newGroup = await models.WorkGroup.create(req.body);
     res.status(201).json(newGroup);
@@ -52,7 +52,7 @@ export const createGroup = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const updateGroup = async (req: Request, res: Response): Promise<void> => {
+export const updateWorkGroup = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
 
@@ -70,23 +70,47 @@ export const updateGroup = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const deleteGroup = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteWorkGroup = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const group = await models.WorkGroup.findByPk(id);
-    if (!group) {
-      res.status(404).json({error: "Grupo no encontrado"});
+
+    const workGroup = await models.WorkGroup.findByPk(id);
+    if (!workGroup) {
+      res.status(404).json({error: "Grupo de trabajo no encontrado"});
       return;
     }
-    await group.destroy();
-    res.json({message: "Grupo eliminado correctamente"});
+
+    // Soft delete: Marca el registro como eliminado
+    await workGroup.destroy();
+
+    res.status(200).json({message: "Grupo de trabajo eliminado lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar el grupo:", error);
-    res.status(500).json({error: "Error al eliminar el grupo"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar el grupo de trabajo lógicamente"});
   }
 };
 
-export const recoverGroup = async (req: Request, res: Response): Promise<void> => {
+export const hardDeleteWorkGroup = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const workGroup = await models.WorkGroup.findOne({where: {id}, paranoid: false});
+    if (!workGroup) {
+      res.status(404).json({error: "Grupo de trabajo no encontrado"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await workGroup.destroy({force: true});
+
+    res.status(200).json({message: "Grupo de trabajo eliminado completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar el grupo de trabajo completamente"});
+  }
+};
+
+export const recoverWorkGroup = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
 

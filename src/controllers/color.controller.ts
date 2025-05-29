@@ -70,19 +70,43 @@ export const updateColor = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const deleteColor = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteColor = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
+
     const color = await models.Color.findByPk(id);
     if (!color) {
       res.status(404).json({error: "Color no encontrado"});
       return;
     }
+
+    // Soft delete: Marca el registro como eliminado
     await color.destroy();
-    res.json({message: "Color eliminado correctamente"});
+
+    res.status(200).json({message: "Color eliminado lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar el color:", error);
-    res.status(500).json({error: "Error al eliminar el color"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar el color lógicamente"});
+  }
+};
+
+export const hardDeleteColor = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const color = await models.Color.findOne({where: {id}, paranoid: false});
+    if (!color) {
+      res.status(404).json({error: "Color no encontrado"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await color.destroy({force: true});
+
+    res.status(200).json({message: "Color eliminado completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar el color completamente"});
   }
 };
 

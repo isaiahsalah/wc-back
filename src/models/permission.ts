@@ -1,6 +1,6 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../database/sequelize";
-import {SystemUserModel} from "./sys_user";
+import {SysUserModel} from "./sys_user";
 import {SectorProcessModel} from "./sector_process";
 
 export const PermissionModel = sequelize.define(
@@ -47,8 +47,8 @@ export const PermissionModel = sequelize.define(
   }*/
 );
 
-SystemUserModel.hasMany(PermissionModel, {foreignKey: "id_sys_user"});
-PermissionModel.belongsTo(SystemUserModel, {foreignKey: "id_sys_user"});
+SysUserModel.hasMany(PermissionModel, {foreignKey: "id_sys_user"});
+PermissionModel.belongsTo(SysUserModel, {foreignKey: "id_sys_user"});
 
 SectorProcessModel.hasMany(PermissionModel, {foreignKey: "id_sector_process"});
 PermissionModel.belongsTo(SectorProcessModel, {foreignKey: "id_sector_process"});

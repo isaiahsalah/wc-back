@@ -1,26 +1,15 @@
 import {Request, Response} from "express";
 import models, {sequelize} from "../database/models";
 import {Op} from "sequelize";
-/*
-// Controlador para Orders
-export const getAllOrders = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const orders = await models.ProductionOrder.findAll({paranoid: false, include: [{model: models.User}]});
-    res.json(orders);
-  } catch (error) {
-    console.error("❌ Error al obtener las órdenes:", error);
-    res.status(500).json({error: "Error al obtener las órdenes"});
-  }
-};*/
 
-export const getOrders = async (req: Request, res: Response): Promise<void> => {
+export const getProductionOrders = async (req: Request, res: Response): Promise<void> => {
   const {id_sector_process, all} = req.query;
 
   try {
     const orders = await models.ProductionOrder.findAll({
       paranoid: all ? false : true,
       include: [
-        {model: models.SystemUser},
+        {model: models.SysUser},
         {model: models.WorkGroup},
         {
           model: models.ProductionOrderDetail,
@@ -52,7 +41,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getOrderById = async (req: Request, res: Response): Promise<void> => {
+export const getProductionOrderById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
     const order = await models.ProductionOrder.findByPk(id, {
@@ -74,7 +63,7 @@ export const getOrderById = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-export const createOrder = async (req: Request, res: Response): Promise<void> => {
+export const createProductionOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const newOrder = await models.ProductionOrder.create(req.body);
     res.status(201).json(newOrder);
@@ -84,7 +73,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const updateOrder = async (req: Request, res: Response): Promise<void> => {
+export const updateProductionOrder = async (req: Request, res: Response): Promise<void> => {
   const transaction = await sequelize.transaction(); // Iniciamos una transacción
 
   try {
@@ -176,23 +165,47 @@ export const updateOrder = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const deleteOrder = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteProductionOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const order = await models.ProductionOrder.findByPk(id);
-    if (!order) {
-      res.status(404).json({error: "Orden no encontrada"});
+
+    const productionOrder = await models.ProductionOrder.findByPk(id);
+    if (!productionOrder) {
+      res.status(404).json({error: "Orden de producción no encontrada"});
       return;
     }
-    await order.destroy();
-    res.json({message: "Orden eliminada correctamente"});
+
+    // Soft delete: Marca el registro como eliminado
+    await productionOrder.destroy();
+
+    res.status(200).json({message: "Orden de producción eliminada lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar la orden:", error);
-    res.status(500).json({error: "Error al eliminar la orden"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar la orden de producción lógicamente"});
   }
 };
 
-export const recoverOrder = async (req: Request, res: Response): Promise<void> => {
+export const hardDeleteProductionOrder = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const productionOrder = await models.ProductionOrder.findOne({where: {id}, paranoid: false});
+    if (!productionOrder) {
+      res.status(404).json({error: "Orden de producción no encontrada"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await productionOrder.destroy({force: true});
+
+    res.status(200).json({message: "Orden de producción eliminada completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar la orden de producción completamente"});
+  }
+};
+
+export const recoverProductionOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
 
@@ -218,7 +231,10 @@ export const recoverOrder = async (req: Request, res: Response): Promise<void> =
 
 /////////////////////////////////////////////////////////////////////
 
-export const createOrderWithDetails = async (req: Request, res: Response): Promise<void> => {
+export const createProductionOrderWithDetails = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const transaction = await sequelize.transaction(); // Iniciar transacción
 
   try {
@@ -255,7 +271,10 @@ export const createOrderWithDetails = async (req: Request, res: Response): Promi
   }
 };
 
-export const editOrderWithDetails = async (req: Request, res: Response): Promise<void> => {
+export const editProductionOrderWithDetails = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   console.log("🅿️🅿️🅿️");
 
   const transaction = await sequelize.transaction(); // Iniciamos una transacción

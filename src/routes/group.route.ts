@@ -1,21 +1,23 @@
 import {Router} from "express";
 import {
-  createGroup,
-  deleteGroup,
-  getGroups,
-  getGroupById,
-  updateGroup,
-  recoverGroup,
+  createWorkGroup,
+  updateWorkGroup,
+  getWorkGroups,
+  recoverWorkGroup,
+  getWorkGroupById,
+  softDeleteWorkGroup,
+  hardDeleteWorkGroup,
 } from "../controllers/group.controller";
 
 const router = Router();
 
 // Rutas
-router.post("/", createGroup);
-router.put("/:id", updateGroup);
-router.get("/", getGroups);
-router.get("/:id", getGroupById);
-router.delete("/:id", deleteGroup);
-router.patch("/:id", recoverGroup);
+router.post("/", createWorkGroup);
+router.put("/:id", updateWorkGroup);
+router.get("/", getWorkGroups);
+router.get("/:id", getWorkGroupById);
+router.delete("/soft/:id", softDeleteWorkGroup);
+router.delete("/hard/:id", hardDeleteWorkGroup);
+router.patch("/:id", recoverWorkGroup);
 
 export default router;

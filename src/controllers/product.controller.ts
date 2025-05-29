@@ -69,19 +69,43 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
+
     const product = await models.Product.findByPk(id);
     if (!product) {
       res.status(404).json({error: "Producto no encontrado"});
       return;
     }
+
+    // Soft delete: Marca el registro como eliminado
     await product.destroy();
-    res.json({message: "Producto eliminado correctamente"});
+
+    res.status(200).json({message: "Producto eliminado lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar el producto:", error);
-    res.status(500).json({error: "Error al eliminar el producto"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar el producto lógicamente"});
+  }
+};
+
+export const hardDeleteProduct = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const product = await models.Product.findOne({where: {id}, paranoid: false});
+    if (!product) {
+      res.status(404).json({error: "Producto no encontrado"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await product.destroy({force: true});
+
+    res.status(200).json({message: "Producto eliminado completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar el producto completamente"});
   }
 };
 

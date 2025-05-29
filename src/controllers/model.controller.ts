@@ -21,7 +21,7 @@ export const getAllModels = async (req: Request, res: Response): Promise<void> =
   }
 };*/
 
-export const getModels = async (req: Request, res: Response): Promise<void> => {
+export const getProductModels = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id_sector_process, all} = req.query;
 
@@ -45,7 +45,7 @@ export const getModels = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getModelById = async (req: Request, res: Response): Promise<void> => {
+export const getProductModelById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
     const model = await models.ProductModel.findByPk(id);
@@ -60,7 +60,7 @@ export const getModelById = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-export const createModel = async (req: Request, res: Response): Promise<void> => {
+export const createProductModel = async (req: Request, res: Response): Promise<void> => {
   try {
     const newModel = await models.ProductModel.create(req.body);
     res.status(201).json(newModel);
@@ -70,7 +70,7 @@ export const createModel = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const updateModel = async (req: Request, res: Response): Promise<void> => {
+export const updateProductModel = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
 
@@ -88,23 +88,47 @@ export const updateModel = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const deleteModel = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteProductModel = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const model = await models.ProductModel.findByPk(id);
-    if (!model) {
-      res.status(404).json({error: "Modelo no encontrado"});
+
+    const productModel = await models.ProductModel.findByPk(id);
+    if (!productModel) {
+      res.status(404).json({error: "Modelo de producto no encontrado"});
       return;
     }
-    await model.destroy();
-    res.json({message: "Modelo eliminado correctamente"});
+
+    // Soft delete: Marca el registro como eliminado
+    await productModel.destroy();
+
+    res.status(200).json({message: "Modelo de producto eliminado lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar el modelo:", error);
-    res.status(500).json({error: "Error al eliminar el modelo"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar el modelo de producto lógicamente"});
   }
 };
 
-export const recoverModel = async (req: Request, res: Response): Promise<void> => {
+export const hardDeleteProductModel = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const productModel = await models.ProductModel.findOne({where: {id}, paranoid: false});
+    if (!productModel) {
+      res.status(404).json({error: "Modelo de producto no encontrado"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await productModel.destroy({force: true});
+
+    res.status(200).json({message: "Modelo de producto eliminado completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar el modelo de producto completamente"});
+  }
+};
+
+export const recoverProductModel = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
 

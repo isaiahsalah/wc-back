@@ -1,18 +1,7 @@
 import {Request, Response} from "express";
 import models from "../database/models";
-/*
-// Controlador para Unity
-export const getAllUnities = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const unities = await models.Unit.findAll({paranoid: false});
-    res.json(unities);
-  } catch (error) {
-    console.error("❌ Error al obtener las unidades:", error);
-    res.status(500).json({error: "Error al obtener las unidades"});
-  }
-};*/
 
-export const getUnities = async (req: Request, res: Response): Promise<void> => {
+export const getUnits = async (req: Request, res: Response): Promise<void> => {
   try {
     const {all} = req.query;
 
@@ -26,7 +15,7 @@ export const getUnities = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-export const getUnityById = async (req: Request, res: Response): Promise<void> => {
+export const getUnitById = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
     const unity = await models.Unit.findByPk(id);
@@ -41,7 +30,7 @@ export const getUnityById = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-export const createUnity = async (req: Request, res: Response): Promise<void> => {
+export const createUnit = async (req: Request, res: Response): Promise<void> => {
   try {
     const newUnity = await models.Unit.create(req.body);
 
@@ -52,7 +41,7 @@ export const createUnity = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const updateUnity = async (req: Request, res: Response): Promise<void> => {
+export const updateUnit = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
 
@@ -70,23 +59,47 @@ export const updateUnity = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const deleteUnity = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteUnit = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
-    const unity = await models.Unit.findByPk(id);
-    if (!unity) {
+
+    const unit = await models.Unit.findByPk(id);
+    if (!unit) {
       res.status(404).json({error: "Unidad no encontrada"});
       return;
     }
-    await unity.destroy();
-    res.json({message: "Unidad eliminada correctamente"});
+
+    // Soft delete: Marca el registro como eliminado
+    await unit.destroy();
+
+    res.status(200).json({message: "Unidad eliminada lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar la unidad:", error);
-    res.status(500).json({error: "Error al eliminar la unidad"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar la unidad lógicamente"});
   }
 };
 
-export const recoverUnity = async (req: Request, res: Response): Promise<void> => {
+export const hardDeleteUnit = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const unit = await models.Unit.findOne({where: {id}, paranoid: false});
+    if (!unit) {
+      res.status(404).json({error: "Unidad no encontrada"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await unit.destroy({force: true});
+
+    res.status(200).json({message: "Unidad eliminada completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar la unidad completamente"});
+  }
+};
+
+export const recoverUnit = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
 

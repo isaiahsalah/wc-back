@@ -46,7 +46,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
             {model: models.ProductionOrder, include: [{model: models.WorkGroup}]},
           ],
         },
-        {model: models.ProductionUser, include: [{model: models.SystemUser}]},
+        {model: models.ProductionUser, include: [{model: models.SysUser}]},
         {model: models.Machine},
         {model: models.Unit, as: "production_unit"},
         {model: models.Unit, as: "production_equivalent_unit"},
@@ -102,19 +102,43 @@ export const updateProduction = async (req: Request, res: Response): Promise<voi
   }
 };
 
-export const deleteProduction = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteProduction = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
+
     const production = await models.Production.findByPk(id);
     if (!production) {
       res.status(404).json({error: "Producción no encontrada"});
       return;
     }
+
+    // Soft delete: Marca el registro como eliminado
     await production.destroy();
-    res.json({message: "Producción eliminada correctamente"});
+
+    res.status(200).json({message: "Producción eliminada lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar la producción:", error);
-    res.status(500).json({error: "Error al eliminar la producción"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar la producción lógicamente"});
+  }
+};
+
+export const hardDeleteProduction = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const production = await models.Production.findOne({where: {id}, paranoid: false});
+    if (!production) {
+      res.status(404).json({error: "Producción no encontrada"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await production.destroy({force: true});
+
+    res.status(200).json({message: "Producción eliminada completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar la producción completamente"});
   }
 };
 

@@ -82,19 +82,43 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const deleteMachine = async (req: Request, res: Response): Promise<void> => {
+export const softDeleteMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const {id} = req.params;
+
     const machine = await models.Machine.findByPk(id);
     if (!machine) {
       res.status(404).json({error: "Máquina no encontrada"});
       return;
     }
+
+    // Soft delete: Marca el registro como eliminado
     await machine.destroy();
-    res.json({message: "Máquina eliminada correctamente"});
+
+    res.status(200).json({message: "Máquina eliminada lógicamente (soft delete)."});
   } catch (error) {
-    console.error("❌ Error al eliminar la máquina:", error);
-    res.status(500).json({error: "Error al eliminar la máquina"});
+    console.error("❌ Error en el soft delete:", error);
+    res.status(500).json({error: "Error al eliminar la máquina lógicamente"});
+  }
+};
+
+export const hardDeleteMachine = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params;
+
+    const machine = await models.Machine.findOne({where: {id}, paranoid: false});
+    if (!machine) {
+      res.status(404).json({error: "Máquina no encontrada"});
+      return;
+    }
+
+    // Hard delete: Elimina físicamente el registro
+    await machine.destroy({force: true});
+
+    res.status(200).json({message: "Máquina eliminada completamente (hard delete)."});
+  } catch (error) {
+    console.error("❌ Error en el hard delete:", error);
+    res.status(500).json({error: "Error al eliminar la máquina completamente"});
   }
 };
 
