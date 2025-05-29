@@ -19,6 +19,7 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
           },
         },
       ],
+      order: [["updatedAt", "DESC"]],
     });
     res.json(products);
   } catch (error) {

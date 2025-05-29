@@ -49,6 +49,7 @@ export const getOrderDetails = async (req: Request, res: Response): Promise<void
       where: {
         id_machine: id_machine ? id_machine : {[Op.ne]: null},
       },
+      order: [["updatedAt", "DESC"]],
     });
     res.json(orderDetails);
   } catch (error) {

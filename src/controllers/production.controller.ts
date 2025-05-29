@@ -51,6 +51,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
         {model: models.Unit, as: "production_unit"},
         {model: models.Unit, as: "production_equivalent_unit"},
       ],
+      order: [["date", "DESC"]],
     });
 
     res.json(productions);

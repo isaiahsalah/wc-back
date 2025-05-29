@@ -43,6 +43,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
           ],
         },
       ],
+      order: [["updatedAt", "DESC"]],
     });
     res.json(orders);
   } catch (error) {
