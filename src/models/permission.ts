@@ -47,11 +47,27 @@ export const PermissionModel = sequelize.define(
   }*/
 );
 
-SysUserModel.hasMany(PermissionModel, {foreignKey: "id_sys_user"});
-PermissionModel.belongsTo(SysUserModel, {foreignKey: "id_sys_user"});
+SysUserModel.hasMany(PermissionModel, {
+  foreignKey: "id_sys_user",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+PermissionModel.belongsTo(SysUserModel, {
+  foreignKey: "id_sys_user",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-SectorProcessModel.hasMany(PermissionModel, {foreignKey: "id_sector_process"});
-PermissionModel.belongsTo(SectorProcessModel, {foreignKey: "id_sector_process"});
+SectorProcessModel.hasMany(PermissionModel, {
+  foreignKey: "id_sector_process",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+PermissionModel.belongsTo(SectorProcessModel, {
+  foreignKey: "id_sector_process",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
 /*
 //Relacion con evento

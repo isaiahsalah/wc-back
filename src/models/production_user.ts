@@ -25,8 +25,24 @@ export const ProductionUserModel = sequelize.define(
   }
 );
 
-ProductionModel.hasMany(ProductionUserModel, {foreignKey: "id_production"});
-ProductionUserModel.belongsTo(ProductionModel, {foreignKey: "id_production"});
+ProductionModel.hasMany(ProductionUserModel, {
+  foreignKey: "id_production",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionUserModel.belongsTo(ProductionModel, {
+  foreignKey: "id_production",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-SysUserModel.hasMany(ProductionUserModel, {foreignKey: "id_sys_user"});
-ProductionUserModel.belongsTo(SysUserModel, {foreignKey: "id_sys_user"});
+SysUserModel.hasMany(ProductionUserModel, {
+  foreignKey: "id_sys_user",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionUserModel.belongsTo(SysUserModel, {
+  foreignKey: "id_sys_user",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

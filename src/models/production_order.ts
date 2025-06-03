@@ -35,8 +35,24 @@ export const ProductionOrderModel = sequelize.define(
   }
 );
 
-SysUserModel.hasMany(ProductionOrderModel, {foreignKey: "id_sys_user"});
-ProductionOrderModel.belongsTo(SysUserModel, {foreignKey: "id_sys_user"});
+SysUserModel.hasMany(ProductionOrderModel, {
+  foreignKey: "id_sys_user",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionOrderModel.belongsTo(SysUserModel, {
+  foreignKey: "id_sys_user",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-WorkGroupModel.hasMany(ProductionOrderModel, {foreignKey: "id_work_group"});
-ProductionOrderModel.belongsTo(WorkGroupModel, {foreignKey: "id_work_group"});
+WorkGroupModel.hasMany(ProductionOrderModel, {
+  foreignKey: "id_work_group",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionOrderModel.belongsTo(WorkGroupModel, {
+  foreignKey: "id_work_group",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

@@ -32,8 +32,24 @@ export const SectorProcessModel = sequelize.define(
   }
 );
 
-ProcessModel.hasMany(SectorProcessModel, {foreignKey: "id_process"});
-SectorProcessModel.belongsTo(ProcessModel, {foreignKey: "id_process"});
+ProcessModel.hasMany(SectorProcessModel, {
+  foreignKey: "id_process",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+SectorProcessModel.belongsTo(ProcessModel, {
+  foreignKey: "id_process",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-SectorModel.hasMany(SectorProcessModel, {foreignKey: "id_sector"});
-SectorProcessModel.belongsTo(SectorModel, {foreignKey: "id_sector"});
+SectorModel.hasMany(SectorProcessModel, {
+  foreignKey: "id_sector",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+SectorProcessModel.belongsTo(SectorModel, {
+  foreignKey: "id_sector",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

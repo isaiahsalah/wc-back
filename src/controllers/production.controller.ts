@@ -28,14 +28,17 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
       include: [
         {
           model: models.ProductionOrderDetail,
+
           required: true,
           include: [
             {
               model: models.Product,
+              paranoid: all ? false : true,
               required: true,
               include: [
                 {
                   model: models.ProductModel,
+                  paranoid: all ? false : true,
                   required: true,
                   where: {
                     id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
@@ -43,13 +46,20 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
                 },
               ],
             },
-            {model: models.ProductionOrder, include: [{model: models.WorkGroup}]},
+            {
+              model: models.ProductionOrder,
+              paranoid: all ? false : true,
+              include: [{model: models.WorkGroup}],
+            },
           ],
         },
-        {model: models.ProductionUser, include: [{model: models.SysUser}]},
-        {model: models.Machine},
-        {model: models.Unit, as: "production_unit"},
-        {model: models.Unit, as: "production_equivalent_unit"},
+        {
+          model: models.ProductionUser,
+          include: [{model: models.SysUser, paranoid: all ? false : true}],
+        },
+        {model: models.Machine, paranoid: all ? false : true},
+        {model: models.Unit, as: "production_unit", paranoid: all ? false : true},
+        {model: models.Unit, as: "production_equivalent_unit", paranoid: all ? false : true},
       ],
       order: [["date", "DESC"]],
     });

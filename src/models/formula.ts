@@ -34,8 +34,16 @@ export const FormulaModel = sequelize.define(
   }
 );
 
-ProductModel.hasMany(FormulaModel, {foreignKey: "id_product"});
-FormulaModel.belongsTo(ProductModel, {foreignKey: "id_product"});
+ProductModel.hasMany(FormulaModel, {
+  foreignKey: "id_product",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+FormulaModel.belongsTo(ProductModel, {
+  foreignKey: "id_product",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
 /*
 //Relacion con evento

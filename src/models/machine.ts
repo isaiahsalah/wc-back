@@ -32,5 +32,13 @@ export const MachineModel = sequelize.define(
   }
 );
 
-SectorProcessModel.hasMany(MachineModel, {foreignKey: "id_sector_process"});
-MachineModel.belongsTo(SectorProcessModel, {foreignKey: "id_sector_process"});
+SectorProcessModel.hasMany(MachineModel, {
+  foreignKey: "id_sector_process",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+MachineModel.belongsTo(SectorProcessModel, {
+  foreignKey: "id_sector_process",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

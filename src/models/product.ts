@@ -56,17 +56,50 @@ export const ProductModel = sequelize.define(
   }
 );
 
-ProductModelModel.hasMany(ProductModel, {foreignKey: "id_product_model"});
-ProductModel.belongsTo(ProductModelModel, {foreignKey: "id_product_model"});
+ProductModelModel.hasMany(ProductModel, {
+  foreignKey: "id_product_model",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductModel.belongsTo(ProductModelModel, {
+  foreignKey: "id_product_model",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-UnitModel.hasMany(ProductModel, {foreignKey: "id_unit", as: "product_unit"});
-ProductModel.belongsTo(UnitModel, {foreignKey: "id_unit", as: "product_unit"});
+UnitModel.hasMany(ProductModel, {
+  foreignKey: "id_unit",
+  as: "product_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductModel.belongsTo(UnitModel, {
+  foreignKey: "id_unit",
+  as: "product_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-UnitModel.hasMany(ProductModel, {foreignKey: "id_equivalent_unit", as: "product_equivalent_unit"});
+UnitModel.hasMany(ProductModel, {
+  foreignKey: "id_equivalent_unit",
+  as: "product_equivalent_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 ProductModel.belongsTo(UnitModel, {
   foreignKey: "id_equivalent_unit",
   as: "product_equivalent_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
 });
 
-ColorModel.hasMany(ProductModel, {foreignKey: "id_color"});
-ProductModel.belongsTo(ColorModel, {foreignKey: "id_color"});
+ColorModel.hasMany(ProductModel, {
+  foreignKey: "id_color",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductModel.belongsTo(ColorModel, {
+  foreignKey: "id_color",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

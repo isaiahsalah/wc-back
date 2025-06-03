@@ -38,5 +38,13 @@ export const SysUserModel = sequelize.define(
   }
 );
 
-WorkGroupModel.hasMany(SysUserModel, {foreignKey: "id_work_group"});
-SysUserModel.belongsTo(WorkGroupModel, {foreignKey: "id_work_group"});
+WorkGroupModel.hasMany(SysUserModel, {
+  foreignKey: "id_work_group",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+SysUserModel.belongsTo(WorkGroupModel, {
+  foreignKey: "id_work_group",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

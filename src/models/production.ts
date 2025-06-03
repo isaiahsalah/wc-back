@@ -66,20 +66,50 @@ export const ProductionModel = sequelize.define(
   }
 );
 
-MachineModel.hasMany(ProductionModel, {foreignKey: "id_machine"});
-ProductionModel.belongsTo(MachineModel, {foreignKey: "id_machine"});
+MachineModel.hasMany(ProductionModel, {
+  foreignKey: "id_machine",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionModel.belongsTo(MachineModel, {
+  foreignKey: "id_machine",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-ProductionOrderDetailModel.hasMany(ProductionModel, {foreignKey: "id_production_order_detail"});
-ProductionModel.belongsTo(ProductionOrderDetailModel, {foreignKey: "id_production_order_detail"});
+ProductionOrderDetailModel.hasMany(ProductionModel, {
+  foreignKey: "id_production_order_detail",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionModel.belongsTo(ProductionOrderDetailModel, {
+  foreignKey: "id_production_order_detail",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-UnitModel.hasMany(ProductionModel, {foreignKey: "id_unit", as: "production_unit"});
-ProductionModel.belongsTo(UnitModel, {foreignKey: "id_unit", as: "production_unit"});
+UnitModel.hasMany(ProductionModel, {
+  foreignKey: "id_unit",
+  as: "production_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionModel.belongsTo(UnitModel, {
+  foreignKey: "id_unit",
+  as: "production_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
 UnitModel.hasMany(ProductionModel, {
   foreignKey: "id_equivalent_unit",
   as: "production_equivalent_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
 });
 ProductionModel.belongsTo(UnitModel, {
   foreignKey: "id_equivalent_unit",
   as: "production_equivalent_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
 });

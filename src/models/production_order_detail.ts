@@ -34,11 +34,35 @@ export const ProductionOrderDetailModel = sequelize.define(
   }
 );
 
-ProductModel.hasMany(ProductionOrderDetailModel, {foreignKey: "id_product"});
-ProductionOrderDetailModel.belongsTo(ProductModel, {foreignKey: "id_product"});
+ProductModel.hasMany(ProductionOrderDetailModel, {
+  foreignKey: "id_product",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionOrderDetailModel.belongsTo(ProductModel, {
+  foreignKey: "id_product",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-MachineModel.hasMany(ProductionOrderDetailModel, {foreignKey: "id_machine"});
-ProductionOrderDetailModel.belongsTo(MachineModel, {foreignKey: "id_machine"});
+MachineModel.hasMany(ProductionOrderDetailModel, {
+  foreignKey: "id_machine",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionOrderDetailModel.belongsTo(MachineModel, {
+  foreignKey: "id_machine",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-ProductionOrderModel.hasMany(ProductionOrderDetailModel, {foreignKey: "id_production_order"});
-ProductionOrderDetailModel.belongsTo(ProductionOrderModel, {foreignKey: "id_production_order"});
+ProductionOrderModel.hasMany(ProductionOrderDetailModel, {
+  foreignKey: "id_production_order",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionOrderDetailModel.belongsTo(ProductionOrderModel, {
+  foreignKey: "id_production_order",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

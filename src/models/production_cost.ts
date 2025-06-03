@@ -26,8 +26,24 @@ export const ProductionCostModel = sequelize.define(
   }
 );
 
-ProductionModel.hasMany(ProductionCostModel, {foreignKey: "id_production"});
-ProductionCostModel.belongsTo(ProductionModel, {foreignKey: "id_production"});
+ProductionModel.hasMany(ProductionCostModel, {
+  foreignKey: "id_production",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionCostModel.belongsTo(ProductionModel, {
+  foreignKey: "id_production",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-ProductionModel.hasMany(ProductionCostModel, {foreignKey: "id_production_material"});
-ProductionCostModel.belongsTo(ProductionModel, {foreignKey: "id_production_material"});
+ProductionModel.hasMany(ProductionCostModel, {
+  foreignKey: "id_production_material",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionCostModel.belongsTo(ProductionModel, {
+  foreignKey: "id_production_material",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});

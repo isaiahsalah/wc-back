@@ -33,11 +33,27 @@ export const FormulaCostModel = sequelize.define(
   }
 );
 
-ProductModel.hasMany(FormulaCostModel, {foreignKey: "id_product_material"});
-FormulaCostModel.belongsTo(ProductModel, {foreignKey: "id_product_material"});
+ProductModel.hasMany(FormulaCostModel, {
+  foreignKey: "id_product_material",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+FormulaCostModel.belongsTo(ProductModel, {
+  foreignKey: "id_product_material",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
-FormulaModel.hasMany(FormulaCostModel, {foreignKey: "id_formula"});
-FormulaCostModel.belongsTo(FormulaModel, {foreignKey: "id_formula"});
+FormulaModel.hasMany(FormulaCostModel, {
+  foreignKey: "id_formula",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+FormulaCostModel.belongsTo(FormulaModel, {
+  foreignKey: "id_formula",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
 
 /*
 //Relacion con evento
