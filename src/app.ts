@@ -30,6 +30,11 @@ dotenv.config();
 const app = express();
 
 // Middlewares
+// Aumentar el límite para JSON
+app.use(express.json({limit: "10mb"})); // Cambia "10mb" por el tamaño que necesites
+
+// Aumentar el límite para datos codificados como URL
+app.use(express.urlencoded({limit: "10mb", extended: true}));
 app.use(cors());
 app.use(express.json());
 
