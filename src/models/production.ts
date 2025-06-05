@@ -21,6 +21,10 @@ export const ProductionModel = sequelize.define(
     date: {
       type: DataTypes.DATE,
     },
+    threshold_date: {
+      type: DataTypes.DATEONLY,
+    },
+
     duration: {
       type: DataTypes.SMALLINT, // in minutes
     },

@@ -1,7 +1,12 @@
 import {Request, Response} from "express";
 import models, {sequelize} from "../database/models";
 import {Op} from "sequelize";
-import {formatDate, normalizeDateParam, setSecondsToEndOfMinute} from "../utils/func";
+import {
+  calculateThresholdDate,
+  formatDate,
+  normalizeDateParam,
+  setSecondsToEndOfMinute,
+} from "../utils/func";
 
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -28,7 +33,6 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
       include: [
         {
           model: models.ProductionOrderDetail,
-
           required: true,
           include: [
             {
@@ -70,6 +74,96 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
     res.status(500).json({error: "Error al obtener las producciones"});
   }
 };
+/*
+export const getProductions = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      init_date,
+      end_date,
+      id_sector_process,
+      id_machine,
+      all,
+      page = "1",
+      pageSize = "50",
+    } = req.query;
+
+    const pageNum = Math.max(parseInt(page as string, 10), 1);
+    const size = Math.min(parseInt(pageSize as string, 10), 100); // Máximo 100 por página
+
+    const normalizedEndDate = normalizeDateParam(end_date);
+    const endDate = normalizedEndDate ? setSecondsToEndOfMinute(new Date(normalizedEndDate)) : null;
+
+    const whereClause = {
+      id_machine: id_machine ? id_machine : {[Op.ne]: null},
+      ...(init_date && end_date
+        ? {
+            date: {
+              [Op.gte]: init_date,
+              [Op.lte]: endDate,
+            },
+          }
+        : {}),
+    };
+
+    // Total para frontend saber cuántas páginas hay
+    const totalRecords = await models.Production.count({where: whereClause});
+
+    // Consulta paginada
+    const productions = await models.Production.findAll({
+      paranoid: all ? false : true,
+      where: whereClause,
+      include: [
+        {
+          model: models.ProductionOrderDetail,
+          required: true,
+          include: [
+            {
+              model: models.Product,
+              paranoid: all ? false : true,
+              required: true,
+              include: [
+                {
+                  model: models.ProductModel,
+                  paranoid: all ? false : true,
+                  required: true,
+                  where: {
+                    id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
+                  },
+                },
+              ],
+            },
+            {
+              model: models.ProductionOrder,
+              paranoid: all ? false : true,
+              include: [{model: models.WorkGroup}],
+            },
+          ],
+        },
+        {
+          model: models.ProductionUser,
+          include: [{model: models.SysUser, paranoid: all ? false : true}],
+        },
+        {model: models.Machine, paranoid: all ? false : true},
+        {model: models.Unit, as: "production_unit", paranoid: all ? false : true},
+        {model: models.Unit, as: "production_equivalent_unit", paranoid: all ? false : true},
+      ],
+      order: [["date", "DESC"]],
+      limit: size,
+      offset: (pageNum - 1) * size,
+    });
+
+    res.json({
+      data: productions,
+      page: pageNum,
+      pageSize: size,
+      totalRecords,
+      totalPages: Math.ceil(totalRecords / size),
+    });
+  } catch (error) {
+    console.error("❌ Error al obtener las producciones:", error);
+    res.status(500).json({error: "Error al obtener las producciones"});
+  }
+};*/
 
 export const getProductionById = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -203,7 +297,6 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
     const machineCode = productions[0].id_machine; // Recuperamos el id_machine
     const productCode = orderDetail.get("id_product"); // Recuperamos el id_product
     const date = formatDate(productions[0].date); // Fecha actual en formato YYYYMMDD
-
     const loteBase = `${date}-P${productCode}-M${machineCode}`; // Base del código del lote (ej. P123-20230507)
 
     // Obtener el número secuencial más alto del lote para este producto y fecha
@@ -229,9 +322,12 @@ export const createProductions = async (req: Request, res: Response): Promise<vo
       productions.map(async (production: any, index: number) => {
         const currentLote = `${loteBase}-${String(nextSequence + index).padStart(3, "0")}`;
 
+        const thresholdDate = calculateThresholdDate(new Date(production.date));
+
         const createdProduction = await models.Production.create(
           {
             ...production,
+            threshold_date: thresholdDate,
             lote: currentLote, // Asociamos el lote generado
             duration: Math.round(production.duration),
           },

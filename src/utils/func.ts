@@ -29,3 +29,16 @@ export function normalizeDateParam(
   // Si es ParsedQs (objeto), no podemos convertir directo, retornamos undefined
   return undefined;
 }
+
+// Función para calcular la Threshold Date, igual que antes
+export const calculateThresholdDate = (inputDate: Date): Date => {
+  const date = new Date(inputDate);
+  const limitTime = new Date(date);
+  limitTime.setHours(7, 30, 0, 0);
+
+  if (date < limitTime) {
+    date.setDate(date.getDate() - 1);
+  }
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
