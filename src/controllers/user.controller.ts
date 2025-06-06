@@ -70,12 +70,20 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Encriptar la contraseña antes de crear el usuario
-    const hashedPassword = await bcryptjs.hash(req.body.pass, 8); // Usando un factor de costo de 10
-    req.body.pass = hashedPassword;
-
     // Convertir el nombre de usuario a minúsculas
-    req.body.user = (req.body.user as string).toLowerCase();
+    const username = (req.body.user as string).toLowerCase();
+
+    // Verificar si el nombre de usuario ya existe
+    const existingUser = await models.SysUser.findOne({where: {user: username}});
+    if (existingUser) {
+      res.status(400).json({error: "El nombre de usuario ya está en uso."});
+      return;
+    }
+
+    // Encriptar la contraseña antes de crear el usuario
+    const hashedPassword = await bcryptjs.hash(req.body.pass, 8); // Usando un factor de costo de 8
+    req.body.pass = hashedPassword;
+    req.body.user = username;
 
     // Crear el usuario en la base de datos
     const newUser = await models.SysUser.create(req.body);
