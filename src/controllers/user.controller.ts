@@ -135,11 +135,28 @@ export const hardDeleteSysUser = async (req: Request, res: Response): Promise<vo
   try {
     const {id} = req.params;
 
+    // Buscar el usuario del sistema sin importar el soft delete
     const sysUser = await models.SysUser.findOne({where: {id}, paranoid: false});
     if (!sysUser) {
       res.status(404).json({error: "Usuario del sistema no encontrado"});
       return;
     }
+
+    // Verificar si el usuario tiene producciones asociadas
+    const productions = await models.ProductionUser.findAll({where: {id_sys_user: id}});
+    if (productions.length > 0) {
+      res.status(400).json({
+        error: "No se puede eliminar el usuario porque tiene producciones asociadas.",
+        productions,
+      });
+      return;
+    }
+
+    // Buscar y eliminar los permisos asociados al usuario
+    await models.Permission.destroy({
+      where: {id_sys_user: id},
+      force: true,
+    });
 
     // Hard delete: Elimina físicamente el registro
     await sysUser.destroy({force: true});

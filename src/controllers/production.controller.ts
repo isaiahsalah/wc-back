@@ -236,6 +236,12 @@ export const hardDeleteProduction = async (req: Request, res: Response): Promise
       return;
     }
 
+    // Buscar y eliminar los production_user asociados al production
+    await models.ProductionUser.destroy({
+      where: {id_production: id},
+      force: true,
+    });
+
     // Hard delete: Elimina físicamente el registro
     await production.destroy({force: true});
 
