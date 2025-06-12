@@ -7,7 +7,7 @@ import {
   normalizeDateParam,
   setSecondsToEndOfMinute,
 } from "../utils/func";
-
+/*
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
     const {init_date, end_date, id_sector_process, id_machine, all} = req.query;
@@ -73,8 +73,8 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
     console.error("❌ Error al obtener las producciones:", error);
     res.status(500).json({error: "Error al obtener las producciones"});
   }
-};
-/*
+};*/
+
 export const getProductions = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
@@ -84,11 +84,11 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
       id_machine,
       all,
       page = "1",
-      pageSize = "50",
+      page_size = "50",
     } = req.query;
 
     const pageNum = Math.max(parseInt(page as string, 10), 1);
-    const size = Math.min(parseInt(pageSize as string, 10), 100); // Máximo 100 por página
+    const size = Math.min(parseInt(page_size as string, 10), 100); // Máximo 100 por página
 
     const normalizedEndDate = normalizeDateParam(end_date);
     const endDate = normalizedEndDate ? setSecondsToEndOfMinute(new Date(normalizedEndDate)) : null;
@@ -106,7 +106,7 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
     };
 
     // Total para frontend saber cuántas páginas hay
-    const totalRecords = await models.Production.count({where: whereClause});
+    const total_records = await models.Production.count({where: whereClause});
 
     // Consulta paginada
     const productions = await models.Production.findAll({
@@ -155,15 +155,15 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
     res.json({
       data: productions,
       page: pageNum,
-      pageSize: size,
-      totalRecords,
-      totalPages: Math.ceil(totalRecords / size),
+      page_size: size,
+      total_records,
+      total_pages: Math.ceil(total_records / size),
     });
   } catch (error) {
     console.error("❌ Error al obtener las producciones:", error);
     res.status(500).json({error: "Error al obtener las producciones"});
   }
-};*/
+};
 
 export const getProductionById = async (req: Request, res: Response): Promise<void> => {
   try {
