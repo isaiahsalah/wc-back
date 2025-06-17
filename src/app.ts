@@ -1,8 +1,8 @@
 // app.ts
-setInterval(() => {
+/*setInterval(() => {
   const memoryUsage = process.memoryUsage();
   console.log(`Heap Used: ${memoryUsage.heapUsed / 1024 / 1024} MB`);
-}, 500);
+}, 500);*/
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";

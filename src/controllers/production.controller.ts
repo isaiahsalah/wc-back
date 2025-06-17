@@ -88,7 +88,8 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
     } = req.query;
 
     const pageNum = Math.max(parseInt(page as string, 10), 1);
-    const size = Math.min(parseInt(page_size as string, 10), 100); // Máximo 100 por página
+    //const size = Math.min(parseInt(page_size as string, 10), 100); // Máximo 100 por página
+    const size = Math.min(parseInt(page_size as string, 10), 1000); // Máximo 100 por página
 
     const normalizedEndDate = normalizeDateParam(end_date);
     const endDate = normalizedEndDate ? setSecondsToEndOfMinute(new Date(normalizedEndDate)) : null;
@@ -106,7 +107,34 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
     };
 
     // Total para frontend saber cuántas páginas hay
-    const total_records = await models.Production.count({where: whereClause});
+    //const total_records = await models.Production.count({where: whereClause});
+
+    const total_records = await models.Production.count({
+      where: whereClause,
+      include: [
+        {
+          model: models.ProductionOrderDetail,
+          required: true,
+          include: [
+            {
+              model: models.Product,
+              paranoid: all ? false : true,
+              required: true,
+              include: [
+                {
+                  model: models.ProductModel,
+                  paranoid: all ? false : true,
+                  required: true,
+                  where: {
+                    id_sector_process: id_sector_process ? id_sector_process : {[Op.ne]: null},
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
 
     // Consulta paginada
     const productions = await models.Production.findAll({
@@ -151,6 +179,9 @@ export const getProductions = async (req: Request, res: Response): Promise<void>
       limit: size,
       offset: (pageNum - 1) * size,
     });
+
+    //console.log("📍📍📍Producciones obtenidas:", req.query);
+    //console.log("📍📍📍Producciones obtenidas:", productions.length);
 
     res.json({
       data: productions,
