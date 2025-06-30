@@ -25,6 +25,7 @@ export const ProductionUserModel = sequelize.define(
   }
 );
 
+// Relación con Producción
 ProductionModel.hasMany(ProductionUserModel, {
   foreignKey: "id_production",
   onDelete: "RESTRICT",
@@ -36,6 +37,7 @@ ProductionUserModel.belongsTo(ProductionModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Usuario del Sistema
 SysUserModel.hasMany(ProductionUserModel, {
   foreignKey: "id_sys_user",
   onDelete: "RESTRICT",

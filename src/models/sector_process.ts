@@ -32,6 +32,7 @@ export const SectorProcessModel = sequelize.define(
   }
 );
 
+// Relación con Proceso
 ProcessModel.hasMany(SectorProcessModel, {
   foreignKey: "id_process",
   onDelete: "RESTRICT",
@@ -43,6 +44,7 @@ SectorProcessModel.belongsTo(ProcessModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Sector
 SectorModel.hasMany(SectorProcessModel, {
   foreignKey: "id_sector",
   onDelete: "RESTRICT",

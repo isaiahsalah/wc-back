@@ -3,6 +3,7 @@ import sequelize from "../database/sequelize";
 import {ProductionOrderDetailModel} from "./production_order_detail";
 import {MachineModel} from "./machine";
 import {UnitModel} from "./unit";
+import {WarehouseModel} from "./warehouse";
 
 export const ProductionModel = sequelize.define(
   "production",
@@ -15,22 +16,14 @@ export const ProductionModel = sequelize.define(
     description: {
       type: DataTypes.STRING,
     },
-    type_size: {
-      type: DataTypes.SMALLINT,
-    },
     date: {
       type: DataTypes.DATE,
     },
     threshold_date: {
       type: DataTypes.DATEONLY,
     },
-
     duration: {
       type: DataTypes.SMALLINT, // in minutes
-    },
-    type_quality: {
-      type: DataTypes.SMALLINT,
-      allowNull: false,
     },
     weight: {
       type: DataTypes.DECIMAL,
@@ -43,6 +36,26 @@ export const ProductionModel = sequelize.define(
     micronage: {
       type: DataTypes.ARRAY(DataTypes.DECIMAL),
     },
+    lote: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+    },
+    consumed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    type_size: {
+      type: DataTypes.SMALLINT,
+    },
+    type_quality: {
+      type: DataTypes.SMALLINT,
+      allowNull: false,
+    },
+    id_machine: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     id_unit: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -51,18 +64,14 @@ export const ProductionModel = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    id_machine: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    lote: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-    },
     id_production_order_detail: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    id_warehouse: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
     },
   },
   {
@@ -70,6 +79,7 @@ export const ProductionModel = sequelize.define(
   }
 );
 
+// Relación con Máquina
 MachineModel.hasMany(ProductionModel, {
   foreignKey: "id_machine",
   onDelete: "RESTRICT",
@@ -81,6 +91,7 @@ ProductionModel.belongsTo(MachineModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Orden de Producción
 ProductionOrderDetailModel.hasMany(ProductionModel, {
   foreignKey: "id_production_order_detail",
   onDelete: "RESTRICT",
@@ -92,6 +103,7 @@ ProductionModel.belongsTo(ProductionOrderDetailModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Unidad
 UnitModel.hasMany(ProductionModel, {
   foreignKey: "id_unit",
   as: "production_unit",
@@ -105,6 +117,7 @@ ProductionModel.belongsTo(UnitModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Unidad Equivalente
 UnitModel.hasMany(ProductionModel, {
   foreignKey: "id_equivalent_unit",
   as: "production_equivalent_unit",
@@ -114,6 +127,18 @@ UnitModel.hasMany(ProductionModel, {
 ProductionModel.belongsTo(UnitModel, {
   foreignKey: "id_equivalent_unit",
   as: "production_equivalent_unit",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+
+// Relación con Almacén
+WarehouseModel.hasMany(ProductionModel, {
+  foreignKey: "id_warehouse",
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+});
+ProductionModel.belongsTo(WarehouseModel, {
+  foreignKey: "id_warehouse",
   onDelete: "RESTRICT",
   onUpdate: "CASCADE",
 });

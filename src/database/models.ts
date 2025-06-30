@@ -20,7 +20,11 @@ import {WorkGroupModel} from "../models/work_group";
 import {ProductionUserModel} from "../models/production_user";
 import {SectorProcessModel} from "../models/sector_process";
 
+import {WarehouseModel} from "../models/warehouse";
+
 const models = {
+  Warehouse: WarehouseModel,
+
   ProductionUser: ProductionUserModel,
   Color: ColorModel,
   ProductModel: ProductModelModel,

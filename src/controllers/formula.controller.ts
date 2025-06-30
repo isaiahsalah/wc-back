@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import models from "../database/models";
+import models, {sequelize} from "../database/models";
 import {Op} from "sequelize";
 
 export const getFormulas = async (req: Request, res: Response): Promise<void> => {
@@ -49,7 +49,7 @@ export const getFormulaById = async (req: Request, res: Response): Promise<void>
     res.status(500).json({error: "Error al obtener la fórmula"});
   }
 };
-
+/*
 export const createFormula = async (req: Request, res: Response): Promise<void> => {
   try {
     const newFormula = await models.Formula.create(req.body);
@@ -57,6 +57,43 @@ export const createFormula = async (req: Request, res: Response): Promise<void> 
   } catch (error) {
     console.error("❌ Error al crear la fórmula:", error);
     res.status(500).json({error: "Error al crear la fórmula"});
+  }
+};*/
+
+export const createFormula = async (req: Request, res: Response): Promise<void> => {
+  const transaction = await sequelize.transaction(); // Iniciar transacción
+
+  try {
+    const formula = req.body; // Extraer la orden y los detalles de la solicitud
+    const {formula_costs} = req.body;
+    // Verificar si la orden y los detalles existen
+    if (!formula || !formula_costs || !Array.isArray(formula_costs)) {
+      res.status(400).json({error: "Datos inválidos: se esperaba una orden y detalles"});
+      return;
+    }
+
+    // Crear la orden dentro de la transacción
+    const newFormula = await models.Formula.create(formula, {transaction});
+
+    // 2. Crear los detalles de la orden (OrderDetails)
+    // Asegurarse de asociar el ID de la orden a los detalles
+    const FormulaCostsId = formula_costs.map((detail) => ({
+      ...detail,
+      id_formula: newFormula.get("id"), // Asignar el id de la nueva orden a los detalles
+    }));
+
+    // Crear múltiples detalles de la orden
+    await models.FormulaCost.bulkCreate(FormulaCostsId, {
+      transaction,
+    });
+
+    // 3. Confirmar la transacción
+    await transaction.commit();
+    res.status(201).json(newFormula); // Devolver la orden creada
+  } catch (error) {
+    await transaction.rollback();
+    console.error("❌ Error al crear la orden:", error);
+    res.status(500).json({error: "Error al crear la orden"});
   }
 };
 
@@ -76,47 +113,45 @@ export const updateFormula = async (req: Request, res: Response): Promise<void> 
   }
 };
 
- 
 export const softDeleteFormula = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
     const formula = await models.Formula.findByPk(id);
     if (!formula) {
-      res.status(404).json({ error: "Fórmula no encontrada" });
+      res.status(404).json({error: "Fórmula no encontrada"});
       return;
     }
 
     // Soft delete: Marca el registro como eliminado
     await formula.destroy();
 
-    res.status(200).json({ message: "Fórmula eliminada lógicamente (soft delete)." });
+    res.status(200).json({message: "Fórmula eliminada lógicamente (soft delete)."});
   } catch (error) {
     console.error("❌ Error en el soft delete:", error);
-    res.status(500).json({ error: "Error al eliminar la fórmula lógicamente" });
+    res.status(500).json({error: "Error al eliminar la fórmula lógicamente"});
   }
 };
 
 export const hardDeleteFormula = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
-    const formula = await models.Formula.findOne({ where: { id }, paranoid: false });
+    const formula = await models.Formula.findOne({where: {id}, paranoid: false});
     if (!formula) {
-      res.status(404).json({ error: "Fórmula no encontrada" });
+      res.status(404).json({error: "Fórmula no encontrada"});
       return;
     }
 
     // Hard delete: Elimina físicamente el registro
-    await formula.destroy({ force: true });
+    await formula.destroy({force: true});
 
-    res.status(200).json({ message: "Fórmula eliminada completamente (hard delete)." });
+    res.status(200).json({message: "Fórmula eliminada completamente (hard delete)."});
   } catch (error) {
     console.error("❌ Error en el hard delete:", error);
-    res.status(500).json({ error: "Error al eliminar la fórmula completamente" });
+    res.status(500).json({error: "Error al eliminar la fórmula completamente"});
   }
 };
-
 
 export const recoverFormula = async (req: Request, res: Response): Promise<void> => {
   try {

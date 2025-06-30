@@ -17,8 +17,9 @@ export const ProductionCostModel = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    id_production_material: {
+    id_inventory: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {
@@ -26,6 +27,7 @@ export const ProductionCostModel = sequelize.define(
   }
 );
 
+// Relación con Producción
 ProductionModel.hasMany(ProductionCostModel, {
   foreignKey: "id_production",
   onDelete: "RESTRICT",
@@ -37,6 +39,7 @@ ProductionCostModel.belongsTo(ProductionModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Producción
 ProductionModel.hasMany(ProductionCostModel, {
   foreignKey: "id_production_material",
   onDelete: "RESTRICT",

@@ -56,6 +56,7 @@ export const ProductModel = sequelize.define(
   }
 );
 
+// Relación con Modelo de Producto
 ProductModelModel.hasMany(ProductModel, {
   foreignKey: "id_product_model",
   onDelete: "RESTRICT",
@@ -67,6 +68,7 @@ ProductModel.belongsTo(ProductModelModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Unidad
 UnitModel.hasMany(ProductModel, {
   foreignKey: "id_unit",
   as: "product_unit",
@@ -80,6 +82,7 @@ ProductModel.belongsTo(UnitModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Unidad Equivalente
 UnitModel.hasMany(ProductModel, {
   foreignKey: "id_equivalent_unit",
   as: "product_equivalent_unit",
@@ -93,6 +96,7 @@ ProductModel.belongsTo(UnitModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Color
 ColorModel.hasMany(ProductModel, {
   foreignKey: "id_color",
   onDelete: "RESTRICT",

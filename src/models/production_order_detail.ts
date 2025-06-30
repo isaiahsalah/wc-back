@@ -34,6 +34,7 @@ export const ProductionOrderDetailModel = sequelize.define(
   }
 );
 
+// Relación con Producto
 ProductModel.hasMany(ProductionOrderDetailModel, {
   foreignKey: "id_product",
   onDelete: "RESTRICT",
@@ -45,6 +46,7 @@ ProductionOrderDetailModel.belongsTo(ProductModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Máquina
 MachineModel.hasMany(ProductionOrderDetailModel, {
   foreignKey: "id_machine",
   onDelete: "RESTRICT",
@@ -56,6 +58,7 @@ ProductionOrderDetailModel.belongsTo(MachineModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Orden de Producción
 ProductionOrderModel.hasMany(ProductionOrderDetailModel, {
   foreignKey: "id_production_order",
   onDelete: "RESTRICT",

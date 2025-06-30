@@ -34,6 +34,7 @@ export const FormulaModel = sequelize.define(
   }
 );
 
+// Relación con Producto
 ProductModel.hasMany(FormulaModel, {
   foreignKey: "id_product",
   onDelete: "RESTRICT",

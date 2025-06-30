@@ -38,6 +38,7 @@ export const SysUserModel = sequelize.define(
   }
 );
 
+// Relación con Grupo de Trabajo
 WorkGroupModel.hasMany(SysUserModel, {
   foreignKey: "id_work_group",
   onDelete: "RESTRICT",

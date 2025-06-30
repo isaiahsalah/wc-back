@@ -32,6 +32,7 @@ export const MachineModel = sequelize.define(
   }
 );
 
+// Relación con Sector de Proceso
 SectorProcessModel.hasMany(MachineModel, {
   foreignKey: "id_sector_process",
   onDelete: "RESTRICT",

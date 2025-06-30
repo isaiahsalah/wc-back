@@ -3,10 +3,18 @@ import bcryptjs from "bcryptjs";
 
 export const seedDatabase = async () => {
   try {
+    // Inserta datos de almacen
+    const warehouseCount = await models.Warehouse.count();
+    if (warehouseCount === 0) {
+      await models.Warehouse.bulkCreate([{id: 1, name: "Almacen general", address: "calle 2"}]);
+      console.log("✅ Datos de Sector insertados");
+    }
+
     // Inserta datos de sector
     const sectorCount = await models.Sector.count();
     if (sectorCount === 0) {
       await models.Sector.bulkCreate([
+        {id: 0, name: "Todos", description: "Sector  sin asignar "},
         {id: 1, name: "Bolsas", description: "Sector de producción "},
         {id: 2, name: "Inyección", description: "Sector de producción"},
         {id: 3, name: "Termoformado", description: "Sector de producción"},
@@ -20,6 +28,7 @@ export const seedDatabase = async () => {
     const processCount = await models.Process.count();
     if (processCount === 0) {
       await models.Process.bulkCreate([
+        {id: 0, name: "Todos", description: "Proceso sin asignar"},
         {id: 1, name: "Mezcla", description: "Proceso de Mezcla de materiales"},
         {id: 2, name: "Extrusión", description: "Proceso de extrusión de materiales"},
         {id: 3, name: "Impresión", description: "Proceso de impresión en productos"},
@@ -40,6 +49,7 @@ export const seedDatabase = async () => {
     const processSectorCount = await models.SectorProcess.count();
     if (processSectorCount === 0) {
       await models.SectorProcess.bulkCreate([
+        {id: 0, id_process: 0, id_sector: 0},
         {id: 1, id_process: 2, id_sector: 1},
         {id: 2, id_process: 8, id_sector: 2},
         {id: 3, id_process: 8, id_sector: 3},
@@ -99,7 +109,7 @@ export const seedDatabase = async () => {
           phone: "00000000",
           user: "admin",
           pass: passAdmin,
-          id_work_group: 1,
+          //id_work_group: 1,
         },
       ]);
       console.log("✅ Datos de Usuario insertados");
@@ -109,8 +119,9 @@ export const seedDatabase = async () => {
     const permissionCount = await models.Permission.count();
     if (permissionCount === 0) {
       await models.Permission.bulkCreate([
-        {id_sys_user: 1, id_sector_process: 4, type_degree: 4, type_screen: 41, type_module: 1},
-        {id_sys_user: 1, id_sector_process: 5, type_degree: 4, type_screen: 41, type_module: 1},
+        //{id_sys_user: 1, id_sector_process: 4, type_degree: 4, type_screen: 41, type_module: 1},
+        //{id_sys_user: 1, id_sector_process: 5, type_degree: 4, type_screen: 41, type_module: 1},
+        {id_sys_user: 1, type_degree: 4, type_screen: 41, type_module: 1},
       ]);
       console.log("✅ Datos de Permiso insertados");
     }

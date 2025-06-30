@@ -11,18 +11,15 @@ export const FormulaCostModel = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     amount: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    id_product_material: {
+    id_product: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+
     id_formula: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -33,6 +30,7 @@ export const FormulaCostModel = sequelize.define(
   }
 );
 
+// Relación con Producto
 ProductModel.hasMany(FormulaCostModel, {
   foreignKey: "id_product_material",
   onDelete: "RESTRICT",
@@ -44,6 +42,7 @@ FormulaCostModel.belongsTo(ProductModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Fórmula
 FormulaModel.hasMany(FormulaCostModel, {
   foreignKey: "id_formula",
   onDelete: "RESTRICT",

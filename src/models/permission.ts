@@ -47,6 +47,7 @@ export const PermissionModel = sequelize.define(
   }*/
 );
 
+// Relación con Usuario del Sistema
 SysUserModel.hasMany(PermissionModel, {
   foreignKey: "id_sys_user",
   onDelete: "RESTRICT",
@@ -58,6 +59,7 @@ PermissionModel.belongsTo(SysUserModel, {
   onUpdate: "CASCADE",
 });
 
+// Relación con Sector de Proceso
 SectorProcessModel.hasMany(PermissionModel, {
   foreignKey: "id_sector_process",
   onDelete: "RESTRICT",

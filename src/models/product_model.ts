@@ -27,6 +27,7 @@ export const ProductModelModel = sequelize.define(
   }
 );
 
+// Relación con Sector de Proceso
 SectorProcessModel.hasMany(ProductModelModel, {
   foreignKey: "id_sector_process",
   onDelete: "RESTRICT",
