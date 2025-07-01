@@ -7,6 +7,8 @@ import {
   getFormulas,
   recoverFormula,
   updateFormula,
+  updateActiveFormula,
+  updateUnactiveFormula,
 } from "../controllers/formula.controller";
 
 const router = Router();
@@ -20,5 +22,8 @@ router.delete("/soft/:id", softDeleteFormula);
 router.delete("/hard/:id", hardDeleteFormula);
 
 router.patch("/:id", recoverFormula);
+
+router.put("/active/:id", updateActiveFormula);
+router.put("/unactive/:id", updateUnactiveFormula);
 
 export default router;

@@ -176,3 +176,53 @@ export const recoverFormula = async (req: Request, res: Response): Promise<void>
     res.status(500).json({error: "Error al recuperar el Formula"});
   }
 };
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const updateActiveFormula = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params; // ID del producto en la fórmula
+
+    const formula = await models.Formula.findByPk(id); // Busca la fórmula específica
+
+    if (!formula) {
+      res.status(404).json({error: "Fórmula no encontrada"});
+      return;
+    }
+
+    // Actualizar todas las fórmulas relacionadas con el mismo id_product
+    await models.Formula.update(
+      {active: false}, // Marcar todas como inactivas inicialmente
+      {where: {id_product: formula.get("id_product")}}
+    );
+
+    // Actualizar solo la fórmula específica para que sea activa
+    await formula.update({active: true});
+
+    res.json({message: "Fórmula actualizada correctamente", formula});
+  } catch (error) {
+    console.error("❌ Error al actualizar las fórmulas relacionadas:", error);
+    res.status(500).json({error: "Error al actualizar las fórmulas relacionadas"});
+  }
+};
+
+export const updateUnactiveFormula = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {id} = req.params; // ID del producto en la fórmula
+
+    const formula = await models.Formula.findByPk(id); // Busca la fórmula específica
+
+    if (!formula) {
+      res.status(404).json({error: "Fórmula no encontrada"});
+      return;
+    }
+
+    // Actualizar solo la fórmula específica para que sea activa
+    await formula.update({active: false});
+
+    res.json({message: "Fórmula actualizada correctamente", formula});
+  } catch (error) {
+    console.error("❌ Error al actualizar las fórmulas relacionadas:", error);
+    res.status(500).json({error: "Error al actualizar las fórmulas relacionadas"});
+  }
+};
